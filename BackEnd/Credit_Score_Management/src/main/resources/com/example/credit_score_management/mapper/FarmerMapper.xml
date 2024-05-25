@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.credit_score_management.mapper.FarmerMapper">
+    <select id="list" resultType="com.example.credit_score_management.pojo.Farmer">
+        select *
+        from farmer
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%', #{name}, '%')
+            </if>
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+            <if test="areaname != null and areaname != ''">
+                and areaname = #{areaname}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from farmer
+        where fid in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update farmer
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="age != null and age != ''">
+                age = #{age},
+            </if>
+            <if test="image != null and image != ''">
+                image = #{image},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="areaname != null and areaname != ''">
+                areaname = #{areaname}
+            </if>
+        </set>
+        where fid = #{fid}
+    </update>
+</mapper>
