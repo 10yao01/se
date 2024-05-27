@@ -3,7 +3,6 @@ package com.example.farm_management.mapper;
 
 
 import com.example.farm_management.pojo.Farm;
-import com.example.farm_management.pojo.Farmer;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 
