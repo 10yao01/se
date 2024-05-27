@@ -17,10 +17,11 @@ public class FarmServiceImpl implements FarmService {
     FarmMapper farmMapper;
 
     @Override
-    public List<Farm> list(String fname, String fid, String pos) {
-        return farmMapper.list(fname, fid, pos);
+    public List<Farm> list(String fname, String fid, String pos, String cname, String cid) {
+        return farmMapper.list(fname, fid, pos, cname, cid);
     }
 
+    @Override
     public void add(Farm farm){
         farmMapper.insert(farm);
     }

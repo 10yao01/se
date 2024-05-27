@@ -19,9 +19,9 @@ public class FarmController {
     FarmService farmService;
 
     @GetMapping
-    public Result list(String fname, String fid, String pos){
+    public Result list(String fname, String fid, String pos, String cname, String cid){
         log.info("查询农田信息");
-        List<Farm> farmList = farmService.list(fname, fid, pos);
+        List<Farm> farmList = farmService.list(fname, fid, pos, cname, cid);
         return Result.success(farmList);
     }
 
