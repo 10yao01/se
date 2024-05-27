@@ -16,6 +16,12 @@
             <if test="pos != null and pos != ''">
                 and pos_info = #{pos}
             </if>
+            <if test="cname != null and cname != ''">
+                and c_name = #{cname}
+            </if>
+            <if test="cid != null and cid != ''">
+                and c_id = #{cid}
+            </if>
         </where>
     </select>
 

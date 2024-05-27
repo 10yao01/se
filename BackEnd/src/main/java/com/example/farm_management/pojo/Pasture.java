@@ -10,10 +10,11 @@ import java.sql.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class pasture {
+public class Pasture {
     private String pid;
     private String pname;
     private String poultryid;
+    private String poultryname;
     private String poultrynum;
     private Date stime;
     private String wid;
