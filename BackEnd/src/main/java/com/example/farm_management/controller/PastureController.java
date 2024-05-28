@@ -31,7 +31,7 @@ public class PastureController {
         return Result.success();
     }
 
-    @DeleteMapping("{/ids}")
+    @DeleteMapping("/{ids}")
     public Result delete(@PathVariable List<Integer> ids){
         log.info("批量删除操作, ids:{}",ids);
         pastureService.delete(ids);
