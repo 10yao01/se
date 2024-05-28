@@ -40,7 +40,7 @@ public class PastureController {
 
     @PutMapping
     public Result update(@RequestBody Pasture pasture){
-        log.info("更新农田信息：{}",pasture);
+        log.info("更新养殖场信息：{}",pasture);
         pastureService.update(pasture);
         return Result.success();
     }
