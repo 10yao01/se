@@ -31,16 +31,16 @@ public class PastureController {
         return Result.success();
     }
 
-    @DeleteMapping("{/ids}")
+    @DeleteMapping("/{ids}")
     public Result delete(@PathVariable List<Integer> ids){
-        log.info("批量删除操作, ids:{}",ids);
+        log.info("批量删除操作：{}",ids);
         pastureService.delete(ids);
         return Result.success();
     }
 
     @PutMapping
     public Result update(@RequestBody Pasture pasture){
-        log.info("更新农田信息：{}",pasture);
+        log.info("更新养殖场信息：{}",pasture);
         pastureService.update(pasture);
         return Result.success();
     }
