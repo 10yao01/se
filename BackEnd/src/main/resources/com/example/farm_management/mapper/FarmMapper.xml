@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.farm_management.mapper.FarmMapper">
+    <select id="list" resultType="com.example.farm_management.pojo.Farm">
+        select *
+        from farm
+        <where>
+            <if test="fname != null and fname != ''">
+                f_name like concat('%', #{fname}, '%')
+            </if>
+            <if test="fid != null">
+                and f_id = #{fid}
+            </if>
+            <if test="pos != null and pos != ''">
+                and pos_info = #{pos}
+            </if>
+            <if test="cname != null and cname != ''">
+                and c_name = #{cname}
+            </if>
+            <if test="cid != null and cid != ''">
+                and c_id = #{cid}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from farm
+        where f_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update farm
+        <set>
+            <if test="fname != null and fname != ''">
+                f_name = #{fname},
+            </if>
+            <if test="cid != null and cid != ''">
+                c_id = #{cid},
+            </if>
+            <if test="cname != null and cname != ''">
+                c_name = #{cname},
+            </if>
+            <if test="camount != null and camount != ''">
+                c_amount = #{camount},
+            </if>
+            <if test="wid != null and wid != ''">
+                w_id = #{wid}
+            </if>
+            <if test="pdate != null and pdate != ''">
+                p_date = #{pdate}
+            </if>
+            <if test="harvest != null and harvest != ''">
+                harvest_date = #{harvest}
+            </if>
+            <if test="stage != null and stage != ''">
+                stage = #{stage}
+            </if>
+            <if test="pos != null and pos != ''">
+                pos_info = #{pos}
+            </if>
+        </set>
+        where f_id = #{fid}
+    </update>
+</mapper>

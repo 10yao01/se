@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.farm_management.mapper.PastureMapper">
+    <select id="list" resultType="com.example.farm_management.pojo.Pasture">
+        select *
+        from pasture
+        <where>
+            <if test="pname != null and pname != ''">
+                p_name like concat('%', #{pname}, '%')
+            </if>
+            <if test="pid != null">
+                and p_id = #{pid}
+            </if>
+            <if test="pos != null and pos != ''">
+                and pos_info = #{pos}
+            </if>
+            <if test="poultryname != null and poultryname != ''">
+                and poultry_name = #{poultryname}
+            </if>
+            <if test="poultryid != null and poultryid != ''">
+                and poultry_id = #{poultryid}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from pasture
+        where p_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update pasture
+        <set>
+            <if test="pname != null and pname != ''">
+                p_name = #{pname},
+            </if>
+            <if test="poultryid != null and poultryid != ''">
+                poultry_id = #{poultryid},
+            </if>
+            <if test="poultryname != null and poultryname != ''">
+                poultry_name = #{poultryname},
+            </if>
+            <if test="poultrynum != null and poultrynum != ''">
+                poultry_num = #{poultrynum},
+            </if>
+            <if test="wid != null and wid != ''">
+                w_id = #{wid}
+            </if>
+            <if test="stime != null and stime != ''">
+                start_time = #{stime}
+            </if>
+            <if test="mtime != null and mtime != ''">
+                mature_time = #{mtime}
+            </if>
+            <if test="stage != null and stage != ''">
+                stage = #{stage}
+            </if>
+            <if test="pos != null and pos != ''">
+                pos_info = #{pos}
+            </if>
+        </set>
+        where p_id = #{pid}
+    </update>
+</mapper>
