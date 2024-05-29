@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface FarmService {
 
-    List<Farm> list(String fname, String fid, String pos, String cname, String cid);
+    List<Farm> list(String fname, String fid, String posinfo, String cname, String cid);
 
     void add(Farm farm);
 
