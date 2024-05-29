@@ -13,8 +13,8 @@
             <if test="fid != null">
                 and f_id = #{fid}
             </if>
-            <if test="pos != null and pos != ''">
-                and pos_info = #{pos}
+            <if test="posinfo != null and posinfo != ''">
+                and pos_info = #{posinfo}
             </if>
             <if test="cname != null and cname != ''">
                 and c_name = #{cname}
@@ -55,14 +55,14 @@
             <if test="pdate != null and pdate != ''">
                 p_date = #{pdate}
             </if>
-            <if test="harvest != null and harvest != ''">
-                harvest_date = #{harvest}
+            <if test="harvestdate != null and harvestdate != ''">
+                harvest_date = #{harvestdate}
             </if>
             <if test="stage != null and stage != ''">
                 stage = #{stage}
             </if>
-            <if test="pos != null and pos != ''">
-                pos_info = #{pos}
+            <if test="posinfo != null and posinfo != ''">
+                pos_info = #{posinfo}
             </if>
         </set>
         where f_id = #{fid}
