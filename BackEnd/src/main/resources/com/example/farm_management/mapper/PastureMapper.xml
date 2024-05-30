@@ -14,7 +14,7 @@
                 and p_id = #{pid}
             </if>
             <if test="pos != null and pos != ''">
-                and pos_info = #{pos}
+                and pos_info = #{posinfo}
             </if>
             <if test="poultryname != null and poultryname != ''">
                 and poultry_name = #{poultryname}

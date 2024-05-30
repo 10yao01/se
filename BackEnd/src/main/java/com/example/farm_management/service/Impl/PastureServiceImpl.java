@@ -16,8 +16,8 @@ public class PastureServiceImpl implements PastureService {
     PastureMapper pastureMapper;
 
     @Override
-    public List<Pasture> list(String pname, String pid, String pos, String poultryid, String poultryname) {
-        return pastureMapper.list(pname, pid, pos, poultryid, poultryname);
+    public List<Pasture> list(String pname, String pid, String posinfo, String poultryid, String poultryname) {
+        return pastureMapper.list(pname, pid, posinfo, poultryid, poultryname);
     }
 
     @Override
