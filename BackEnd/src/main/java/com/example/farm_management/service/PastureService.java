@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PastureService {
 
-    List<Pasture> list(String pname, String pid, String pos, String poultryid, String poultryname);
+    List<Pasture> list(String pname, String pid, String posinfo, String poultryid, String poultryname);
 
     void add(Pasture pasture);
 

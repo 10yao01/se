@@ -15,10 +15,10 @@ public class Pasture {
     private String pname;
     private String poultryid;
     private String poultryname;
-    private String poultrynum;
-    private Date stime;
+    private Integer poultrynum;
+    private Date starttime;
     private String wid;
-    private Date mtime;
+    private Date maturetime;
     private Integer stage;
-    private String pos;
+    private String posinfo;
 }
