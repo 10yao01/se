@@ -16,8 +16,8 @@ public class Farm {
     private String cid;
     private String cname;
     private Integer camount;
-    private String wid;
     private Date pdate;
+    private String wid;
     private Date harvestdate;
     private Integer stage;
     private String posinfo;
