@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class User {
     private String uid;
     private String pwd;
-    private Integer type;
+    private Integer idtype;
     private String name;
     private Integer gender;
     private Integer age;

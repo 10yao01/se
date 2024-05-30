@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.farm_management.mapper.UserMapper">
+    <select id="list" resultType="com.example.farm_management.pojo.User">
+        select *
+        from user
+        <where>
+            <if test="uid != null and uid != ''">
+                u_id like concat('%', #{uid}, '%')
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="tel != null and tel != ''">
+                and tel = #{tel}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from user
+        where u_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update user
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="uid != null and uid != ''">
+                u_id = #{uid},
+            </if>
+            <if test="pwd != null and pwd != ''">
+                pwd = #{pwd}
+            </if>
+            <if test="age != null and age != ''">
+                age = #{age}
+            </if>
+            <if test="tel != null and tel != ''">
+                tel = #{tel}
+            </if>
+        </set>
+        where u_id = #{uid}
+    </update>
+</mapper>
