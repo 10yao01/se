@@ -37,9 +37,6 @@
             <if test="name != null and name != ''">
                 name = #{name},
             </if>
-            <if test="uid != null and uid != ''">
-                u_id = #{uid},
-            </if>
             <if test="pwd != null and pwd != ''">
                 pwd = #{pwd}
             </if>
