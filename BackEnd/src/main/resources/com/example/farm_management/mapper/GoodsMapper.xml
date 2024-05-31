@@ -31,9 +31,6 @@
             <if test="gname != null and gname != ''">
                 g_name = #{gname},
             </if>
-            <if test="gid != null and gid != ''">
-                g_id = #{gid},
-            </if>
             <if test="stock != null and stock != ''">
                 stock = #{stock},
             </if>
