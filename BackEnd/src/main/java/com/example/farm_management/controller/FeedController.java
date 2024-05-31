@@ -33,7 +33,7 @@ public class FeedController {
     }
 
     @DeleteMapping("/{ids}")
-    public Result delete(@PathVariable List<Integer> ids){
+    public Result delete(@PathVariable List<String> ids){
         log.info("批量删除操作, ids:{}",ids);
         feedService.delete(ids);
         return Result.success();

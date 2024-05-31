@@ -16,7 +16,7 @@ public interface FertileMapper {
             "values (#{fid}, #{farmid}, #{opid}, #{optime})")
     void insert(FertileRecord fertileRecord);
 
-    void delete(List<Integer> ids);
+    void delete(List<String> ids);
 
     void update(FertileRecord fertileRecord);
 }

@@ -32,7 +32,7 @@ public class FertileController {
     }
 
     @DeleteMapping("/{ids}")
-    public Result delete(@PathVariable List<Integer> ids){
+    public Result delete(@PathVariable List<String> ids){
         log.info("批量删除操作, ids:{}",ids);
         fertileService.delete(ids);
         return Result.success();
