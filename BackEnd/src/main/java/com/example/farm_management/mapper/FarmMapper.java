@@ -17,7 +17,7 @@ public interface FarmMapper {
             "values (#{fid},#{fname},#{cid},#{cname},#{camount},#{pdate},#{wid},#{harvestdate},#{stage},#{posinfo})")
     void insert(Farm farm);
 
-    void delete(List<Integer> ids);
+    void delete(List<String> ids);
 
     void update(Farm farm);
 }

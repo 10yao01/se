@@ -16,7 +16,7 @@ public interface PastureMapper {
             "values (#{pid},#{pname},#{poultryid},#{poultryname},#{poultrynum},#{starttime},#{wid},#{maturetime},#{stage},#{posinfo})")
     void insert(Pasture pasture);
 
-    void delete(List<Integer> ids);
+    void delete(List<String> ids);
 
     void update(Pasture pasture);
 }

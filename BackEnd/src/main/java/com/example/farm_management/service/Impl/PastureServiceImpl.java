@@ -26,7 +26,7 @@ public class PastureServiceImpl implements PastureService {
     }
 
     @Override
-    public void delete(List<Integer> ids) {
+    public void delete(List<String> ids) {
         pastureMapper.delete(ids);
     }
 

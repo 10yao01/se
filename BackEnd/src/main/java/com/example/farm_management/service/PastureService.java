@@ -10,7 +10,7 @@ public interface PastureService {
 
     void add(Pasture pasture);
 
-    void delete(List<Integer> ids);
+    void delete(List<String> ids);
 
     void update(Pasture pasture);
 }

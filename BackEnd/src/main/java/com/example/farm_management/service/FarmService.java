@@ -11,7 +11,7 @@ public interface FarmService {
 
     void add(Farm farm);
 
-    void delete(List<Integer> ids);
+    void delete(List<String> ids);
 
     void update(Farm farm);
 }

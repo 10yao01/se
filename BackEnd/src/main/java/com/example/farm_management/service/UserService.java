@@ -10,7 +10,7 @@ public interface UserService {
 
     void add(User user);
 
-    void delete(List<Integer> ids);
+    void delete(List<String> ids);
 
     void update(User user);
 }
