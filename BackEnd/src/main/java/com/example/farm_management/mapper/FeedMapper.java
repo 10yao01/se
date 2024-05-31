@@ -16,7 +16,7 @@ public interface FeedMapper {
             "values (#{fid},#{pid},#{ftime})")
     void insert(FeedRecord feedRecord);
 
-    void delete(List<Integer> ids);
+    void delete(List<String> ids);
 
     void update(FeedRecord feedRecord);
 }

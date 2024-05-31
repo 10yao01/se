@@ -26,7 +26,7 @@ public class FertileServiceImpl implements FertileService {
     }
 
     @Override
-    public void delete(List<Integer> ids){
+    public void delete(List<String> ids){
         fertileMapper.delete(ids);
     }
 

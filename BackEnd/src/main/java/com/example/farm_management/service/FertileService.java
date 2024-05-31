@@ -11,7 +11,7 @@ public interface FertileService {
 
     void add(FertileRecord feedRecord);
 
-    void delete(List<Integer> ids);
+    void delete(List<String> ids);
 
     void update(FertileRecord feedRecord);
 }

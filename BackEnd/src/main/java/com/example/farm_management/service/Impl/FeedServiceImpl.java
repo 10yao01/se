@@ -26,7 +26,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public void delete(List<Integer> ids){
+    public void delete(List<String> ids){
         feedMapper.delete(ids);
     }
 

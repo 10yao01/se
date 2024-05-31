@@ -11,7 +11,7 @@ public interface FeedService {
 
     void add(FeedRecord feedRecord);
 
-    void delete(List<Integer> ids);
+    void delete(List<String> ids);
 
     void update(FeedRecord feedRecord);
 }
