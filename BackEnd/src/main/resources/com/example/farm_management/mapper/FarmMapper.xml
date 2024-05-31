@@ -10,7 +10,7 @@
             <if test="fname != null and fname != ''">
                 f_name like concat('%', #{fname}, '%')
             </if>
-            <if test="fid != null">
+            <if test="fid != null and fid != ''">
                 and f_id = #{fid}
             </if>
             <if test="posinfo != null and posinfo != ''">
