@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.farm_management.mapper.FertileMapper">
+    <select id="list" resultType="com.example.farm_management.pojo.FertileRecord">
+        select *
+        from fertile
+        <where>
+            <if test="fid != null">
+                and f_id = #{fid}
+            </if>
+            <if test="farmid != null and farmid != ''">
+                and farm_id = #{farmid}
+            </if>
+            <if test="opid != null and opid != ''">
+                and op_id = #{opid}
+            </if>
+            <if test="optime != null and optime != ''">
+                and op_time = #{optime}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from fertile
+        where f_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update fertile
+        <set>
+            <if test="fid != null">
+                and f_id = #{fid}
+            </if>
+            <if test="farmid != null and farmid != ''">
+                and farm_id = #{farmid}
+            </if>
+            <if test="opid != null and opid != ''">
+                and op_id = #{opid}
+            </if>
+            <if test="optime != null and optime != ''">
+                and op_time = #{optime}
+            </if>
+        </set>
+        where f_id = #{fid}
+    </update>
+</mapper>
