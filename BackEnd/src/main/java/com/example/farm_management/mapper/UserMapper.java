@@ -17,7 +17,7 @@ public interface UserMapper {
             "values (#{uid},#{pwd},#{idtype},#{name},#{gender},#{age},#{tel})")
     void insert(User user);
 
-    void delete(List<Integer> ids);
+    void delete(List<String> ids);
 
     void update(User user);
 }

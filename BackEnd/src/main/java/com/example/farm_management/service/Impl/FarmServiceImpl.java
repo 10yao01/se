@@ -27,7 +27,7 @@ public class FarmServiceImpl implements FarmService {
     }
 
     @Override
-    public void delete(List<Integer> ids) {
+    public void delete(List<String> ids) {
         farmMapper.delete(ids);
     }
 
