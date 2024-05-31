@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.farm_management.mapper.GoodsMapper">
+    <select id="list" resultType="com.example.farm_management.pojo.Goods">
+        select *
+        from goods
+        <where>
+            <if test="gname != null and gname != ''">
+                g_name like concat('%', #{gname}, '%')
+            </if>
+            <if test="gid != null and gid != ''">
+                and g_id = #{gid}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from goods
+        where g_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update goods
+        <set>
+            <if test="gname != null and gname != ''">
+                g_name = #{gname},
+            </if>
+            <if test="gid != null and gid != ''">
+                g_id = #{gid},
+            </if>
+            <if test="stock != null and stock != ''">
+                stock = #{stock},
+            </if>
+            <if test="sale != null and sale != ''">
+                sale = #{sale},
+            </if>
+            <if test="price != null and price != ''">
+                price = #{price}
+            </if>
+            <if test="score != null and score != ''">
+                score = #{score}
+            </if>
+            <if test="ratersnum != null and ratersnum != ''">
+                raters_num = #{ratersnum}
+            </if>
+        </set>
+        where g_id = #{gid}
+    </update>
+</mapper>
