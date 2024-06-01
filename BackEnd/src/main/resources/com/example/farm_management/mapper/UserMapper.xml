@@ -46,6 +46,12 @@
             <if test="tel != null and tel != ''">
                 tel = #{tel}
             </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender}
+            </if>
+            <if test="idtype != null and idtype != ''">
+                id_type = #{idtype}
+            </if>
         </set>
         where u_id = #{uid}
     </update>
