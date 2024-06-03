@@ -21,7 +21,7 @@ public class UserController {
     @GetMapping
     public Result list(String uid, String name, Integer gender, String tel){
         log.info("查询用户信息");
-        List<User> userList = userService.list(uid, name, gender, tel);
+        List<User> userList  = userService.list(uid, name, gender, tel);
         return Result.success(userList);
     }
 
