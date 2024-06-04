@@ -4,6 +4,7 @@ package com.example.farm_management.mapper;
 import com.example.farm_management.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -20,4 +21,7 @@ public interface UserMapper {
     void delete(List<String> ids);
 
     void update(User user);
+
+    @Select("select * from user where u_id=#{uid} and pwd =  #{pwd}")
+    User getByNAP(User user);
 }

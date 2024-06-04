@@ -33,4 +33,9 @@ public class UserServiceImpl implements UserService {
     public void update(User user) {
         userMapper.update(user);
     }
+
+    @Override
+    public User login(User user){
+        return userMapper.getByNAP(user);
+    }
 }
