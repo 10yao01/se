@@ -39,13 +39,13 @@ export default {
           routeName: '/pasture',
           name: '养殖场管理',
           desc: '进行养殖场管理',
-          src: 'static/images/3.jpg'
+          src: 'static/images/muchang.jpg'
         },
         {
           routeName: '/market',
           name: '集市管理',
           desc: '进行集市管理',
-          src: 'static/images/jiefeng.jpg'
+          src: 'static/images/market.jpg'
         }
 
       ],
