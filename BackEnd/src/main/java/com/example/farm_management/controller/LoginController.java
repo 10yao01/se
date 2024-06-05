@@ -34,8 +34,8 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public Result getType(@RequestBody User user){
-        Integer type = userService.getType(user);
+    public Result getType(String uid){
+        Integer type = userService.getType(uid);
         return Result.success(type);
     }
 }

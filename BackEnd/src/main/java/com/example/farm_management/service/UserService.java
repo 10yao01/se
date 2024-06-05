@@ -16,5 +16,5 @@ public interface UserService {
 
     User login(User user);
 
-    Integer getType(User user);
+    Integer getType(String uid);
 }

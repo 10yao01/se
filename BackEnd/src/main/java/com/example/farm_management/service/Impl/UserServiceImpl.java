@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer getType(User user) {
-        return userMapper.getType(user);
+    public Integer getType(String uid) {
+        return userMapper.getType(uid);
     }
 }
