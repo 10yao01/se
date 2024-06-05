@@ -31,14 +31,11 @@
     <update id="update">
         update feed
         <set>
-            <if test="fid != null">
-                and f_id = #{fid}
-            </if>
             <if test="pid != null and pid != ''">
-                and p_id = #{pid}
+                p_id = #{pid}
             </if>
             <if test="ftime != null and ftime != ''">
-                and f_time = #{ftime}
+                f_time = #{ftime}
             </if>
         </set>
         where f_id = #{fid}

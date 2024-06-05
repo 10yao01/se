@@ -34,17 +34,14 @@
     <update id="update">
         update fertile
         <set>
-            <if test="fid != null">
-                and f_id = #{fid}
-            </if>
             <if test="farmid != null and farmid != ''">
-                and farm_id = #{farmid}
+                farm_id = #{farmid}
             </if>
             <if test="opid != null and opid != ''">
-                and op_id = #{opid}
+                op_id = #{opid}
             </if>
             <if test="optime != null and optime != ''">
-                and op_time = #{optime}
+                op_time = #{optime}
             </if>
         </set>
         where f_id = #{fid}

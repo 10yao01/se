@@ -33,7 +33,7 @@ public class GoodsController {
     }
 
     @DeleteMapping("/{ids}")
-    public Result delete(@PathVariable List<Goods> ids){
+    public Result delete(@PathVariable List<String> ids){
         log.info("批量删除操作：{}", ids);
         goodsService.delete(ids);
         return Result.success();
