@@ -24,4 +24,7 @@ public interface UserMapper {
 
     @Select("select * from user where u_id=#{uid} and pwd =  #{pwd}")
     User getByNAP(User user);
+
+    @Select("select id_type from user where u_id=#{uid} and pwd =  #{pwd}")
+    Integer getType(User user);
 }

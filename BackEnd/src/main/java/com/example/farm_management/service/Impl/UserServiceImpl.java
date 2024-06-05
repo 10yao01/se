@@ -38,4 +38,9 @@ public class UserServiceImpl implements UserService {
     public User login(User user){
         return userMapper.getByNAP(user);
     }
+
+    @Override
+    public Integer getType(User user) {
+        return userMapper.getType(user);
+    }
 }
