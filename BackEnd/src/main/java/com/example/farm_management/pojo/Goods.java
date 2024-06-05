@@ -14,5 +14,5 @@ public class Goods {
     private Integer sale;
     private Double price;
     private Double score;
-    private Integer ratersnum;
+    private Integer raternum;
 }

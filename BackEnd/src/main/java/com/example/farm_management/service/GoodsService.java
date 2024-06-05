@@ -11,7 +11,7 @@ public interface GoodsService {
 
     void add(Goods goods);
 
-    void delete(List<Goods> ids);
+    void delete(List<String> ids);
 
     void update(Goods goods);
 }

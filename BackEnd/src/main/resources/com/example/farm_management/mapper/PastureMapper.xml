@@ -52,17 +52,17 @@
             <if test="wid != null and wid != ''">
                 w_id = #{wid}
             </if>
-            <if test="stime != null and stime != ''">
-                start_time = #{stime}
+            <if test="starttime != null and starttime != ''">
+                start_time = #{starttime}
             </if>
-            <if test="mtime != null and mtime != ''">
-                mature_time = #{mtime}
+            <if test="maturetime != null and maturetime != ''">
+                mature_time = #{maturetime}
             </if>
             <if test="stage != null and stage != ''">
                 stage = #{stage}
             </if>
-            <if test="pos != null and pos != ''">
-                pos_info = #{pos}
+            <if test="posinfo != null and posinfo != ''">
+                pos_info = #{posinfo}
             </if>
         </set>
         where p_id = #{pid}

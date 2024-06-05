@@ -25,7 +25,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public void delete(List<Goods> ids) {
+    public void delete(List<String> ids) {
         goodsMapper.delete(ids);
     }
 

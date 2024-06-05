@@ -43,8 +43,8 @@
             <if test="score != null and score != ''">
                 score = #{score}
             </if>
-            <if test="ratersnum != null and ratersnum != ''">
-                raters_num = #{ratersnum}
+            <if test="raternum != null and raternum != ''">
+                rater_num = #{raternum}
             </if>
         </set>
         where g_id = #{gid}

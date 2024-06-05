@@ -12,11 +12,11 @@ public interface GoodsMapper {
 
     List<Goods> list(String gid, String gname);
 
-    @Insert("insert into goods(g_id,g_name,stock,sale,price,score,raters_num)" +
-            "values (#{gid},#{gname},#{stock},#{sale},#{price},#{score},#{ratersnum})")
+    @Insert("insert into goods(g_id,g_name,stock,sale,price,score,rater_num)" +
+            "values (#{gid},#{gname},#{stock},#{sale},#{price},#{score},#{raternum})")
     void insert(Goods goods);
 
-    void delete(List<Goods> ids);
+    void delete(List<String> ids);
 
     void update(Goods goods);
 }
