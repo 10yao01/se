@@ -29,6 +29,6 @@ public class LoginController {
             String jwt = JwtUtils.generateJwt(claims);
             return Result.success(jwt);
         }
-        return Result.error("错误！");
+        return Result.error("账号或密码错误！");
     }
 }
