@@ -1,0 +1,102 @@
+<template>
+  <el-container>
+    <el-header>
+      <h3 class="title">智慧农场管理平台</h3>
+    </el-header>
+    <el-main>
+      <h5>当前用户：  <el-tag size="medium">{{ name }}</el-tag>&nbsp;&nbsp;&nbsp;<el-button type="danger" size="mini" @click="$router.push('/login')" plain>切换账户</el-button></h5>
+      <el-row :gutter="20">
+        <el-col :span="6" :offset="0" v-for="item in link" :key="item.baseURL" style="margin-bottom: 20px;">
+          <el-card shadow="hover" class="box-card" style="cursor: pointer;height:70vh;" @click.native="handle(item.routeName)">
+            <el-image style="width: 350px; height: 300px" :src="item.src"></el-image>
+            <h3 style="margin-top: 0;">{{item.name}}</h3>
+            <span>{{item.desc}}</span>
+          </el-card>
+        </el-col>
+      </el-row>
+    </el-main>
+  </el-container>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      link: [
+        {
+          routeName: '/user',
+          name: '用户管理',
+          desc: '进行订单查询',
+          src: 'static/images/1.jpg'
+        },
+        {
+          routeName: '/farm',
+          name: '农场管理',
+          desc: '进行农场管理',
+          src: 'static/images/2.jpg'
+        },
+        {
+          routeName: '/pasture',
+          name: '养殖场管理',
+          desc: '进行养殖场管理',
+          src: 'static/images/3.jpg'
+        },
+        {
+          routeName: '/market',
+          name: '集市管理',
+          desc: '进行集市管理',
+          src: 'static/images/jiefeng.jpg'
+        }
+
+      ],
+      name: '',
+      token: '',
+    }
+  },
+  created () {
+    this.name = window.localStorage.getItem('name')
+    this.token = window.localStorage.getItem('token')
+  },
+  mounted () {
+  },
+  methods: {
+    handle (routeName) {
+      this.$router.push({ path: routeName })
+    }
+  }
+}
+</script>
+
+
+<style>
+
+  .image {
+    width: 100%;
+    display: block;
+  }
+
+  .el-header {
+    background-color: #abb6c7;
+    color: #333;
+    /* text-align: center; */
+    line-height: 60px;
+  }
+  .el-main {
+    background-color: #fafcff;
+    color: #333;
+    /* text-align: center; */
+    line-height: 60px;
+  }
+  
+  body > .el-container {
+    margin-bottom: 40px;
+  }
+
+  .title {
+    font-size: 27px;
+    margin: 0px auto 40px auto;
+    margin-left: 60px;
+    font-weight: bold;
+  }
+
+</style>
