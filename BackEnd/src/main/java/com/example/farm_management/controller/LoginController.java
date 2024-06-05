@@ -5,6 +5,7 @@ import com.example.farm_management.pojo.User;
 import com.example.farm_management.service.UserService;
 import com.example.farm_management.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,5 +31,11 @@ public class LoginController {
             return Result.success(jwt);
         }
         return Result.error("账号或密码错误！");
+    }
+
+    @GetMapping("/login")
+    public Result getType(@RequestBody User user){
+        Integer type = userService.getType(user);
+        return Result.success(type);
     }
 }
