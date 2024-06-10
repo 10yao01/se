@@ -27,19 +27,19 @@
           <h3 class="title">欢迎使用智慧农场管理平台</h3>
         </div>
 
-        <el-form-item prop="name">
+        <el-form-item prop="uid">
           <span class="svg-container">
             <svg-icon icon-class="user" />
           </span>
-          <el-input ref="name" v-model="loginForm.name" placeholder="name" name="name" type="text" tabindex="1"
+          <el-input ref="uid" v-model="loginForm.uid" placeholder="U_id" name="name" type="text" tabindex="1"
             auto-complete="on" />
         </el-form-item>
 
-        <el-form-item prop="password">
+        <el-form-item prop="pwd">
           <span class="svg-container">
             <svg-icon icon-class="password" />
           </span>
-          <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType"
+          <el-input :key="passwordType" ref="pwd" v-model="loginForm.pwd" :type="passwordType"
             placeholder="Password" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin" />
           <span class="show-pwd" @click="showPwd">
             <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
@@ -125,8 +125,8 @@ export default {
   data () {
     return {
       loginForm: {
-        name: '',
-        password: ''
+        uid: '',
+        pwd: ''
       },
       areaData:[],
       loginRules: {
@@ -253,18 +253,31 @@ export default {
           this.loading = true
 
           const url = this.$store.state.settings.baseurl + '/login'
-          if(this.loginForm.name!='root'){
+          if(this.loginForm.uid!='root'){
             axios.post(url, this.loginForm)
               .then(res => {
                 let data = res.data
                 if (data.code === 1) {
-                  Message.success('登录成功')
-                  window.localStorage.setItem('name', this.loginForm.name)
+                  window.localStorage.setItem('uid', this.loginForm.uid)
                   window.localStorage.setItem('token', data.data)
                   // console.log(this.$store)
-                  this.$router.push({ path: '/index' })
+                  axios.get(url + "?uid=" + this.loginForm.uid) //获取用户权限等级
+                    .then(response => {
+                      Message.success('登录成功')
+                      let type = response.data.data
+                      window.localStorage.setItem('type', type)
+                      if(type == 0){
+                        this.$router.push({ path: '/index' })
+                      }
+                    }).catch(error => {
+                      console.error(error)
+                      Message.error('系统错误' + error)
+                    }).finally(() => {
+                      // 结束请求
+                      this.loading = false
+                    })
                 } else {
-                  Message.error('登录失败' + data.msg)
+                  Message.error('登录失败，' + data.msg)
                 }
               }).catch(error => {
                 console.error(error)
@@ -273,9 +286,9 @@ export default {
                 // 结束请求
                 this.loading = false
               })
-          }else if(this.loginForm.password=='zzb021120'){
+          }else if(this.loginForm.pwd=='zzb021120'){
             Message.success('登录成功')
-            window.localStorage.setItem('name', this.loginForm.name)
+            window.localStorage.setItem('uid', this.loginForm.uid)
             this.$router.push({ path: '/index' })
           }else{
             Message.error('系统错误')
