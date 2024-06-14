@@ -6,9 +6,11 @@
     <el-main>
       <el-row :gutter="20">
         <el-col :span="22" :offset="1">
-          <el-input style="width: 20%;" placeholder="请输入订单编号" v-model="searchName" />
-          <el-input style="width: 20%;" placeholder="请输入商品种类" v-model="searchName" />
-          <el-button size="media" @click="search(searchName, searchGender, searchArea)" icon="el-icon-search">搜索</el-button>
+          <el-input style="width: 15%;" placeholder="请输入用户ID" v-model="searchID" />
+          <el-input style="width: 15%;" placeholder="请输入用户姓名" v-model="searchName" />
+          <el-input style="width: 15%;" placeholder="请输入用户性别" v-model="searchGender" />
+          <el-input style="width: 15%;" placeholder="请输入用户电话" v-model="searchTel" />
+          <el-button size="media" @click="search(searchID, searchName, searchGender, searchTel)" icon="el-icon-search">搜索</el-button>
          
         </el-col>
       </el-row>
@@ -16,26 +18,23 @@
       <el-row >
         <el-col :span="22" :offset="1">
           <el-table :data="pagedData" border height="550" style="width: 100%">
-          <el-table-column prop="fid" label="订单编号" sortable>
+          <el-table-column prop="uid" label="用户编号" sortable>
           </el-table-column>
-          <el-table-column prop="image" label="商品种类">
-            <template slot-scope="scope">
-              <el-image :src="scope.row.image" style="width: 130px; height: 110px"></el-image>
-            </template>
+          <el-table-column prop="pwd" label="密码" sortable>
           </el-table-column>
-          <el-table-column prop="name" label="购买数量" sortable>
+          <el-table-column prop="name" label="姓名">
           </el-table-column>
-          <el-table-column prop="gender" label="农牧场名称" sortable>
+          <el-table-column prop="gender" label="性别" sortable>
           </el-table-column>
-          <el-table-column prop="age" label="农牧场位置" sortable>
+          <el-table-column prop="idtype" label="用户类别" sortable>
           </el-table-column>
-          <el-table-column prop="areaname" label="评分" sortable>
+          <el-table-column prop="age" label="年龄" sortable>
           </el-table-column>
-          <el-table-column prop="status" label="所给评分" sortable>
-            <template slot-scope="scope">
+          <el-table-column prop="tel" label="电话" sortable>
+            <!-- <template slot-scope="scope">
               <el-tag :type="statusType[scope.row.status]" disable-transitions>{{ statusText[scope.row.status]
               }}：{{scope.row.score}}</el-tag>
-            </template>
+            </template> -->
           </el-table-column>
           </el-table>
           <Pagination :total="filteredData.length" :currentPage="1" @changePage="changePage" :pageSize="pageSize">
@@ -59,9 +58,10 @@ export default {
       formData: [],
       areaData: [],
       oneData: {},
+      searchID:'',
       searchName: '',
       searchGender: '',
-      searchArea: '',
+      searchTel: '',
       descriptionData: '',
       dialogForm: {
           name: '',
@@ -177,24 +177,35 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    search(searchName, searchGender, searchArea) {
+    search(searchID, searchName, searchGender, searchTel) {
       if(this.name=='root'){       
         let url = this.$store.state.settings.baseurl + '/farmer?'
-        if(searchName != '') {
+        if(searchID != ''){
+          url = url + 'uid=' + searchID
+          if(searchName != ''){
+            url = url + '&name=' + searchName
+          }
+          if(searchGender != '') {
+                url = url + '&gender=' + searchGender
+            }
+            if(searchArea != '') {
+                url = url + '&tel=' + searchTel
+            }
+        }else if(searchName != '') {
             url = url + 'name=' + searchName
             if(searchGender != '') {
                 url = url + '&gender=' + searchGender
             }
             if(searchArea != '') {
-                url = url + '&areaname=' + searchArea
+                url = url + '&tel=' + searchTel
             }
         }else if(searchGender != '') {
             url = url + 'gender=' + searchGender
             if(searchArea != '') {
-                url = url + '&areaname=' + searchArea
+                url = url + '&tel=' + searchTel
             }
         }else if(searchArea != '') {
-            url = url + 'areaname=' + searchArea
+            url = url + 'tel=' + searchTel
         }
         axios.get(url, {
             headers: {
@@ -262,7 +273,7 @@ export default {
       })
     },
     fetchData () {
-      let url = this.$store.state.settings.baseurl + '/farmer'
+      let url = this.$store.state.settings.baseurl + '/user'
       if(this.name!='root'){
         url = url + '?name=' +this.name
       }
