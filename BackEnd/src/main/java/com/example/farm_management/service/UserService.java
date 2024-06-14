@@ -1,12 +1,17 @@
 package com.example.farm_management.service;
 
+import com.example.farm_management.pojo.PageBean;
 import com.example.farm_management.pojo.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<User> list(String uid, String name, Integer gender, String tel);
+
+    PageBean page(Integer page, Integer pageSize, String uid,
+                  String name, Integer gender,  String tel);
+
+//    List<User> list(String uid, String name, Integer gender, String tel);
 
     void add(User user);
 
