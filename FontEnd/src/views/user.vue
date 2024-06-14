@@ -31,10 +31,6 @@
           <el-table-column prop="age" label="年龄" sortable>
           </el-table-column>
           <el-table-column prop="tel" label="电话" sortable>
-            <!-- <template slot-scope="scope">
-              <el-tag :type="statusType[scope.row.status]" disable-transitions>{{ statusText[scope.row.status]
-              }}：{{scope.row.score}}</el-tag>
-            </template> -->
           </el-table-column>
           </el-table>
           <Pagination :total="filteredData.length" :currentPage="1" @changePage="changePage" :pageSize="pageSize">
@@ -64,47 +60,42 @@ export default {
       searchTel: '',
       descriptionData: '',
       dialogForm: {
+          uid:'',
+          pwd:'',
           name: '',
           gender: '',
           age: '',
-          image: '',
-          areaname: ''
+          idtype: '',
+          tel: ''
       },
       dialogForm2: {
+          uid:'',
+          pwd:'',
           name: '',
           gender: '',
           age: '',
-          image: '',
-          areaname: ''
+          idtype: '',
+          tel: ''
       },
-      statusType: ['success','warning','danger'],
-      statusText: ['优','良','差'],
       dialogVisible: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
       formLabelWidth: '70px',
+      typeClass: ['普通用户', '农场职工', '农场管理员', '系统管理员'],
       pageSize: 10,
       firstRecord: 1,
       lastRecord: 999,
       statusFileter: ['男', '女'],
       name: '',
       token: '',
+      type:''
     }
   },
   created() {
-    axios.get(this.$store.state.settings.baseurl + '/area',{
-        headers: {
-          'Authorization': this.token
-        }
-    })
-        .then(response => {
-          this.areaData = response.data.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    this.fetchData()
     this.name = window.localStorage.getItem('name')
     this.token = window.localStorage.getItem('token')
+    this.type = window.localStorage.getItem('type')
   },
   mounted () {
     if (this.$route.params.iid) {
@@ -179,54 +170,25 @@ export default {
     },
     search(searchID, searchName, searchGender, searchTel) {
       if(this.name=='root'){       
-        let url = this.$store.state.settings.baseurl + '/farmer?'
-        if(searchID != ''){
-          url = url + 'uid=' + searchID
-          if(searchName != ''){
-            url = url + '&name=' + searchName
-          }
-          if(searchGender != '') {
-                url = url + '&gender=' + searchGender
-            }
-            if(searchArea != '') {
-                url = url + '&tel=' + searchTel
-            }
-        }else if(searchName != '') {
-            url = url + 'name=' + searchName
-            if(searchGender != '') {
-                url = url + '&gender=' + searchGender
-            }
-            if(searchArea != '') {
-                url = url + '&tel=' + searchTel
-            }
-        }else if(searchGender != '') {
-            url = url + 'gender=' + searchGender
-            if(searchArea != '') {
-                url = url + '&tel=' + searchTel
-            }
-        }else if(searchArea != '') {
-            url = url + 'tel=' + searchTel
-        }
+        let url = this.$store.state.settings.baseurl + '/user'
         axios.get(url, {
             headers: {
             'Authorization': this.token
+            },
+            params:{
+              uid: searchID,
+              name: searchName,
+              gender: searchGender,
+              tel: searchTel
             }
         })
         .then(response => {
           let Ddata = response.data.data
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
-            }else{
-              Ddata[i].status = 2
-            }
+            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
           }
-          this.formData=Ddata
-
+          this.formData = Ddata
         })
         .catch(error => {
           console.log(error)
@@ -274,9 +236,6 @@ export default {
     },
     fetchData () {
       let url = this.$store.state.settings.baseurl + '/user'
-      if(this.name!='root'){
-        url = url + '?name=' +this.name
-      }
       axios.get(url,{
         headers: {
           'Authorization': this.token
@@ -286,14 +245,7 @@ export default {
           let Ddata = response.data.data
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
-            }else{
-              Ddata[i].status = 2
-            }
+            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
           }
           this.formData=Ddata
           this.firstRecord = 1
@@ -309,11 +261,13 @@ export default {
     },
     handleInfo (row) {
       this.dialogFormVisible2 = true;
+      this.dialogForm2.uid = row.uid
+      this.dialogForm2.pwd = row.pwd
       this.dialogForm2.name = row.name
       this.dialogForm2.gender = row.gender
       this.dialogForm2.age = row.age
-      this.dialogForm2.image = row.image
-      this.dialogForm2.areaname = row.areaname
+      this.dialogForm2.idtype = row.idtype
+      this.dialogForm2.tel = row.tel
     },
     Update(fid) {
       this.dialogFormVisible2 = false
