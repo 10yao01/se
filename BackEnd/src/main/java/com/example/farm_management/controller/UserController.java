@@ -1,6 +1,7 @@
 package com.example.farm_management.controller;
 
 
+import com.example.farm_management.pojo.PageBean;
 import com.example.farm_management.pojo.Result;
 import com.example.farm_management.pojo.User;
 import com.example.farm_management.service.UserService;
@@ -19,11 +20,22 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    public Result list(String uid, String name, Integer gender, String tel){
-        log.info("查询用户信息");
-        List<User> userList = userService.list(uid, name, gender, tel);
-        return Result.success(userList);
+    public Result page(@RequestParam(defaultValue = "1") Integer page,
+                       @RequestParam(defaultValue = "10") Integer pageSize,
+                       String uid, String name,
+                       Integer gender, String tel){
+        log.info("分页查询, 参数: {},{},{},{},{},{}",page,pageSize,uid,name,gender,tel);
+        //调用service分页查询
+        PageBean pageBean = userService.page(page,pageSize,uid,name,gender,tel);
+        return Result.success(pageBean);
     }
+
+//    @GetMapping
+//    public Result list(String uid, String name, Integer gender, String tel){
+//        log.info("查询用户信息");
+//        List<User> userList = userService.list(uid, name, gender, tel);
+//        return Result.success(userList);
+//    }
 
     @PostMapping
     public Result add(@RequestBody User user){
