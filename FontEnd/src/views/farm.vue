@@ -27,25 +27,25 @@ export default {
           routeName: '/irrigate',
           name: '灌溉',
           desc: '进行灌溉登记',
-          src: 'static/images/1.jpg'
+          src: 'static/images/guangai.jpg'
         },
         {
           routeName: '/fertilize',
           name: '施肥',
           desc: '进行施肥登记',
-          src: 'static/images/2.jpg'
+          src: 'static/images/shifei.jpg'
         },
         {
           routeName: '/crop',
           name: '农作物',
           desc: '进行农作物管理',
-          src: 'static/images/3.jpg'
+          src: 'static/images/nongzuowu.jpg'
         },
         {
           routeName: '/cropland',
           name: '农田信息',
           desc: '进行农田管理',
-          src: 'static/images/jiefeng.jpg'
+          src: 'static/images/nongtian.jpg'
         }
 
       ],

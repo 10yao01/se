@@ -27,19 +27,19 @@ export default {
           routeName: '/feed',
           name: '喂食',
           desc: '进行喂食登记',
-          src: 'static/images/1.jpg'
+          src: 'static/images/weishi.jpg'
         },
         {
           routeName: '/poultry',
           name: '家禽信息',
           desc: '进行家禽管理',
-          src: 'static/images/3.jpg'
+          src: 'static/images/jiaqin.jpg'
         },
         {
           routeName: '/poultryland',
           name: '养殖场信息',
           desc: '进行养殖场管理',
-          src: 'static/images/jiefeng.jpg'
+          src: 'static/images/yangzhichang.jpg'
         }
 
       ],

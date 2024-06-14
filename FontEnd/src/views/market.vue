@@ -27,25 +27,25 @@ export default {
           routeName: '/shop',
           name: '用户购买',
           desc: '进行用户购买',
-          src: 'static/images/1.jpg'
+          src: 'static/images/shop.jpg'
         },
         {
           routeName: '/mark',
           name: '用户打分',
           desc: '进行用户打分',
-          src: 'static/images/2.jpg'
+          src: 'static/images/mark.jpg'
         },
         {
           routeName: '/batch_upload',
           name: '批次上传',
           desc: '进行批次上传',
-          src: 'static/images/2.jpg'
+          src: 'static/images/upload.jpg'
         },
         {
           routeName: '/check_batch',
           name: '批次审核',
           desc: '进行批次审核',
-          src: 'static/images/2.jpg'
+          src: 'static/images/check.jpg'
         }
 
       ],

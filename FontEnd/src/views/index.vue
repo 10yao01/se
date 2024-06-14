@@ -31,9 +31,9 @@ export default {
         },
         {
           routeName: '/farm',
-          name: '农场管理',
-          desc: '进行农场管理',
-          src: 'static/images/2.jpg'
+          name: '农田管理',
+          desc: '进行农田管理',
+          src: 'static/images/nongchang.jpg'
         },
         {
           routeName: '/pasture',
