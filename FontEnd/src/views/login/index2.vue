@@ -81,7 +81,7 @@
           <el-input v-model="dialogForm.age" autocomplete="off"></el-input>
         </el-form-item>
         <div>
-          <span style="font-weight: bold">所属地区&nbsp&nbsp</span>
+          <span style="font-weight: bold">所属地区&nbsp;&nbsp;</span>
           <el-select v-model="dialogForm.areaname" placeholder="请选择" filterable>
             <el-option
               v-for="item in areaData"
@@ -327,6 +327,7 @@ $cursor: #fff;
       background: transparent;
       border: 0px;
       -webkit-appearance: none;
+      appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
       color: $light_gray;
