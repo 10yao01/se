@@ -8,10 +8,10 @@ import java.util.List;
 public interface UserService {
 
 
-    PageBean page(Integer page, Integer pageSize, String uid,
-                  String name, Integer gender,  String tel);
+//    PageBean page(Integer page, Integer pageSize, String uid,
+//                  String name, Integer gender,  String tel);
 
-//    List<User> list(String uid, String name, Integer gender, String tel);
+    List<User> list(String uid, String name, Integer gender, String tel);
 
     void add(User user);
 
