@@ -17,21 +17,21 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
-    @Override
-    public PageBean page(Integer page, Integer pageSize, String uid,
-                         String name, Integer gender, String tel) {
-
-        PageHelper.startPage(page, pageSize);
-        List<User> farmerList = userMapper.list(uid,name,gender,tel);
-        Page<User> p = (Page<User>) farmerList;
-
-        return new PageBean(p.getTotal(), p.getResult());
-    }
-
 //    @Override
-//    public List<User> list(String uid, String name, Integer gender, String tel) {
-//        return userMapper.list(uid, name, gender, tel);
+//    public PageBean page(Integer page, Integer pageSize, String uid,
+//                         String name, Integer gender, String tel) {
+//
+//        PageHelper.startPage(page, pageSize);
+//        List<User> farmerList = userMapper.list(uid,name,gender,tel);
+//        Page<User> p = (Page<User>) farmerList;
+//
+//        return new PageBean(p.getTotal(), p.getResult());
 //    }
+
+    @Override
+    public List<User> list(String uid, String name, Integer gender, String tel) {
+        return userMapper.list(uid, name, gender, tel);
+    }
 
     @Override
     public void add(User user) {
