@@ -38,10 +38,10 @@
                 sale = #{sale},
             </if>
             <if test="price != null and price != ''">
-                price = #{price}
+                price = #{price},
             </if>
             <if test="score != null and score != ''">
-                score = #{score}
+                score = #{score},
             </if>
             <if test="raternum != null and raternum != ''">
                 rater_num = #{raternum}

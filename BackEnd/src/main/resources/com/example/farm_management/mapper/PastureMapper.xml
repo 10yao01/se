@@ -50,16 +50,16 @@
                 poultry_num = #{poultrynum},
             </if>
             <if test="wid != null and wid != ''">
-                w_id = #{wid}
+                w_id = #{wid},
             </if>
             <if test="starttime != null and starttime != ''">
-                start_time = #{starttime}
+                start_time = #{starttime},
             </if>
             <if test="maturetime != null and maturetime != ''">
-                mature_time = #{maturetime}
+                mature_time = #{maturetime},
             </if>
             <if test="stage != null and stage != ''">
-                stage = #{stage}
+                stage = #{stage},
             </if>
             <if test="posinfo != null and posinfo != ''">
                 pos_info = #{posinfo}

@@ -32,7 +32,7 @@
         update feed
         <set>
             <if test="pid != null and pid != ''">
-                p_id = #{pid}
+                p_id = #{pid},
             </if>
             <if test="ftime != null and ftime != ''">
                 f_time = #{ftime}
