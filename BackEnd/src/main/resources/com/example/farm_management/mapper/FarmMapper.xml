@@ -50,16 +50,16 @@
                 c_amount = #{camount},
             </if>
             <if test="wid != null and wid != ''">
-                w_id = #{wid}
+                w_id = #{wid},
             </if>
             <if test="pdate != null and pdate != ''">
-                p_date = #{pdate}
+                p_date = #{pdate},
             </if>
             <if test="harvestdate != null and harvestdate != ''">
-                harvest_date = #{harvestdate}
+                harvest_date = #{harvestdate},
             </if>
             <if test="stage != null and stage != ''">
-                stage = #{stage}
+                stage = #{stage},
             </if>
             <if test="posinfo != null and posinfo != ''">
                 pos_info = #{posinfo}

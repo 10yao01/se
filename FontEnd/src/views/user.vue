@@ -15,7 +15,7 @@
         </el-col>
       </el-row>
 
-      <el-row >
+      <el-row>
         <el-col :span="22" :offset="1">
           <el-table :data="pagedData" border height="550" style="width: 100%">
           <el-table-column prop="uid" label="用户编号" sortable>
@@ -32,6 +32,36 @@
           </el-table-column>
           <el-table-column prop="tel" label="电话" sortable>
           </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button size="mini" type="info" @click="handleInfo(scope.row)">
+                修改
+              </el-button>
+              <el-dialog title="修改用户信息" :visible.sync="dialogFormVisible2" width="30%">
+                <el-form :model="dialogForm2">
+                  <el-form-item label="姓名" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm2.name" autocomplete="on"></el-input>
+                  </el-form-item>
+                  <el-form-item label="密码" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm2.pwd" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="年龄" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.age" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="电话" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.tel" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+                    <el-button type="primary" @click="Update()">确 定</el-button>
+                </div>
+              </el-dialog>
+              <el-button size="mini" type="danger" @click="openDelete(scope.row)">
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
           </el-table>
           <Pagination :total="filteredData.length" :currentPage="1" @changePage="changePage" :pageSize="pageSize">
           </Pagination>
@@ -41,6 +71,7 @@
 
  </el-container>
 </template>
+
 <script>
 import {Message} from 'element-ui'
 import axios from 'axios'
@@ -52,7 +83,7 @@ export default {
   data () {
     return {
       formData: [],
-      areaData: [],
+      userData: [],
       oneData: {},
       searchID:'',
       searchName: '',
@@ -63,8 +94,8 @@ export default {
           uid:'',
           pwd:'',
           name: '',
-          gender: '',
           age: '',
+          gender:'',
           idtype: '',
           tel: ''
       },
@@ -72,8 +103,8 @@ export default {
           uid:'',
           pwd:'',
           name: '',
-          gender: '',
           age: '',
+          gender:'',
           idtype: '',
           tel: ''
       },
@@ -197,14 +228,14 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    openDelete(index, row, rows) {
+    openDelete(row) {
         if(this.name=='root'){        
           this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.deleteRow(index, row, rows);
+          this.deleteRow(row);
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -219,9 +250,9 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    deleteRow (index, row, rows) {
-      let Fid = row.fid;
-      const url = this.$store.state.settings.baseurl + '/farmer/' + Fid;0
+    deleteRow (row) {
+      let Uid = row.uid;
+      const url = this.$store.state.settings.baseurl + '/user/' + Uid;
       axios.delete(url, {
         headers: {
           'Authorization': this.token
@@ -243,6 +274,7 @@ export default {
       })
         .then(response => {
           let Ddata = response.data.data
+          this.userData = Ddata
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
             Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
@@ -269,16 +301,15 @@ export default {
       this.dialogForm2.idtype = row.idtype
       this.dialogForm2.tel = row.tel
     },
-    Update(fid) {
+    Update() {
       this.dialogFormVisible2 = false
-      const url = this.$store.state.settings.baseurl + '/farmer'
+      const url = this.$store.state.settings.baseurl + '/user'
       axios.put(url,{
-        "fid": fid,
+        "uid": this.dialogForm2.uid,
         "name": this.dialogForm2.name,
-        "gender": this.dialogForm2.gender=='男'? 1:2,
+        "pwd": this.dialogForm2.pwd,
         "age": this.dialogForm2.age,
-        "image": this.dialogForm2.image,
-        "areaname": this.dialogForm2.areaname
+        "tel": this.dialogForm2.tel
       },{
         headers: {
           'Authorization': this.token
