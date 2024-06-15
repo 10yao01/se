@@ -8,7 +8,7 @@
         from user
         <where>
             <if test="uid != null and uid != ''">
-                u_id = #{uid} like concat('%', #{uid}, '%')
+                u_id = #{uid}
             </if>
             <if test="name != null and name != ''">
                 and name like concat('%', #{name}, '%')
