@@ -8,7 +8,7 @@
         from batch
         <where>
             <if test="bid != null and bid != ''">
-                and b_id = #{bid}
+                b_id = #{bid}
             </if>
             <if test="bdate != null and bdate != ''">
                 and b_date = #{bdate}
@@ -20,10 +20,10 @@
                 and g_id = #{gid}
             </if>
             <if test="gname != null and gname != ''">
-                and g_name = #{gname}
+                and g_name like concat('%', #{gname}, '%')
             </if>
             <if test="isdealed != null and isdealed != ''">
-                is_dealed = #{isdealed}
+                and is_dealed = #{isdealed}
             </if>
             <if test="amount != null and amount != ''">
                 and amount = #{amount}

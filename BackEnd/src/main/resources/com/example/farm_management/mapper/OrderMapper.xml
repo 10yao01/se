@@ -8,7 +8,7 @@
         from `order`
         <where>
             <if test="oid != null and oid != ''">
-                and o_id = #{oid}
+                o_id = #{oid}
             </if>
             <if test="customerid != null and customerid != ''">
                 and customer_id = #{customerid}

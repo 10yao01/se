@@ -8,7 +8,7 @@
         from fertile
         <where>
             <if test="fid != null">
-                and f_id = #{fid}
+                f_id = #{fid}
             </if>
             <if test="farmid != null and farmid != ''">
                 and farm_id = #{farmid}
