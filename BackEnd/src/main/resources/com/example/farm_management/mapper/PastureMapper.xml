@@ -17,7 +17,7 @@
                 and pos_info = #{posinfo}
             </if>
             <if test="poultryname != null and poultryname != ''">
-                and poultry_name = #{poultryname}
+                and poultry_name like concat('%', #{poultryname}, '%')
             </if>
             <if test="poultryid != null and poultryid != ''">
                 and poultry_id = #{poultryid}

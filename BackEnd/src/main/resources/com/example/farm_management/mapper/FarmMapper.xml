@@ -17,7 +17,7 @@
                 and pos_info = #{posinfo}
             </if>
             <if test="cname != null and cname != ''">
-                and c_name = #{cname}
+                and c_name like concat('%', #{cname}, '%')
             </if>
             <if test="cid != null and cid != ''">
                 and c_id = #{cid}

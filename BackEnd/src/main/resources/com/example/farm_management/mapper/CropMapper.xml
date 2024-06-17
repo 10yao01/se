@@ -8,7 +8,7 @@
         from crop
         <where>
             <if test="cid != null and cid != ''">
-                and c_id = #{cid}
+                c_id = #{cid}
             </if>
             <if test="cname != null and cname != ''">
                 c_name like concat('%', #{cname}, '%')

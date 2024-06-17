@@ -8,7 +8,7 @@
         from feed
         <where>
             <if test="fid != null">
-                and f_id = #{fid}
+                f_id = #{fid}
             </if>
             <if test="pid != null and pid != ''">
                 and p_id = #{pid}
