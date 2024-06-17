@@ -34,7 +34,7 @@
             <if test="pid != null and pid != ''">
                 p_id = #{pid},
             </if>
-            <if test="ftime != null and ftime != ''">
+            <if test="ftime != null">
                 f_time = #{ftime}
             </if>
         </set>

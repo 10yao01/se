@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FertileRecord {
-    private String fid;
-    private String farmid;
-    private Integer optype;
-    private Date optime;
+public class Order {
+    private String oid;
+    private String customerid;
+    private String gid;
+    private Integer amount;
+    private Integer score;
 }

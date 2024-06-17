@@ -16,8 +16,8 @@ public class FertileServiceImpl implements FertileService {
     FertileMapper fertileMapper;
 
     @Override
-    public List<FertileRecord> list(String fid, String farmid, Integer opid, Date optime){
-        return fertileMapper.list(fid, farmid,opid,optime);
+    public List<FertileRecord> list(String fid, String farmid, Integer optype, Date optime){
+        return fertileMapper.list(fid, farmid,optype,optime);
     }
 
     @Override

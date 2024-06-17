@@ -52,10 +52,10 @@
             <if test="wid != null and wid != ''">
                 w_id = #{wid},
             </if>
-            <if test="starttime != null and starttime != ''">
+            <if test="starttime != null">
                 start_time = #{starttime},
             </if>
-            <if test="maturetime != null and maturetime != ''">
+            <if test="maturetime != null">
                 mature_time = #{maturetime},
             </if>
             <if test="stage != null and stage != ''">
