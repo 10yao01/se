@@ -65,47 +65,27 @@
     </div>
   </div>
   <div style="line-height: 60px">
-    <el-dialog title="新增用户" :visible.sync="dialogFormVisible" width="30%">
+    <el-dialog title="注册用户" :visible.sync="dialogFormVisible" width="30%">
       <el-form :model="dialogForm">
-        <el-form-item label="用户姓名" :label-width="formLabelWidth">
+        <el-form-item label="U_id" :label-width="formLabelWidth">
+          <el-input v-model="dialogForm.uid" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" :label-width="formLabelWidth">
           <el-input v-model="dialogForm.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="用户密码" :label-width="formLabelWidth">
-          <el-input v-model="dialogForm.password" type="password" autocomplete="off"></el-input>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input v-model="dialogForm.pwd" type="password" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="用户性别">
+        <el-form-item label="性别" style="margin-left: 30px">
           <el-radio v-model="dialogForm.gender" label="1">男</el-radio>
-          <el-radio v-model="dialogForm.gender" label="2">女</el-radio>
+          <el-radio v-model="dialogForm.gender" label="0">女</el-radio>
         </el-form-item>
-        <el-form-item label="用户年龄" :label-width="formLabelWidth">
+        <el-form-item label="年龄" :label-width="formLabelWidth">
           <el-input v-model="dialogForm.age" autocomplete="off"></el-input>
         </el-form-item>
-        <div>
-          <span style="font-weight: bold">所属地区&nbsp;&nbsp;</span>
-          <el-select v-model="dialogForm.areaname" placeholder="请选择" filterable>
-            <el-option
-              v-for="item in areaData"
-              :key="item.id"
-              :label="item.name"
-              :value="item.name">
-              <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.id }}</span>
-            </el-option>
-          </el-select>
-        </div>
-        <div>
-          <span style="font-weight: bold">用户头像</span>
-          <el-upload
-            class="avatar-uploader"
-            action="static/images/"
-            :show-file-list="false"
-            list-type="picture-card"
-            :on-change="changeImage"
-            :before-upload="beforeAvatarUpload">
-            <el-image v-if="dialogForm.image" :src="dialogForm.image" class="avatar"></el-image>
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-        </div>
+        <el-form-item label="电话" :label-width="formLabelWidth">
+          <el-input v-model="dialogForm.tel" autocomplete="off"></el-input>
+        </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -128,7 +108,6 @@ export default {
         uid: '',
         pwd: ''
       },
-      areaData:[],
       loginRules: {
         name: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -139,7 +118,6 @@ export default {
       },
       loading: false,
       dialogFormVisible: false,
-      formData: [],
       passwordType: 'password',
       // options: [
       //   {'label': '用户'},
@@ -147,38 +125,16 @@ export default {
       // ],
       formLabelWidth: '70px',
       dialogForm: {
+          uid: '',
           name: '',
           gender: '',
-          password: '',
+          pwd: '',
           age: '',
-          image: '',
-          areaname: ''
+          tel: ''
       },
     }
   },
     created() {
-      axios.get(this.$store.state.settings.baseurl + '/area',{
-          headers: {
-            'Authorization': this.token
-          }
-      })
-          .then(response => {
-            this.areaData = response.data.data
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      axios.get(this.$store.state.settings.baseurl + '/farmer',{
-          headers: {
-            'Authorization': this.token
-          }
-      })
-          .then(response => {
-            this.formData = response.data.data
-          })
-          .catch(error => {
-            console.log(error)
-          })
     },
   methods: {
     // showPwd() {
@@ -196,15 +152,15 @@ export default {
     },
     AddData() {
       this.dialogFormVisible = false;
-      const url = this.$store.state.settings.baseurl + '/farmer';
+      const url = this.$store.state.settings.baseurl + '/user';
       axios.post(url, {
-        "fid": this.formData[this.formData.length-1].fid+1,
+        "uid": this.dialogForm.uid,
         "name": this.dialogForm.name,
-        "password": this.dialogForm.password,
+        "pwd": this.dialogForm.pwd,
         "gender": this.dialogForm.gender,
         "age": this.dialogForm.age,
-        "areaname": this.dialogForm.areaname,
-        "image": this.dialogForm.image
+        "tel": this.dialogForm.tel,
+        "idtype": 0
       },
       {
         headers: {
@@ -214,7 +170,7 @@ export default {
       .then(() => {
         this.$message({
           type: 'success',
-          message: '新增成功!'
+          message: '注册成功!'
         });
       })
       .catch(error => {
@@ -253,47 +209,36 @@ export default {
           this.loading = true
 
           const url = this.$store.state.settings.baseurl + '/login'
-          if(this.loginForm.uid!='root'){
-            axios.post(url, this.loginForm)
-              .then(res => {
-                let data = res.data
-                if (data.code === 1) {
-                  window.localStorage.setItem('uid', this.loginForm.uid)
-                  window.localStorage.setItem('token', data.data)
-                  // console.log(this.$store)
-                  axios.get(url + "?uid=" + this.loginForm.uid) //获取用户权限等级
-                    .then(response => {
-                      Message.success('登录成功')
-                      let type = response.data.data
-                      window.localStorage.setItem('type', type)
-                      if(type == 0){
-                        this.$router.push({ path: '/index' })
-                      }
-                    }).catch(error => {
-                      console.error(error)
-                      Message.error('系统错误' + error)
-                    }).finally(() => {
-                      // 结束请求
-                      this.loading = false
-                    })
-                } else {
-                  Message.error('登录失败，' + data.msg)
-                }
-              }).catch(error => {
-                console.error(error)
-                Message.error('系统错误' + error)
-              }).finally(() => {
-                // 结束请求
-                this.loading = false
-              })
-          }else if(this.loginForm.pwd=='zzb021120'){
-            Message.success('登录成功')
-            window.localStorage.setItem('uid', this.loginForm.uid)
-            this.$router.push({ path: '/index' })
-          }else{
-            Message.error('系统错误')
-            this.loading = false
-          }
+          axios.post(url, this.loginForm)
+            .then(res => {
+              let data = res.data
+              if (data.code === 1) {
+                window.localStorage.setItem('uid', this.loginForm.uid)
+                window.localStorage.setItem('token', data.data)
+                // console.log(this.$store)
+                axios.get(url + "?uid=" + this.loginForm.uid) //获取用户权限等级
+                  .then(response => {
+                    Message.success('登录成功')
+                    let type = response.data.data
+                    window.localStorage.setItem('type', type)
+                    this.$router.push({ path: '/index' })
+                  }).catch(error => {
+                    console.error(error)
+                    Message.error('系统错误' + error)
+                  }).finally(() => {
+                    // 结束请求
+                    this.loading = false
+                  })
+              } else {
+                Message.error('登录失败，' + data.msg)
+              }
+            }).catch(error => {
+              console.error(error)
+              Message.error('系统错误' + error)
+            }).finally(() => {
+              // 结束请求
+              this.loading = false
+            })
         }
       })
     }

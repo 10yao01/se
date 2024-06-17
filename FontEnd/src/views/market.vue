@@ -36,12 +36,6 @@ export default {
           src: 'static/images/mark.jpg'
         },
         {
-          routeName: '/batch_upload',
-          name: '批次上传',
-          desc: '进行批次上传',
-          src: 'static/images/upload.jpg'
-        },
-        {
           routeName: '/check_batch',
           name: '批次审核',
           desc: '进行批次审核',
