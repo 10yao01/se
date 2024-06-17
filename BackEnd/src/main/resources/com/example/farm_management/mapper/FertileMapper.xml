@@ -40,7 +40,7 @@
             <if test="optype != null and optype != ''">
                 op_type = #{optype},
             </if>
-            <if test="optime != null and optime != ''">
+            <if test="optime != null">
                 op_time = #{optime}
             </if>
         </set>

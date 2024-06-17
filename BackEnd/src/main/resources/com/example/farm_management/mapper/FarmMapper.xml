@@ -52,10 +52,10 @@
             <if test="wid != null and wid != ''">
                 w_id = #{wid},
             </if>
-            <if test="pdate != null and pdate != ''">
+            <if test="pdate != null">
                 p_date = #{pdate},
             </if>
-            <if test="harvestdate != null and harvestdate != ''">
+            <if test="harvestdate != null">
                 harvest_date = #{harvestdate},
             </if>
             <if test="stage != null and stage != ''">
