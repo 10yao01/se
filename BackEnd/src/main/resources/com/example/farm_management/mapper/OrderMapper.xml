@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.farm_management.mapper.OrderMapper">
+    <select id="list" resultType="com.example.farm_management.pojo.Order">
+        select *
+        from `order`
+        <where>
+            <if test="oid != null and oid != ''">
+                and o_id = #{oid}
+            </if>
+            <if test="customerid != null and customerid != ''">
+                and customer_id = #{customerid}
+            </if>
+            <if test="gid != null and gid != ''">
+                and g_id = #{gid}
+            </if>
+            <if test="amount != null and amount != ''">
+                and amount = #{amount}
+            </if>
+            <if test="score != null and score != ''">
+                and score = #{score}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from `order`
+        where `order`.o_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update `order`
+        <set>
+            <if test="customerid != null and customerid != ''">
+                customer_id = #{customerid},
+            </if>
+            <if test="gid != null and gid != ''">
+                g_id = #{gid},
+            </if>
+            <if test="amount != null and amount != ''">
+                amount = #{amount},
+            </if>
+            <if test="score != null and score != ''">
+                score = #{score}
+            </if>
+        </set>
+        where o_id = #{oid}
+    </update>
+</mapper>
