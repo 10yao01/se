@@ -12,6 +12,6 @@ import java.sql.Date;
 public class FertileRecord {
     private String fid;
     private String farmid;
-    private Integer opid;
+    private Integer optype;
     private Date optime;
 }

@@ -18,9 +18,9 @@ public class FertileController {
     FertileService fertileService;
 
     @GetMapping
-    public Result list(String fid, String farmid, Integer opid, Date optime){
+    public Result list(String fid, String farmid, Integer optype, Date optime){
         log.info("查询喂食信息");
-        List<FertileRecord> feedRecordListList = fertileService.list(fid, farmid, opid, optime);
+        List<FertileRecord> feedRecordListList = fertileService.list(fid, farmid, optype, optime);
         return Result.success(feedRecordListList);
     }
 

@@ -7,7 +7,7 @@ import java.sql.Date;
 import java.util.List;
 
 public interface FertileService {
-    List<FertileRecord> list(String fid, String farmid, Integer opid, Date optime);
+    List<FertileRecord> list(String fid, String farmid, Integer optype, Date optime);
 
     void add(FertileRecord feedRecord);
 

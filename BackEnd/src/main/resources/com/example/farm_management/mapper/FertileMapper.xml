@@ -13,8 +13,8 @@
             <if test="farmid != null and farmid != ''">
                 and farm_id = #{farmid}
             </if>
-            <if test="opid != null and opid != ''">
-                and op_id = #{opid}
+            <if test="optype != null and optype != ''">
+                and op_type = #{optype}
             </if>
             <if test="optime != null and optime != ''">
                 and op_time = #{optime}
@@ -37,8 +37,8 @@
             <if test="farmid != null and farmid != ''">
                 farm_id = #{farmid},
             </if>
-            <if test="opid != null and opid != ''">
-                op_id = #{opid},
+            <if test="optype != null and optype != ''">
+                op_type = #{optype},
             </if>
             <if test="optime != null and optime != ''">
                 op_time = #{optime}
