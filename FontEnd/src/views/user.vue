@@ -15,7 +15,7 @@
         </el-col>
       </el-row>
 
-      <el-row >
+      <el-row>
         <el-col :span="22" :offset="1">
           <el-table :data="pagedData" border height="550" style="width: 100%">
           <el-table-column prop="uid" label="用户编号" sortable>
@@ -31,10 +31,36 @@
           <el-table-column prop="age" label="年龄" sortable>
           </el-table-column>
           <el-table-column prop="tel" label="电话" sortable>
-            <!-- <template slot-scope="scope">
-              <el-tag :type="statusType[scope.row.status]" disable-transitions>{{ statusText[scope.row.status]
-              }}：{{scope.row.score}}</el-tag>
-            </template> -->
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button size="mini" type="info" @click="handleInfo(scope.row)">
+                修改
+              </el-button>
+              <el-dialog title="修改用户信息" :visible.sync="dialogFormVisible2" width="30%">
+                <el-form :model="dialogForm2">
+                  <el-form-item label="姓名" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm2.name" autocomplete="on"></el-input>
+                  </el-form-item>
+                  <el-form-item label="密码" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm2.pwd" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="年龄" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.age" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="电话" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.tel" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+                    <el-button type="primary" @click="Update()">确 定</el-button>
+                </div>
+              </el-dialog>
+              <el-button size="mini" type="danger" @click="openDelete(scope.row)">
+                删除
+              </el-button>
+            </template>
           </el-table-column>
           </el-table>
           <Pagination :total="filteredData.length" :currentPage="1" @changePage="changePage" :pageSize="pageSize">
@@ -45,6 +71,7 @@
 
  </el-container>
 </template>
+
 <script>
 import {Message} from 'element-ui'
 import axios from 'axios'
@@ -56,7 +83,7 @@ export default {
   data () {
     return {
       formData: [],
-      areaData: [],
+      userData: [],
       oneData: {},
       searchID:'',
       searchName: '',
@@ -64,47 +91,42 @@ export default {
       searchTel: '',
       descriptionData: '',
       dialogForm: {
+          uid:'',
+          pwd:'',
           name: '',
-          gender: '',
           age: '',
-          image: '',
-          areaname: ''
+          gender:'',
+          idtype: '',
+          tel: ''
       },
       dialogForm2: {
+          uid:'',
+          pwd:'',
           name: '',
-          gender: '',
           age: '',
-          image: '',
-          areaname: ''
+          gender:'',
+          idtype: '',
+          tel: ''
       },
-      statusType: ['success','warning','danger'],
-      statusText: ['优','良','差'],
       dialogVisible: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
       formLabelWidth: '70px',
+      typeClass: ['普通用户', '农场职工', '农场管理员', '系统管理员'],
       pageSize: 10,
       firstRecord: 1,
       lastRecord: 999,
       statusFileter: ['男', '女'],
       name: '',
       token: '',
+      type:''
     }
   },
   created() {
-    axios.get(this.$store.state.settings.baseurl + '/area',{
-        headers: {
-          'Authorization': this.token
-        }
-    })
-        .then(response => {
-          this.areaData = response.data.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    this.fetchData()
     this.name = window.localStorage.getItem('name')
     this.token = window.localStorage.getItem('token')
+    this.type = window.localStorage.getItem('type')
   },
   mounted () {
     if (this.$route.params.iid) {
@@ -179,54 +201,25 @@ export default {
     },
     search(searchID, searchName, searchGender, searchTel) {
       if(this.name=='root'){       
-        let url = this.$store.state.settings.baseurl + '/farmer?'
-        if(searchID != ''){
-          url = url + 'uid=' + searchID
-          if(searchName != ''){
-            url = url + '&name=' + searchName
-          }
-          if(searchGender != '') {
-                url = url + '&gender=' + searchGender
-            }
-            if(searchArea != '') {
-                url = url + '&tel=' + searchTel
-            }
-        }else if(searchName != '') {
-            url = url + 'name=' + searchName
-            if(searchGender != '') {
-                url = url + '&gender=' + searchGender
-            }
-            if(searchArea != '') {
-                url = url + '&tel=' + searchTel
-            }
-        }else if(searchGender != '') {
-            url = url + 'gender=' + searchGender
-            if(searchArea != '') {
-                url = url + '&tel=' + searchTel
-            }
-        }else if(searchArea != '') {
-            url = url + 'tel=' + searchTel
-        }
+        let url = this.$store.state.settings.baseurl + '/user'
         axios.get(url, {
             headers: {
             'Authorization': this.token
+            },
+            params:{
+              uid: searchID,
+              name: searchName,
+              gender: searchGender,
+              tel: searchTel
             }
         })
         .then(response => {
           let Ddata = response.data.data
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
-            }else{
-              Ddata[i].status = 2
-            }
+            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
           }
-          this.formData=Ddata
-
+          this.formData = Ddata
         })
         .catch(error => {
           console.log(error)
@@ -235,14 +228,14 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    openDelete(index, row, rows) {
+    openDelete(row) {
         if(this.name=='root'){        
           this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.deleteRow(index, row, rows);
+          this.deleteRow(row);
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -257,9 +250,9 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    deleteRow (index, row, rows) {
-      let Fid = row.fid;
-      const url = this.$store.state.settings.baseurl + '/farmer/' + Fid;0
+    deleteRow (row) {
+      let Uid = row.uid;
+      const url = this.$store.state.settings.baseurl + '/user/' + Uid;
       axios.delete(url, {
         headers: {
           'Authorization': this.token
@@ -274,9 +267,6 @@ export default {
     },
     fetchData () {
       let url = this.$store.state.settings.baseurl + '/user'
-      if(this.name!='root'){
-        url = url + '?name=' +this.name
-      }
       axios.get(url,{
         headers: {
           'Authorization': this.token
@@ -284,16 +274,10 @@ export default {
       })
         .then(response => {
           let Ddata = response.data.data
+          this.userData = Ddata
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
-            }else{
-              Ddata[i].status = 2
-            }
+            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
           }
           this.formData=Ddata
           this.firstRecord = 1
@@ -309,22 +293,23 @@ export default {
     },
     handleInfo (row) {
       this.dialogFormVisible2 = true;
+      this.dialogForm2.uid = row.uid
+      this.dialogForm2.pwd = row.pwd
       this.dialogForm2.name = row.name
       this.dialogForm2.gender = row.gender
       this.dialogForm2.age = row.age
-      this.dialogForm2.image = row.image
-      this.dialogForm2.areaname = row.areaname
+      this.dialogForm2.idtype = row.idtype
+      this.dialogForm2.tel = row.tel
     },
-    Update(fid) {
+    Update() {
       this.dialogFormVisible2 = false
-      const url = this.$store.state.settings.baseurl + '/farmer'
+      const url = this.$store.state.settings.baseurl + '/user'
       axios.put(url,{
-        "fid": fid,
+        "uid": this.dialogForm2.uid,
         "name": this.dialogForm2.name,
-        "gender": this.dialogForm2.gender=='男'? 1:2,
+        "pwd": this.dialogForm2.pwd,
         "age": this.dialogForm2.age,
-        "image": this.dialogForm2.image,
-        "areaname": this.dialogForm2.areaname
+        "tel": this.dialogForm2.tel
       },{
         headers: {
           'Authorization': this.token

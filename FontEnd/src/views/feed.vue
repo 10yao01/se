@@ -184,7 +184,7 @@ export default {
             params:{
               fid: searchFid,
               pid: searchFarmid,
-              ftime: searchTime,
+              time: searchTime,
             }
         })
         .then(response => {
