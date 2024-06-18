@@ -11,11 +11,12 @@ public interface OrderMapper {
     List<Order> list(String oid,
                      String customerid,
                      String gid,
+                     String gname,
                      Integer amount,
                      Integer score);
 
-    @Insert("insert into `order`(o_id, customer_id, g_id, amount, score)" +
-            "values (#{oid},#{customerid},#{gid},#{amount},#{score})")
+    @Insert("insert into `order`(o_id, customer_id, g_id, g_name, amount, score)" +
+            "values (#{oid},#{customerid},#{gid},#{gname},#{amount},#{score})")
     void insert(Order order);
 
     void delete(List<String> ids);

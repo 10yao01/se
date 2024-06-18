@@ -8,6 +8,7 @@ public interface OrderService {
     List<Order> list(String oid,
                      String customerid,
                      String gid,
+                     String gname,
                      Integer amount,
                      Integer score);
 

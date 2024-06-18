@@ -16,6 +16,9 @@
             <if test="gid != null and gid != ''">
                 and g_id = #{gid}
             </if>
+            <if test="gname != null and gname != ''">
+                and g_name like concat('%', #{gname}, '%')
+            </if>
             <if test="amount != null and amount != ''">
                 and amount = #{amount}
             </if>
