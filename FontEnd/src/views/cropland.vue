@@ -6,11 +6,11 @@
     <el-main>
       <el-row :gutter="20">
         <el-col :span="22" :offset="1">
-          <el-input style="width: 20%;" placeholder="请输入农田编号" v-model="searchName" />
-          <el-input style="width: 20%;" placeholder="请输入农田名称" v-model="searchName" />
-          <el-input style="width: 20%;" placeholder="请输入农田种植的作物名称" v-model="searchName" />
-          <el-input style="width: 20%;" placeholder="请输入农田管理员号" v-model="searchName" />
-          <el-button size="media" @click="search(searchName, searchGender, searchArea)" icon="el-icon-search">搜索</el-button>
+          <el-input style="width: 20%;" placeholder="请输入农田编号" v-model="LandID" />
+          <el-input style="width: 20%;" placeholder="请输入农田名称" v-model="LandName" />
+          <el-input style="width: 20%;" placeholder="请输入农田种植的作物名称" v-model="CropName" />
+          <el-input style="width: 20%;" placeholder="请输入农田管理员号" v-model="Uid" />
+          <el-button size="media" @click="search(LandID,LandName,CropName,Uid)" icon="el-icon-search">搜索</el-button>
          
         </el-col>
       </el-row>
@@ -20,31 +20,71 @@
           <el-table :data="pagedData" border height="550" style="width: 100%">
           <el-table-column prop="fid" label="农田编号" sortable>
           </el-table-column>
-          <el-table-column prop="image" label="农田名称">
+          <el-table-column prop="fname" label="农田名称">
+            
+            </el-table-column>
+            <el-table-column prop="cid" label="作物编号" sortable>
+            </el-table-column>
+            <el-table-column prop="cname" label="种植作物" sortable>
+            </el-table-column>
+            <el-table-column prop="camount" label="种植数量" sortable>
+            </el-table-column>
+            <el-table-column prop="pdate" label="种植时间" sortable>
+            </el-table-column>
+            <el-table-column prop="wid" label="管理员号" sortable>
+            </el-table-column>
+            <el-table-column prop="harvestdate" label="预计收成时间" sortable>
+            </el-table-column>
+            <el-table-column prop="stage" label="成长阶段" sortable>
+            </el-table-column>
+            <el-table-column prop="posinfo" label="农场位置备注" sortable>
+            </el-table-column>
+            <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-image :src="scope.row.image" style="width: 130px; height: 110px"></el-image>
-            </template>
-            </el-table-column>
-            <el-table-column prop="name" label="作物编号" sortable>
-            </el-table-column>
-            <el-table-column prop="name" label="种植作物" sortable>
-            </el-table-column>
-            <el-table-column prop="gender" label="种植数量" sortable>
-            </el-table-column>
-            <el-table-column prop="age" label="种植时间" sortable>
-            </el-table-column>
-            <el-table-column prop="areaname" label="管理员号" sortable>
-            </el-table-column>
-            <el-table-column prop="areaname" label="管理员名字" sortable>
-            </el-table-column>
-            <el-table-column prop="status" label="预计收成时间" sortable>
-            </el-table-column>
-            <el-table-column prop="areaname" label="成长阶段" sortable>
-            </el-table-column>
-            <el-table-column prop="areaname" label="农场位置备注" sortable>
-            <template slot-scope="scope">
-              <el-tag :type="statusType[scope.row.status]" disable-transitions>{{ statusText[scope.row.status]
-              }}：{{scope.row.score}}</el-tag>
+              <el-button size="mini" type="info" @click="handleInfo(scope.row)">
+                修改
+              </el-button>
+              <el-dialog title="修改农田信息" :visible.sync="dialogFormVisible2" width="30%">
+                <el-form :model="dialogForm2">
+                  <el-form-item label="养殖场编号" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm2.fid" autocomplete="on"></el-input>
+                  </el-form-item>
+                  <el-form-item label="养殖场名称" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm2.fname" autocomplete="on"></el-input>
+                  </el-form-item>
+                  <el-form-item label="作物编号" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm2.cid" autocomplete="on"></el-input>
+                  </el-form-item>
+                  <el-form-item label="种植作物" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm2.cname" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="种植数量" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.camount" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="种植时间" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.pdate" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="管理员号" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.wid" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="预计收成时间" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.harvestdate" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="成长阶段" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.stage" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="农场位置备注" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.posinfo" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+                    <el-button type="primary" @click="Update()">确 定</el-button>
+                </div>
+              </el-dialog>
+              <el-button size="mini" type="danger" @click="openDelete(scope.row)">
+                删除
+              </el-button>
             </template>
           </el-table-column>
           </el-table>
@@ -67,54 +107,60 @@ export default {
   data () {
     return {
       formData: [],
-      areaData: [],
+      userData: [],
       oneData: {},
+      searchID:'',
       searchName: '',
       searchGender: '',
-      searchArea: '',
+      searchTel: '',
+      LandID: '',
+      LandName: '',
+      CropName: '',
+      Uid: '',
       descriptionData: '',
       dialogForm: {
-          name: '',
-          gender: '',
-          age: '',
-          image: '',
-          areaname: ''
+          fid: '',
+          fname: '',
+          cid: '',
+          cname: '',
+          camount: '',
+          pdate: '',
+          wid: '',
+          harvestdate: '',
+          stage: '',
+          posinfo: '',
       },
       dialogForm2: {
-          name: '',
-          gender: '',
-          age: '',
-          image: '',
-          areaname: ''
+          fid: '',
+          fname: '',
+          cid: '',
+          cname: '',
+          camount: '',
+          pdate: '',
+          wid: '',
+          harvestdate: '',
+          stage: '',
+          posinfo: '',
       },
-      statusType: ['success','warning','danger'],
-      statusText: ['优','良','差'],
       dialogVisible: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
       formLabelWidth: '70px',
+      typeClass: ['普通用户', '农场职工', '农场管理员', '系统管理员'],
       pageSize: 10,
       firstRecord: 1,
       lastRecord: 999,
       statusFileter: ['男', '女'],
       name: '',
       token: '',
+      type:''
     }
   },
   created() {
-    axios.get(this.$store.state.settings.baseurl + '/area',{
-        headers: {
-          'Authorization': this.token
-        }
-    })
-        .then(response => {
-          this.areaData = response.data.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    this.fetchData()
     this.name = window.localStorage.getItem('name')
     this.token = window.localStorage.getItem('token')
+    this.type = window.localStorage.getItem('type')
   },
   mounted () {
     if (this.$route.params.iid) {
@@ -187,45 +233,27 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    search(searchName, searchGender, searchArea) {
+    search(LandID,LandName,CropName,Uid) {
       if(this.name=='root'){       
-        let url = this.$store.state.settings.baseurl + '/farmer?'
-        if(searchName != '') {
-            url = url + 'name=' + searchName
-            if(searchGender != '') {
-                url = url + '&gender=' + searchGender
-            }
-            if(searchArea != '') {
-                url = url + '&areaname=' + searchArea
-            }
-        }else if(searchGender != '') {
-            url = url + 'gender=' + searchGender
-            if(searchArea != '') {
-                url = url + '&areaname=' + searchArea
-            }
-        }else if(searchArea != '') {
-            url = url + 'areaname=' + searchArea
-        }
+        let url = this.$store.state.settings.baseurl + '/farm'
         axios.get(url, {
             headers: {
             'Authorization': this.token
+            },
+            params:{
+              fid: LandID,
+              fname: LandName,
+              cname: CropName,
+              wid: Uid
             }
         })
         .then(response => {
           let Ddata = response.data.data
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
-            }else{
-              Ddata[i].status = 2
-            }
+            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
           }
-          this.formData=Ddata
-
+          this.formData = Ddata
         })
         .catch(error => {
           console.log(error)
@@ -234,14 +262,14 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    openDelete(index, row, rows) {
+    openDelete(row) {
         if(this.name=='root'){        
           this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.deleteRow(index, row, rows);
+          this.deleteRow(row);
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -256,9 +284,9 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    deleteRow (index, row, rows) {
+    deleteRow (row) {
       let Fid = row.fid;
-      const url = this.$store.state.settings.baseurl + '/farmer/' + Fid;0
+      const url = this.$store.state.settings.baseurl + '/farm/' + Fid;
       axios.delete(url, {
         headers: {
           'Authorization': this.token
@@ -272,10 +300,7 @@ export default {
       })
     },
     fetchData () {
-      let url = this.$store.state.settings.baseurl + '/farmer'
-      if(this.name!='root'){
-        url = url + '?name=' +this.name
-      }
+      let url = this.$store.state.settings.baseurl + '/farm'
       axios.get(url,{
         headers: {
           'Authorization': this.token
@@ -283,16 +308,10 @@ export default {
       })
         .then(response => {
           let Ddata = response.data.data
+          this.userData = Ddata
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
-            }else{
-              Ddata[i].status = 2
-            }
+            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
           }
           this.formData=Ddata
           this.firstRecord = 1
@@ -308,22 +327,31 @@ export default {
     },
     handleInfo (row) {
       this.dialogFormVisible2 = true;
-      this.dialogForm2.name = row.name
-      this.dialogForm2.gender = row.gender
-      this.dialogForm2.age = row.age
-      this.dialogForm2.image = row.image
-      this.dialogForm2.areaname = row.areaname
+      this.dialogForm2.fid = row.fid
+      this.dialogForm2.fname = row.fname
+      this.dialogForm2.cid = row.cid
+      this.dialogForm2.cname = row.cname
+      this.dialogForm2.camount = row.camount
+      this.dialogForm2.pdate = row.pdate
+      this.dialogForm2.wid =row.wid
+      this.dialogForm2.harvestdate = row.harvestdate
+      this.dialogForm2.stage = row.stage
+      this.dialogForm2.posinfo = row.posinfo
     },
-    Update(fid) {
+    Update() {
       this.dialogFormVisible2 = false
-      const url = this.$store.state.settings.baseurl + '/farmer'
+      const url = this.$store.state.settings.baseurl + '/farm'
       axios.put(url,{
-        "fid": fid,
-        "name": this.dialogForm2.name,
-        "gender": this.dialogForm2.gender=='男'? 1:2,
-        "age": this.dialogForm2.age,
-        "image": this.dialogForm2.image,
-        "areaname": this.dialogForm2.areaname
+        "fid": this.dialogForm2.fid,
+        "fname": this.dialogForm2.fname,
+        "cid": this.dialogForm2.cid,
+        "cname": this.dialogForm2.cname,
+        "camount": this.dialogForm2.camount,
+        "pdate": this.dialogForm2.pdate,
+        "wid": this.dialogForm2.wid,
+        "harvestdate": this.dialogForm2.harvestdate,
+        "stage": this.dialogForm2.stage,
+        "posinfo": this.dialogForm2.posinfo
       },{
         headers: {
           'Authorization': this.token

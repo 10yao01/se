@@ -6,9 +6,10 @@
     <el-main>
       <el-row :gutter="20">
         <el-col :span="22" :offset="1">
-          <el-input style="width: 20%;" placeholder="请输入农田编号" v-model="searchName" />
-          <el-input style="width: 20%;" placeholder="请输入灌溉时间" v-model="searchName" />
-          <el-button size="media" @click="search(searchName, searchGender, searchArea)" icon="el-icon-search">搜索</el-button>
+          <el-input style="width: 20%;" placeholder="请输入灌溉编号" v-model="searchFid" />
+          <el-input style="width: 20%;" placeholder="请输入农田编号" v-model="searchFarmid" />
+          <el-input style="width: 20%;" placeholder="请输入灌溉时间" v-model="searchTime" />
+          <el-button size="media" @click="search(searchFid,searchFarmid, searchTime)" icon="el-icon-search">搜索</el-button>
          
         </el-col>
       </el-row>
@@ -16,12 +17,37 @@
       <el-row >
         <el-col :span="22" :offset="1">
           <el-table :data="pagedData" border height="550" style="width: 100%">
-          <el-table-column prop="fid" label="农田编号" sortable>
+            <el-table-column prop="fid" label="灌溉编号" sortable>
+            </el-table-column>
+            <el-table-column prop="farmid" label="农田编号" sortable>
+            </el-table-column>
+          <el-table-column prop="optime" label="灌溉时间">
           </el-table-column>
-          <el-table-column prop="image" label="灌溉时间">
+          <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-tag :type="statusType[scope.row.status]" disable-transitions>{{ statusText[scope.row.status]
-              }}：{{scope.row.score}}</el-tag>
+              <el-button size="mini" type="info" @click="handleInfo(scope.row)">
+                修改
+              </el-button>
+              <el-dialog title="修改灌溉信息" :visible.sync="dialogFormVisible2" width="30%">
+                <el-form :model="dialogForm2">
+                  <el-form-item label="灌溉编号" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.fid" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="农田编号" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.farmid" autocomplete="off"></el-input>
+                    </el-form-item>
+                  <el-form-item label="灌溉时间" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.optime" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+                    <el-button type="primary" @click="Update()">确 定</el-button>
+                </div>
+              </el-dialog>
+              <el-button size="mini" type="danger" @click="openDelete(scope.row)">
+                删除
+              </el-button>
             </template>
           </el-table-column>
           </el-table>
@@ -44,54 +70,43 @@ export default {
   data () {
     return {
       formData: [],
-      areaData: [],
+      userData: [],
       oneData: {},
-      searchName: '',
-      searchGender: '',
-      searchArea: '',
+      searchFid:'',
+      searchFarmid: '',
+      searchTime: '',
       descriptionData: '',
       dialogForm: {
-          name: '',
-          gender: '',
-          age: '',
-          image: '',
-          areaname: ''
+          fid:'',
+          farmid:'',
+          opid: '',
+          optime: '',
       },
       dialogForm2: {
-          name: '',
-          gender: '',
-          age: '',
-          image: '',
-          areaname: ''
+        fid:'',
+          farmid:'',
+          opid: '',
+          optime: '',
       },
-      statusType: ['success','warning','danger'],
-      statusText: ['优','良','差'],
       dialogVisible: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
       formLabelWidth: '70px',
+      typeClass: ['普通用户', '农场职工', '农场管理员', '系统管理员'],
       pageSize: 10,
       firstRecord: 1,
       lastRecord: 999,
       statusFileter: ['男', '女'],
       name: '',
       token: '',
+      type:''
     }
   },
   created() {
-    axios.get(this.$store.state.settings.baseurl + '/area',{
-        headers: {
-          'Authorization': this.token
-        }
-    })
-        .then(response => {
-          this.areaData = response.data.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    this.fetchData()
     this.name = window.localStorage.getItem('name')
     this.token = window.localStorage.getItem('token')
+    this.type = window.localStorage.getItem('type')
   },
   mounted () {
     if (this.$route.params.iid) {
@@ -139,11 +154,8 @@ export default {
         const url = this.$store.state.settings.baseurl + '/farmer';
         axios.post(url, {
           "fid": this.formData[this.formData.length-1].fid+1,
-          "name": this.dialogForm.name,
-          "gender": this.dialogForm.gender,
-          "age": this.dialogForm.age,
-          "areaname": this.dialogForm.areaname,
-          "image": this.dialogForm.image
+          "farmid": this.dialogForm.farmid,
+          "optime": this.dialogForm.optime,
         },
         {
           headers: {
@@ -164,45 +176,26 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    search(searchName, searchGender, searchArea) {
+    search(searchFid,searchFarmid, searchTime) {
       if(this.name=='root'){       
-        let url = this.$store.state.settings.baseurl + '/farmer?'
-        if(searchName != '') {
-            url = url + 'name=' + searchName
-            if(searchGender != '') {
-                url = url + '&gender=' + searchGender
-            }
-            if(searchArea != '') {
-                url = url + '&areaname=' + searchArea
-            }
-        }else if(searchGender != '') {
-            url = url + 'gender=' + searchGender
-            if(searchArea != '') {
-                url = url + '&areaname=' + searchArea
-            }
-        }else if(searchArea != '') {
-            url = url + 'areaname=' + searchArea
-        }
+        let url = this.$store.state.settings.baseurl + '/fertile'
         axios.get(url, {
             headers: {
             'Authorization': this.token
+            },
+            params:{
+              fid: searchFid,
+              farmid: searchFarmid,
+              time: searchTime,
             }
         })
         .then(response => {
           let Ddata = response.data.data
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
-            }else{
-              Ddata[i].status = 2
-            }
+            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
           }
-          this.formData=Ddata
-
+          this.formData = Ddata
         })
         .catch(error => {
           console.log(error)
@@ -211,14 +204,14 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    openDelete(index, row, rows) {
+    openDelete(row) {
         if(this.name=='root'){        
           this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.deleteRow(index, row, rows);
+          this.deleteRow(row);
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -233,9 +226,9 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    deleteRow (index, row, rows) {
+    deleteRow (row) {
       let Fid = row.fid;
-      const url = this.$store.state.settings.baseurl + '/farmer/' + Fid;0
+      const url = this.$store.state.settings.baseurl + '/fertile/' + Fid;
       axios.delete(url, {
         headers: {
           'Authorization': this.token
@@ -249,10 +242,7 @@ export default {
       })
     },
     fetchData () {
-      let url = this.$store.state.settings.baseurl + '/farmer'
-      if(this.name!='root'){
-        url = url + '?name=' +this.name
-      }
+      let url = this.$store.state.settings.baseurl + '/fertile'
       axios.get(url,{
         headers: {
           'Authorization': this.token
@@ -260,16 +250,10 @@ export default {
       })
         .then(response => {
           let Ddata = response.data.data
+          this.userData = Ddata
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
-            }else{
-              Ddata[i].status = 2
-            }
+            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
           }
           this.formData=Ddata
           this.firstRecord = 1
@@ -285,22 +269,19 @@ export default {
     },
     handleInfo (row) {
       this.dialogFormVisible2 = true;
-      this.dialogForm2.name = row.name
-      this.dialogForm2.gender = row.gender
-      this.dialogForm2.age = row.age
-      this.dialogForm2.image = row.image
-      this.dialogForm2.areaname = row.areaname
+      this.dialogForm2.fid = row.fid
+      this.dialogForm2.farmid = row.farmid
+      this.dialogForm2.opid = row.opid
+      this.dialogForm2.optime = row.optime
     },
-    Update(fid) {
+    Update() {
       this.dialogFormVisible2 = false
-      const url = this.$store.state.settings.baseurl + '/farmer'
+      const url = this.$store.state.settings.baseurl + '/fertile'
       axios.put(url,{
-        "fid": fid,
-        "name": this.dialogForm2.name,
-        "gender": this.dialogForm2.gender=='男'? 1:2,
-        "age": this.dialogForm2.age,
-        "image": this.dialogForm2.image,
-        "areaname": this.dialogForm2.areaname
+        "fid": this.dialogForm2.fid,
+        "farmid": this.dialogForm2.farmid,
+        "opid": this.dialogForm2.opid,
+        "optime": this.dialogForm2.optime,
       },{
         headers: {
           'Authorization': this.token
