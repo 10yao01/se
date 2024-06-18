@@ -26,17 +26,17 @@
           </el-table-column>
           <el-table-column prop="ftime" label="所需施肥间隔时间" sortable>
           </el-table-column>
-            <el-table-column label="操作">
+          <el-table-column label="操作" width="300px">
             <template slot-scope="scope">
               <el-button size="mini" type="info" @click="handleInfo(scope.row)">
                 修改
               </el-button>
               <el-dialog title="修改农作物信息" :visible.sync="dialogFormVisible2" width="30%">
                 <el-form :model="dialogForm2">
-                  <el-form-item label="农作物编号" :label-width="formLabelWidth">
+                  <el-form-item label="作物编号" :label-width="formLabelWidth">
                     <el-input v-model="dialogForm2.cid" autocomplete="on"></el-input>
                   </el-form-item>
-                  <el-form-item label="农作物名称" :label-width="formLabelWidth">
+                  <el-form-item label="作物名称" :label-width="formLabelWidth">
                     <el-input v-model="dialogForm2.cname" autocomplete="off"></el-input>
                   </el-form-item>
                   <el-form-item label="相关信息" :label-width="formLabelWidth">
@@ -80,19 +80,9 @@ export default {
   data () {
     return {
       formData: [],
-      userData: [],
       oneData: {},
       searchID:'',
       searchName: '',
-      descriptionData: '',
-      dialogForm: {
-          cid:'',
-          cname:'',
-          cinfo: '',
-          wtime: '',
-          ftime: '',
-
-      },
       dialogForm2: {
           cid:'',
           cname:'',
@@ -100,23 +90,22 @@ export default {
           wtime: '',
           ftime: '',
       },
-      dialogVisible: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
-      formLabelWidth: '70px',
+      formLabelWidth: '100px',
       typeClass: ['普通用户', '农场职工', '农场管理员', '系统管理员'],
       pageSize: 10,
       firstRecord: 1,
       lastRecord: 999,
       statusFileter: ['男', '女'],
-      name: '',
+      uid: '',
       token: '',
       type:''
     }
   },
   created() {
     this.fetchData()
-    this.name = window.localStorage.getItem('name')
+    this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
   },
@@ -154,41 +143,10 @@ export default {
             }
           }
         })
-      }).filter(row => {
-        return this.statusFileter.includes(row.gender)
       })
     }
   },
   methods: {
-    AddData() {
-      if(this.name=='root'){ 
-        this.dialogFormVisible = false;
-        const url = this.$store.state.settings.baseurl + '/farmer';
-        axios.post(url, {
-          "cid": this.formData[this.formData.length-1].cid+1,
-          "name": this.dialogForm.name,
-          "itime": this.dialogForm.itime,
-          "ftime": this.dialogForm.ftime,
-        },
-        {
-          headers: {
-            'Authorization': this.token
-          }
-        })
-        .then(() => {
-          this.fetchData();
-          this.$message({
-            type: 'success',
-            message: '新增成功!'
-          });
-        })
-        .catch(error => {
-            console.log(error)
-        });
-      }else{
-        Message.error("没有此权限！")
-      }
-    },
     search(searchID, searchName) {
       if(this.name=='root'){       
         let url = this.$store.state.settings.baseurl + '/crop'
@@ -262,9 +220,7 @@ export default {
       })
         .then(response => {
           let Ddata = response.data.data
-          this.userData = Ddata
           for(let i = 0;i<Ddata.length;i++){
-            Ddata[i].gender = Ddata[i].gender==1? '男':'女'
             Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
           }
           this.formData=Ddata
@@ -312,21 +268,6 @@ export default {
       .catch(error => {
           console.log(error)
       });
-    },
-    beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt5M = file.size / 1024 / 1024 < 5;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt5M) {
-          this.$message.error('上传头像图片大小不能超过 5MB!');
-        }
-        return isJPG && isLt5M;
-    },
-    changeImage(file) {
-      this.dialogForm.image = 'static/images/' + file.name
     }
   }
 }

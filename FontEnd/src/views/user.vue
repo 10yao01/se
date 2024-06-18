@@ -126,13 +126,11 @@ export default {
   data () {
     return {
       formData: [],
-      userData: [],
       oneData: {},
       searchID:'',
       searchName: '',
       searchGender: '',
       searchTel: '',
-      descriptionData: '',
       dialogForm: {
           uid:'',
           pwd:'',
@@ -317,7 +315,6 @@ export default {
       })
         .then(response => {
           let Ddata = response.data.data
-          this.userData = Ddata
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
             Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
@@ -368,21 +365,6 @@ export default {
       .catch(error => {
           console.log(error)
       })
-    },
-    beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt5M = file.size / 1024 / 1024 < 5;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt5M) {
-          this.$message.error('上传头像图片大小不能超过 5MB!');
-        }
-        return isJPG && isLt5M;
-    },
-    changeImage(file) {
-      this.dialogForm.image = 'static/images/' + file.name
     }
   }
 }

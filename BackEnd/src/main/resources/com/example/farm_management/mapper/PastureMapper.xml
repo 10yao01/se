@@ -46,7 +46,7 @@
             <if test="poultryname != null and poultryname != ''">
                 poultry_name = #{poultryname},
             </if>
-            <if test="poultrynum != null and poultrynum != ''">
+            <if test="poultrynum != null">
                 poultry_num = #{poultrynum},
             </if>
             <if test="wid != null and wid != ''">
