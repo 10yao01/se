@@ -241,6 +241,9 @@ export default {
             })
         }
       })
+    },
+    test(){
+      
     }
   }
 }
