@@ -6,9 +6,9 @@
     <el-main>
       <el-row :gutter="20">
         <el-col :span="22" :offset="1">
-          <el-input style="width: 20%;" placeholder="请输入家禽编号" v-model="searchName" />
+          <el-input style="width: 20%;" placeholder="请输入家禽编号" v-model="searchID" />
           <el-input style="width: 20%;" placeholder="请输入家禽名称" v-model="searchName" />
-          <el-button size="media" @click="search(searchName, searchGender, searchArea)" icon="el-icon-search">搜索</el-button>
+          <el-button size="media" @click="search(searchID,searchName)" icon="el-icon-search">搜索</el-button>
          
         </el-col>
       </el-row>
@@ -16,20 +16,42 @@
       <el-row >
         <el-col :span="22" :offset="1">
           <el-table :data="pagedData" border height="550" style="width: 100%">
-          <el-table-column prop="fid" label="家禽编号" sortable>
+          <el-table-column prop="pid" label="家禽编号" sortable>
           </el-table-column>
-          <el-table-column prop="image" label="家禽名称">
+          <el-table-column prop="pname" label="家禽名称">
+          </el-table-column>
+          <el-table-column prop="pinfo" label="相关信息" sortable>
+          </el-table-column>
+          <el-table-column prop="feedinterval" label="所需喂食间隔时间" sortable>
+          </el-table-column>
+            <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-image :src="scope.row.image" style="width: 130px; height: 110px"></el-image>
-            </template>
-          </el-table-column>
-          <el-table-column prop="name" label="家禽信息" sortable>
-          </el-table-column>
-          <el-table-column prop="gender" label="所需喂食间隔时间" sortable>
-
-            <template slot-scope="scope">
-              <el-tag :type="statusType[scope.row.status]" disable-transitions>{{ statusText[scope.row.status]
-              }}：{{scope.row.score}}</el-tag>
+              <el-button size="mini" type="info" @click="handleInfo(scope.row)">
+                修改
+              </el-button>
+              <el-dialog title="修改家禽信息" :visible.sync="dialogFormVisible2" width="30%">
+                <el-form :model="dialogForm2">
+                  <el-form-item label="家禽编号" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm2.pid" autocomplete="on"></el-input>
+                  </el-form-item>
+                  <el-form-item label="家禽名称" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm2.pname" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="相关信息" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.pinfo" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="所需喂食间隔时间" :label-width="formLabelWidth">
+                      <el-input v-model="dialogForm2.feedinterval" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+                    <el-button type="primary" @click="Update()">确 定</el-button>
+                </div>
+              </el-dialog>
+              <el-button size="mini" type="danger" @click="openDelete(scope.row)">
+                删除
+              </el-button>
             </template>
           </el-table-column>
           </el-table>
@@ -41,6 +63,7 @@
 
  </el-container>
 </template>
+
 <script>
 import {Message} from 'element-ui'
 import axios from 'axios'
@@ -52,54 +75,43 @@ export default {
   data () {
     return {
       formData: [],
-      areaData: [],
+      userData: [],
       oneData: {},
+      searchID:'',
       searchName: '',
-      searchGender: '',
-      searchArea: '',
       descriptionData: '',
       dialogForm: {
-          name: '',
-          gender: '',
-          age: '',
-          image: '',
-          areaname: ''
+          pid:'',
+          pname:'',
+          pinfo: '',
+          feedinterval: '',
+
       },
       dialogForm2: {
-          name: '',
-          gender: '',
-          age: '',
-          image: '',
-          areaname: ''
+          pid:'',
+          pname:'',
+          pinfo: '',
+          feedinterval: '',
       },
-      statusType: ['success','warning','danger'],
-      statusText: ['优','良','差'],
       dialogVisible: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
       formLabelWidth: '70px',
+      typeClass: ['普通用户', '农场职工', '农场管理员', '系统管理员'],
       pageSize: 10,
       firstRecord: 1,
       lastRecord: 999,
       statusFileter: ['男', '女'],
       name: '',
       token: '',
+      type:''
     }
   },
   created() {
-    axios.get(this.$store.state.settings.baseurl + '/area',{
-        headers: {
-          'Authorization': this.token
-        }
-    })
-        .then(response => {
-          this.areaData = response.data.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    this.fetchData()
     this.name = window.localStorage.getItem('name')
     this.token = window.localStorage.getItem('token')
+    this.type = window.localStorage.getItem('type')
   },
   mounted () {
     if (this.$route.params.iid) {
@@ -146,12 +158,10 @@ export default {
         this.dialogFormVisible = false;
         const url = this.$store.state.settings.baseurl + '/farmer';
         axios.post(url, {
-          "fid": this.formData[this.formData.length-1].fid+1,
+          "cid": this.formData[this.formData.length-1].cid+1,
           "name": this.dialogForm.name,
-          "gender": this.dialogForm.gender,
-          "age": this.dialogForm.age,
-          "areaname": this.dialogForm.areaname,
-          "image": this.dialogForm.image
+          "itime": this.dialogForm.itime,
+          "ftime": this.dialogForm.ftime,
         },
         {
           headers: {
@@ -172,45 +182,25 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    search(searchName, searchGender, searchArea) {
+    search(searchID, searchName) {
       if(this.name=='root'){       
-        let url = this.$store.state.settings.baseurl + '/farmer?'
-        if(searchName != '') {
-            url = url + 'name=' + searchName
-            if(searchGender != '') {
-                url = url + '&gender=' + searchGender
-            }
-            if(searchArea != '') {
-                url = url + '&areaname=' + searchArea
-            }
-        }else if(searchGender != '') {
-            url = url + 'gender=' + searchGender
-            if(searchArea != '') {
-                url = url + '&areaname=' + searchArea
-            }
-        }else if(searchArea != '') {
-            url = url + 'areaname=' + searchArea
-        }
+        let url = this.$store.state.settings.baseurl + '/poultry'
         axios.get(url, {
             headers: {
             'Authorization': this.token
+            },
+            params:{
+              pid: searchID,
+              pname: searchName,
             }
         })
         .then(response => {
           let Ddata = response.data.data
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
-            }else{
-              Ddata[i].status = 2
-            }
+            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
           }
-          this.formData=Ddata
-
+          this.formData = Ddata
         })
         .catch(error => {
           console.log(error)
@@ -219,14 +209,14 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    openDelete(index, row, rows) {
+    openDelete(row) {
         if(this.name=='root'){        
           this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.deleteRow(index, row, rows);
+          this.deleteRow(row);
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -241,9 +231,9 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    deleteRow (index, row, rows) {
-      let Fid = row.fid;
-      const url = this.$store.state.settings.baseurl + '/farmer/' + Fid;0
+    deleteRow (row) {
+      let Cid = row.pid;
+      const url = this.$store.state.settings.baseurl + '/poultry/' + Cid;
       axios.delete(url, {
         headers: {
           'Authorization': this.token
@@ -257,10 +247,7 @@ export default {
       })
     },
     fetchData () {
-      let url = this.$store.state.settings.baseurl + '/farmer'
-      if(this.name!='root'){
-        url = url + '?name=' +this.name
-      }
+      let url = this.$store.state.settings.baseurl + '/poultry'
       axios.get(url,{
         headers: {
           'Authorization': this.token
@@ -268,16 +255,10 @@ export default {
       })
         .then(response => {
           let Ddata = response.data.data
+          this.userData = Ddata
           for(let i = 0;i<Ddata.length;i++){
             Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
-            }else{
-              Ddata[i].status = 2
-            }
+            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
           }
           this.formData=Ddata
           this.firstRecord = 1
@@ -293,22 +274,20 @@ export default {
     },
     handleInfo (row) {
       this.dialogFormVisible2 = true;
-      this.dialogForm2.name = row.name
-      this.dialogForm2.gender = row.gender
-      this.dialogForm2.age = row.age
-      this.dialogForm2.image = row.image
-      this.dialogForm2.areaname = row.areaname
+      this.dialogForm2.pid = row.pid
+      this.dialogForm2.pname = row.pname
+      this.dialogForm2.pinfo = row.pinfo
+      this.dialogForm2.feedinterval = row.feedinterval
+
     },
-    Update(fid) {
+    Update() {
       this.dialogFormVisible2 = false
-      const url = this.$store.state.settings.baseurl + '/farmer'
+      const url = this.$store.state.settings.baseurl + '/poultry'
       axios.put(url,{
-        "fid": fid,
-        "name": this.dialogForm2.name,
-        "gender": this.dialogForm2.gender=='男'? 1:2,
-        "age": this.dialogForm2.age,
-        "image": this.dialogForm2.image,
-        "areaname": this.dialogForm2.areaname
+        "pid": this.dialogForm2.pid,
+        "pname": this.dialogForm2.pname,
+        "pinfo": this.dialogForm2.pinfo,
+        "feedinterval": this.dialogForm2.feedinterval
       },{
         headers: {
           'Authorization': this.token
