@@ -23,19 +23,22 @@ USE `se`;
 CREATE TABLE IF NOT EXISTS `batch` (
   `b_id` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '批次号',
   `b_date` date NOT NULL COMMENT '日期',
-  `origin_id` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '产地，农田（养殖场）编号，联合外键问题？',
+  `origin_id` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '产地',
   `g_id` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '商品编号',
-  `g_name` char(50) NOT NULL,
+  `g_name` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '商品名称',
+  `is_dealed` int NOT NULL DEFAULT (0) COMMENT '1为已审核，0为未审核，-1为审核不通过',
   `amount` int DEFAULT NULL COMMENT '该批次的数量',
   PRIMARY KEY (`b_id`) USING BTREE,
   KEY `FK_batch_goods` (`g_id`) USING BTREE,
   CONSTRAINT `FK_batch_goods` FOREIGN KEY (`g_id`) REFERENCES `goods` (`g_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 正在导出表  se.batch 的数据：~2 rows (大约)
-REPLACE INTO `batch` (`b_id`, `b_date`, `origin_id`, `g_id`, `g_name`, `amount`) VALUES
-	('B01', '2024-05-25', 'P01', 'G01', '鸡', 2),
-	('B02', '2024-05-31', 'P02', 'G04', '鸭', 20);
+-- 正在导出表  se.batch 的数据：~4 rows (大约)
+REPLACE INTO `batch` (`b_id`, `b_date`, `origin_id`, `g_id`, `g_name`, `is_dealed`, `amount`) VALUES
+	('B01', '2024-05-25', 'P01', 'P01', '鸡', 1, 2),
+	('B02', '2024-05-31', 'P02', 'P02', '鸭', 1, 20),
+	('B03', '2024-06-03', 'P03', 'P01', '鸡', 0, 20),
+	('B04', '2024-06-02', 'P02', 'P02', '鸭', 1, 20);
 
 -- 导出  表 se.crop 结构
 CREATE TABLE IF NOT EXISTS `crop` (
@@ -47,12 +50,13 @@ CREATE TABLE IF NOT EXISTS `crop` (
   PRIMARY KEY (`c_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 正在导出表  se.crop 的数据：~4 rows (大约)
+-- 正在导出表  se.crop 的数据：~5 rows (大约)
 REPLACE INTO `crop` (`c_id`, `c_name`, `c_info`, `w_time`, `f_time`) VALUES
 	('C01', '大葱', '非常好吃', 24, 48),
 	('C02', '白菜', '白白嫩嫩', 6, 12),
 	('C03', '土豆', '美国大土豆品种', 30, 36),
-	('C04', '茄子', '非常紫', 22, 12);
+	('C04', '茄子', '非常紫', 22, 12),
+	('C05', '豆角', '好吃', 2, 4);
 
 -- 导出  表 se.farm 结构
 CREATE TABLE IF NOT EXISTS `farm` (
@@ -61,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `farm` (
   `c_id` char(50) NOT NULL COMMENT '作物编号',
   `c_name` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '作物名称',
   `c_amount` int NOT NULL DEFAULT (0) COMMENT '作物数量',
-  `p_date` date DEFAULT NULL COMMENT '种植时间',
+  `p_date` date NOT NULL COMMENT '种植时间',
   `w_id` char(50) NOT NULL COMMENT '负责员工编号',
   `harvest_date` date DEFAULT NULL COMMENT '预计收成时间',
   `stage` int DEFAULT NULL COMMENT '成长阶段',
@@ -73,12 +77,13 @@ CREATE TABLE IF NOT EXISTS `farm` (
   CONSTRAINT `FK_farms_crop` FOREIGN KEY (`c_id`) REFERENCES `crop` (`c_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 正在导出表  se.farm 的数据：~4 rows (大约)
+-- 正在导出表  se.farm 的数据：~5 rows (大约)
 REPLACE INTO `farm` (`f_id`, `f_name`, `c_id`, `c_name`, `c_amount`, `p_date`, `w_id`, `harvest_date`, `stage`, `pos_info`) VALUES
-	('F01', '高高兴兴农场', 'C02', '白菜', 100, '2024-05-25', 'U2988270', '2024-05-25', 2, '北京'),
-	('F02', '悲伤农场', 'C01', '大葱', 50, '2024-05-17', 'U2270119', '2024-05-28', 5, '浙江'),
-	('F03', 'c++农场', 'C03', '土豆', 23, '2024-05-22', 'U2379633', '2024-06-03', 6, '河南'),
-	('F04', 'py农场', 'C03', '土豆', 122, '2024-05-13', 'U2787669', '2024-05-23', 8, '河南');
+	('F01', '高高兴兴农场', 'C02', '白菜', 100, '2024-05-25', 'U2988270', '2024-06-07', 2, '北京'),
+	('F02', '悲伤农场', 'C01', '大葱', 50, '2024-05-17', 'U2270119', '2024-06-10', 2, '浙江'),
+	('F03', 'c++农场', 'C03', '土豆', 23, '2024-05-22', 'U2379633', '2024-06-12', 1, '河南'),
+	('F04', 'py农场', 'C03', '土豆', 122, '2024-05-13', 'U2787669', '2025-05-23', 1, '河南'),
+	('F05', '好农场', 'C02', '大白菜', 123, '2024-06-03', 'U2988270', '2024-06-15', 2, '河南');
 
 -- 导出  表 se.feed 结构
 CREATE TABLE IF NOT EXISTS `feed` (
@@ -90,9 +95,13 @@ CREATE TABLE IF NOT EXISTS `feed` (
   CONSTRAINT `FK_feed_pasture` FOREIGN KEY (`p_id`) REFERENCES `pasture` (`p_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 正在导出表  se.feed 的数据：~1 rows (大约)
+-- 正在导出表  se.feed 的数据：~4 rows (大约)
 REPLACE INTO `feed` (`f_id`, `p_id`, `f_time`) VALUES
-	('F01', 'P01', '2024-05-25');
+	('F01', 'P01', '2024-05-25'),
+	('F02', 'P02', '2024-06-02'),
+	('F03', 'P05', '2024-06-02'),
+	('F04', 'P01', '2024-06-07'),
+	('F05', 'P03', '2024-06-04');
 
 -- 导出  表 se.fertile 结构
 CREATE TABLE IF NOT EXISTS `fertile` (
@@ -105,9 +114,13 @@ CREATE TABLE IF NOT EXISTS `fertile` (
   CONSTRAINT `FK_fertile_farm` FOREIGN KEY (`farm_id`) REFERENCES `farm` (`f_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 正在导出表  se.fertile 的数据：~1 rows (大约)
+-- 正在导出表  se.fertile 的数据：~5 rows (大约)
 REPLACE INTO `fertile` (`f_id`, `farm_id`, `op_type`, `op_time`) VALUES
-	('F01', 'F02', 0, '2024-05-25');
+	('F01', 'F02', 0, '2024-05-25'),
+	('F02', 'F04', 0, '2024-06-07'),
+	('F03', 'F03', 1, '2024-06-03'),
+	('F04', 'F05', 1, '2024-06-03'),
+	('F05', 'F04', 1, '2024-06-02');
 
 -- 导出  表 se.goods 结构
 CREATE TABLE IF NOT EXISTS `goods` (
@@ -116,23 +129,29 @@ CREATE TABLE IF NOT EXISTS `goods` (
   `stock` int NOT NULL DEFAULT (0) COMMENT '库存余量，初始默认为0，不删该商品',
   `sale` int NOT NULL DEFAULT (0) COMMENT '销量=余量+批次表里的该商品的数量',
   `price` double NOT NULL DEFAULT '0' COMMENT '价格',
-  `score` float DEFAULT '0' COMMENT '平均评分，0531使用float类型便于保留一位小数',
-  `rater_num` int DEFAULT NULL COMMENT '评分人数，0531触发器修改',
+  `score` float DEFAULT '0' COMMENT '平均评分，使用float类型便于保留一位小数',
+  `rater_num` int DEFAULT (0) COMMENT '评分人数，触发器修改',
   PRIMARY KEY (`g_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 正在导出表  se.goods 的数据：~4 rows (大约)
+-- 正在导出表  se.goods 的数据：~9 rows (大约)
 REPLACE INTO `goods` (`g_id`, `g_name`, `stock`, `sale`, `price`, `score`, `rater_num`) VALUES
-	('G01', '鸡', 100, 50, 20, 3.2, 3),
-	('G02', '鸭', 20, 30, 10, 4.7, 102),
-	('G03', '牛', 21, 23, 43, 4.9, 122),
-	('G04', '羊', 21, 2434, 32, 4.6, 211);
+	('C01', '大葱', 42, 96, 20, 3.4, 4),
+	('C02', '白菜', 20, 30, 10, 4.7, 102),
+	('C03', '土豆', 515, 559, 43, 4.88906, 128),
+	('C04', '茄子', 101, 2434, 32, 4.6, 211),
+	('P01', '白鸡', 38, 88, 10, 3.1, 5),
+	('P02', '鸭子', 66, 86, 6, 3, 2),
+	('P03', '牛肉', 26, 4, 40, 4, 2),
+	('P04', '羊', 30, 40, 40, 1, 2),
+	('P05', '鱼', 50, 0, 10, 0, 0);
 
 -- 导出  表 se.order 结构
 CREATE TABLE IF NOT EXISTS `order` (
   `o_id` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '订单号',
   `customer_id` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '顾客账号',
   `g_id` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '商品号',
+  `g_name` char(50) NOT NULL COMMENT '商品名称',
   `amount` int NOT NULL COMMENT '购买数量',
   `score` int DEFAULT NULL COMMENT '评分',
   PRIMARY KEY (`o_id`) USING BTREE,
@@ -143,15 +162,15 @@ CREATE TABLE IF NOT EXISTS `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 正在导出表  se.order 的数据：~8 rows (大约)
-REPLACE INTO `order` (`o_id`, `customer_id`, `g_id`, `amount`, `score`) VALUES
-	('O01', 'U3365824', 'G01', 22, 5),
-	('O02', 'U3875211', 'G03', 23, 4),
-	('O03', 'U3875211', 'G04', 212, 4),
-	('O04', 'U3559363', 'G02', 2, 4),
-	('O05', 'U3949267', 'G01', 34, 5),
-	('O06', 'U3365824', 'G03', 43, 3),
-	('O07', 'U3295433', 'G04', 44, 3),
-	('O08', 'U3493396', 'G01', 20, 1);
+REPLACE INTO `order` (`o_id`, `customer_id`, `g_id`, `g_name`, `amount`, `score`) VALUES
+	('O01', 'U3365824', 'C03', '土豆', 22, 5),
+	('O02', 'U3875211', 'C01', '大葱', 23, 4),
+	('O03', 'U3875211', 'C03', '土豆', 212, 4),
+	('O04', 'U3559363', 'P03', '牛肉', 2, 4),
+	('O05', 'U3949267', 'C03', '土豆', 34, 5),
+	('O06', 'U3365824', 'P02', '鸭子', 43, 3),
+	('O07', 'U3295433', 'P01', '白鸡', 44, 3),
+	('O08', 'U3493396', 'P04', '羊肉', 20, 1);
 
 -- 导出  表 se.pasture 结构
 CREATE TABLE IF NOT EXISTS `pasture` (
@@ -160,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `pasture` (
   `poultry_id` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '家禽编号',
   `poultry_name` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '家禽名称',
   `poultry_num` int NOT NULL DEFAULT '0' COMMENT '家禽数量',
-  `start_time` date DEFAULT NULL COMMENT '入栏时间',
+  `start_time` date NOT NULL COMMENT '入栏时间',
   `w_id` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '负责职工号',
   `mature_time` date DEFAULT NULL COMMENT '成熟时间',
   `stage` int DEFAULT NULL COMMENT '成长阶段',
@@ -176,9 +195,9 @@ CREATE TABLE IF NOT EXISTS `pasture` (
 REPLACE INTO `pasture` (`p_id`, `p_name`, `poultry_id`, `poultry_name`, `poultry_num`, `start_time`, `w_id`, `mature_time`, `stage`, `pos_info`) VALUES
 	('P01', '养鸡场', 'P01', '鸡', 16, '2024-05-25', 'U5504479', '2024-06-02', 1, '山西省朔州市应县'),
 	('P02', '养鸭场', 'P02', '鸭', 32, '2024-05-25', 'U5278444', '2024-05-30', 1, '四川省黎川县'),
-	('P03', '渔场', 'P05', '鲤鱼', 25, '2024-05-25', 'U5430317', '2024-05-27', 1, '四川省泸州市叙永县'),
-	('P04', '养牛场', 'P03', '奶牛', 12, '2024-05-25', 'U5278444', '2024-05-31', 1, '湖南省株洲市芦淞区里'),
-	('P05', '羊场', 'P04', '绵羊', 14, '2024-05-25', 'U5574819', '2024-05-26', 1, '河南省郑州市惠济区园河东路');
+	('P03', '渔场', 'P05', '鱼', 25, '2024-05-25', 'U5430317', '2024-05-27', 1, '四川省泸州市叙永县'),
+	('P04', '养牛场', 'P03', '牛', 12, '2024-05-25', 'U5278444', '2024-05-31', 1, '湖南省株洲市芦淞区里'),
+	('P05', '羊场', 'P04', '羊', 14, '2024-05-25', 'U5574819', '2024-05-26', 1, '河南省郑州市惠济区园河东路');
 
 -- 导出  表 se.poultry 结构
 CREATE TABLE IF NOT EXISTS `poultry` (
@@ -193,9 +212,10 @@ CREATE TABLE IF NOT EXISTS `poultry` (
 REPLACE INTO `poultry` (`p_id`, `p_name`, `p_info`, `feed_interval`) VALUES
 	('P01', '鸡', '一种鸡', 5),
 	('P02', '鸭', '鸭子', 10),
-	('P03', '牛', '让', 5),
+	('P03', '牛', '好吃', 5),
 	('P04', '羊', '咩', 3),
-	('P05', '鱼', '很好吃', 3);
+	('P05', '鱼', '很好吃', 3),
+	('P06', '奶牛', '哞', 3);
 
 -- 导出  表 se.user 结构
 CREATE TABLE IF NOT EXISTS `user` (
@@ -242,10 +262,48 @@ REPLACE INTO `user` (`u_id`, `pwd`, `id_type`, `name`, `gender`, `age`, `tel`) V
 	('U5574819', 'pwd721', 2, '端木秋会', 1, 25, '14754953376'),
 	('U5824355', 'pwd768', 2, '唐颖', 1, 39, '17916723573');
 
--- 导出  触发器 se.update_goods_score 结构
+-- 导出  触发器 se.batch_after_update 结构
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
-CREATE TRIGGER `update_goods_score` AFTER INSERT ON `order` FOR EACH ROW BEGIN
+CREATE TRIGGER `batch_after_update` AFTER UPDATE ON `batch` FOR EACH ROW BEGIN
+	IF NEW.is_dealed = 1 AND OLD.is_dealed = 0 THEN
+		UPDATE goods 
+		SET stock = stock + NEW.amount
+		WHERE g_id = NEW.g_id;
+	END IF;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- 导出  触发器 se.farm_after_insert 结构
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `farm_after_insert` AFTER INSERT ON `farm` FOR EACH ROW BEGIN
+    -- 检查 goods 表中是否存在 g_id = NEW.c_id 的记录
+    IF NOT EXISTS (SELECT 1 FROM goods WHERE g_id = NEW.c_id) THEN
+        -- 在 goods 表中插入新的记录
+        INSERT INTO goods (g_id, g_name)
+        VALUES (NEW.c_id, NEW.c_name);
+    END IF;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- 导出  触发器 se.order_after_insert 结构
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `order_after_insert` AFTER INSERT ON `order` FOR EACH ROW BEGIN
+  UPDATE goods 
+  SET stock = stock - NEW.amount, sale = sale + NEW.amount
+  WHERE g_id = NEW.g_id;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- 导出  触发器 se.order_after_update 结构
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `order_after_update` AFTER UPDATE ON `order` FOR EACH ROW BEGIN
   DECLARE new_score DOUBLE;
   DECLARE current_rater_num INT;
   DECLARE current_score DOUBLE;
@@ -262,13 +320,16 @@ END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;
 
--- 导出  触发器 se.update_goods_stock 结构
+-- 导出  触发器 se.pasture_after_insert 结构
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
-CREATE TRIGGER `update_goods_stock` AFTER INSERT ON `batch` FOR EACH ROW BEGIN
-  UPDATE goods 
-  SET stock = stock + NEW.amount
-  WHERE g_id = NEW.g_id;
+CREATE TRIGGER `pasture_after_insert` AFTER INSERT ON `pasture` FOR EACH ROW BEGIN
+    -- 检查 goods 表中是否存在 g_id = NEW.c_id 的记录
+    IF NOT EXISTS (SELECT 1 FROM goods WHERE g_id = NEW.p_id) THEN
+        -- 在 goods 表中插入新的记录
+        INSERT INTO goods (g_id, g_name)
+        VALUES (NEW.poultry_id, NEW.poultry_name);
+    END IF;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;

@@ -8,13 +8,13 @@
         from fertile
         <where>
             <if test="fid != null">
-                and f_id = #{fid}
+                f_id = #{fid}
             </if>
             <if test="farmid != null and farmid != ''">
                 and farm_id = #{farmid}
             </if>
-            <if test="opid != null and opid != ''">
-                and op_id = #{opid}
+            <if test="optype != null and optype != ''">
+                and op_type = #{optype}
             </if>
             <if test="optime != null and optime != ''">
                 and op_time = #{optime}
@@ -35,12 +35,12 @@
         update fertile
         <set>
             <if test="farmid != null and farmid != ''">
-                farm_id = #{farmid}
+                farm_id = #{farmid},
             </if>
-            <if test="opid != null and opid != ''">
-                op_id = #{opid}
+            <if test="optype != null and optype != ''">
+                op_type = #{optype},
             </if>
-            <if test="optime != null and optime != ''">
+            <if test="optime != null">
                 op_time = #{optime}
             </if>
         </set>

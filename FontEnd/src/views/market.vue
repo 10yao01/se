@@ -31,15 +31,9 @@ export default {
         },
         {
           routeName: '/mark',
-          name: '用户打分',
-          desc: '进行用户打分',
+          name: '订单管理',
+          desc: '进行订单信息查询',
           src: 'static/images/mark.jpg'
-        },
-        {
-          routeName: '/batch_upload',
-          name: '批次上传',
-          desc: '进行批次上传',
-          src: 'static/images/upload.jpg'
         },
         {
           routeName: '/check_batch',

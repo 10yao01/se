@@ -8,7 +8,7 @@
         from feed
         <where>
             <if test="fid != null">
-                and f_id = #{fid}
+                f_id = #{fid}
             </if>
             <if test="pid != null and pid != ''">
                 and p_id = #{pid}
@@ -32,9 +32,9 @@
         update feed
         <set>
             <if test="pid != null and pid != ''">
-                p_id = #{pid}
+                p_id = #{pid},
             </if>
-            <if test="ftime != null and ftime != ''">
+            <if test="ftime != null">
                 f_time = #{ftime}
             </if>
         </set>

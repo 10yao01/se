@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.farm_management.mapper.CropMapper">
+    <select id="list" resultType="com.example.farm_management.pojo.Crop">
+        select *
+        from crop
+        <where>
+            <if test="cid != null and cid != ''">
+                c_id = #{cid}
+            </if>
+            <if test="cname != null and cname != ''">
+                c_name like concat('%', #{cname}, '%')
+            </if>
+            <if test="cinfo != null and cinfo != ''">
+                and c_info = #{cinfo}
+            </if>
+            <if test="wtime != null and wtime != ''">
+                and w_time = #{wtime}
+            </if>
+            <if test="ftime != null and ftime != ''">
+                and f_time = #{ftime}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from crop
+        where crop.c_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update crop
+        <set>
+            <if test="cname != null and cname != ''">
+                c_name = #{cname},
+            </if>
+            <if test="cinfo != null and cinfo != ''">
+                c_info = #{cinfo},
+            </if>
+            <if test="wtime != null and wtime != ''">
+                w_time = #{wtime},
+            </if>
+            <if test="ftime != null and ftime != ''">
+                f_time = #{ftime}
+            </if>
+        </set>
+        where c_id = #{cid}
+    </update>
+</mapper>

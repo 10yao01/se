@@ -6,9 +6,9 @@
     <el-main>
       <el-row :gutter="20">
         <el-col :span="22" :offset="1">
-          <el-input style="width: 20%;" placeholder="请输入批次编号" v-model="searchName" />
-          <el-input style="width: 20%;" placeholder="请输入批次名称" v-model="searchName" />
-          <el-button size="media" @click="search(searchName, searchGender, searchArea)" icon="el-icon-search">搜索</el-button>
+          <el-input style="width: 20%;" placeholder="请输入批次编号" v-model="searchBid" />
+          <el-input style="width: 20%;" placeholder="请输入商品名称" v-model="searchGname" />
+          <el-button size="media" @click="search(searchBid, searchGname)" icon="el-icon-search">搜索</el-button>
          
         </el-col>
       </el-row>
@@ -16,24 +16,33 @@
       <el-row >
         <el-col :span="22" :offset="1">
           <el-table :data="pagedData" border height="550" style="width: 100%">
-          <el-table-column prop="fid" label="批次编号" sortable>
+          <el-table-column prop="bid" label="批次编号" sortable>
           </el-table-column>
-          <el-table-column prop="image" label="进货日期">
+          <el-table-column prop="bdate" label="进货日期" sortable>
             </el-table-column>
-          <el-table-column prop="image" label="农田（养殖场）编号">
+          <el-table-column prop="originid" label="农田（养殖场）编号" sortable>
             </el-table-column>
-          <el-table-column prop="image" label="农田（养殖场）名称">
+          <el-table-column prop="originname" label="农田（养殖场）名称" sortable>
             </el-table-column>
-          <el-table-column prop="image" label="商品编号">
+          <el-table-column prop="gid" label="商品编号" sortable>
             </el-table-column>
-          <el-table-column prop="image" label="商品名称">
+          <el-table-column prop="gname" label="商品名称" sortable>
             </el-table-column>
-          <el-table-column prop="image" label="数量">
-            
- 
+          <el-table-column prop="amount" label="数量" sortable>
+          </el-table-column>
+          <el-table-column prop="isdealed" label="状态" sortable>
             <template slot-scope="scope">
-              <el-tag :type="statusType[scope.row.status]" disable-transitions>{{ statusText[scope.row.status]
-              }}：{{scope.row.score}}</el-tag>
+                <el-tag :type="stateType[scope.row.isdealed]" disable-transitions>{{ state[scope.row.isdealed] }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button size="mini" type="info" @click="Pass(scope.row)">
+                通过
+              </el-button>
+              <el-button size="mini" type="danger" @click="NoPass(scope.row)">
+                不通过
+              </el-button>
             </template>
           </el-table-column>
           </el-table>
@@ -56,54 +65,26 @@ export default {
   data () {
     return {
       formData: [],
-      areaData: [],
       oneData: {},
-      searchName: '',
-      searchGender: '',
-      searchArea: '',
+      searchBid: '',
+      searchGname: '',
       descriptionData: '',
-      dialogForm: {
-          name: '',
-          gender: '',
-          age: '',
-          image: '',
-          areaname: ''
-      },
-      dialogForm2: {
-          name: '',
-          gender: '',
-          age: '',
-          image: '',
-          areaname: ''
-      },
-      statusType: ['success','warning','danger'],
-      statusText: ['优','良','差'],
-      dialogVisible: false,
-      dialogFormVisible: false,
-      dialogFormVisible2: false,
       formLabelWidth: '70px',
       pageSize: 10,
       firstRecord: 1,
       lastRecord: 999,
-      statusFileter: ['男', '女'],
-      name: '',
+      stateType: ['danger','warning','success'],
+      state: ['审批不通过', '未审批', '审批通过'],
+      uid: '',
       token: '',
+      type: ''
     }
   },
   created() {
-    axios.get(this.$store.state.settings.baseurl + '/area',{
-        headers: {
-          'Authorization': this.token
-        }
-    })
-        .then(response => {
-          this.areaData = response.data.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    this.name = window.localStorage.getItem('name')
+    this.fetchData()
+    this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
+    this.type = window.localStorage.getItem('type')
   },
   mounted () {
     if (this.$route.params.iid) {
@@ -139,132 +120,78 @@ export default {
             }
           }
         })
-      }).filter(row => {
-        return this.statusFileter.includes(row.gender)
       })
     }
   },
   methods: {
-    AddData() {
-      if(this.name=='root'){ 
-        this.dialogFormVisible = false;
-        const url = this.$store.state.settings.baseurl + '/farmer';
-        axios.post(url, {
-          "fid": this.formData[this.formData.length-1].fid+1,
-          "name": this.dialogForm.name,
-          "gender": this.dialogForm.gender,
-          "age": this.dialogForm.age,
-          "areaname": this.dialogForm.areaname,
-          "image": this.dialogForm.image
-        },
-        {
-          headers: {
-            'Authorization': this.token
-          }
-        })
-        .then(() => {
-          this.fetchData();
-          this.$message({
-            type: 'success',
-            message: '新增成功!'
-          });
-        })
-        .catch(error => {
-            console.log(error)
-        });
+    Pass(row) {
+      let url = this.$store.state.settings.baseurl + '/batch'
+      if(row.isdealed != 1){
+        Message.error("请勿重复审核！")
       }else{
-        Message.error("没有此权限！")
-      }
-    },
-    search(searchName, searchGender, searchArea) {
-      if(this.name=='root'){       
-        let url = this.$store.state.settings.baseurl + '/farmer?'
-        if(searchName != '') {
-            url = url + 'name=' + searchName
-            if(searchGender != '') {
-                url = url + '&gender=' + searchGender
-            }
-            if(searchArea != '') {
-                url = url + '&areaname=' + searchArea
-            }
-        }else if(searchGender != '') {
-            url = url + 'gender=' + searchGender
-            if(searchArea != '') {
-                url = url + '&areaname=' + searchArea
-            }
-        }else if(searchArea != '') {
-            url = url + 'areaname=' + searchArea
-        }
-        axios.get(url, {
-            headers: {
-            'Authorization': this.token
-            }
-        })
-        .then(response => {
-          let Ddata = response.data.data
-          for(let i = 0;i<Ddata.length;i++){
-            Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
-            }else{
-              Ddata[i].status = 2
-            }
-          }
-          this.formData=Ddata
-
-        })
-        .catch(error => {
-          console.log(error)
-        });
-      }else{
-        Message.error("没有此权限！")
-      }
-    },
-    openDelete(index, row, rows) {
-        if(this.name=='root'){        
-          this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.deleteRow(index, row, rows);
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
-      }else{
-        Message.error("没有此权限！")
-      }
-    },
-    deleteRow (index, row, rows) {
-      let Fid = row.fid;
-      const url = this.$store.state.settings.baseurl + '/farmer/' + Fid;0
-      axios.delete(url, {
+        axios.put(url,{
+        "bid": row.bid,
+        "isdealed": 1
+      },{
         headers: {
           'Authorization': this.token
         }
-      })    
+      })
       .then(() => {
-        this.fetchData();
-      })      
+        this.fetchData()
+        this.$message({
+            type: 'success',
+            message: '审核成功!'
+        })
+      })
+      }
+    },
+    NoPass(row) {
+      let url = this.$store.state.settings.baseurl + '/batch'
+      if(row.isdealed != 1){
+        Message.error("请勿重复审核！")
+      }else{
+        axios.put(url,{
+        "bid": row.bid,
+        "isdealed": -1
+      },{
+        headers: {
+          'Authorization': this.token
+        }
+      })
+      .then(() => {
+        this.fetchData()
+        this.$message({
+            type: 'success',
+            message: '审核成功!'
+        })
+      })
+      }
+    },
+    search(searchBid, searchGName) {     
+      let url = this.$store.state.settings.baseurl + '/batch'
+      axios.get(url, {
+          headers: {
+          'Authorization': this.token
+          },
+          params:{
+              bid: searchBid,
+              gname: searchGName
+            }
+      })
+      .then(response => {
+        let Ddata = response.data.data
+        for(let i = 0;i<Ddata.length;i++){
+            Ddata[i].isdealed = Ddata[i].isdealed+1
+        }       
+        this.formData = Ddata
+      })
       .catch(error => {
         console.log(error)
       })
     },
     fetchData () {
-      let url = this.$store.state.settings.baseurl + '/farmer'
-      if(this.name!='root'){
-        url = url + '?name=' +this.name
-      }
+      let url = this.$store.state.settings.baseurl + '/batch'
       axios.get(url,{
         headers: {
           'Authorization': this.token
@@ -273,14 +200,42 @@ export default {
         .then(response => {
           let Ddata = response.data.data
           for(let i = 0;i<Ddata.length;i++){
-            Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].status = ''
-            if(Ddata[i].score >= 90){
-              Ddata[i].status = 0
-            }else if(Ddata[i].score >= 70){
-              Ddata[i].status = 1
+            Ddata[i].isdealed = Ddata[i].isdealed+1
+          }        
+          Ddata = Ddata.map(obj => {
+              obj.originname = '1';
+              return obj;
+          });
+          for(let i = 0;i<Ddata.length;i++){
+            let url2 = this.$store.state.settings.baseurl
+            if(Ddata[i].originid[0] == 'P'){
+              url2 += '/pasture?pid=' + Ddata[i].originid
+              axios.get(url2,{
+                headers: {
+                  'Authorization': this.token
+                }
+              })
+              .then(response => {
+                let Ndata = response.data.data
+                Ddata[i].originname = Ndata[0].pname
+              })
+              .catch(error => {
+                console.log(error)
+              })
             }else{
-              Ddata[i].status = 2
+              url2 += '/farm?fid=' + Ddata[i].originid
+              axios.get(url2,{
+                headers: {
+                  'Authorization': this.token
+                }
+              })
+              .then(response => {
+                let Ndata = response.data.data
+                Ddata[i].originname = Ndata[0].fname
+              })
+              .catch(error => {
+                console.log(error)
+              })
             }
           }
           this.formData=Ddata
@@ -295,55 +250,6 @@ export default {
       this.firstRecord = first
       this.lastRecord = last
     },
-    handleInfo (row) {
-      this.dialogFormVisible2 = true;
-      this.dialogForm2.name = row.name
-      this.dialogForm2.gender = row.gender
-      this.dialogForm2.age = row.age
-      this.dialogForm2.image = row.image
-      this.dialogForm2.areaname = row.areaname
-    },
-    Update(fid) {
-      this.dialogFormVisible2 = false
-      const url = this.$store.state.settings.baseurl + '/farmer'
-      axios.put(url,{
-        "fid": fid,
-        "name": this.dialogForm2.name,
-        "gender": this.dialogForm2.gender=='男'? 1:2,
-        "age": this.dialogForm2.age,
-        "image": this.dialogForm2.image,
-        "areaname": this.dialogForm2.areaname
-      },{
-        headers: {
-          'Authorization': this.token
-        }
-      })
-      .then(() => {
-        this.fetchData();
-        this.$message({
-            type: 'success',
-            message: '修改成功!'
-        })
-      })  
-      .catch(error => {
-          console.log(error)
-      });
-    },
-    beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt5M = file.size / 1024 / 1024 < 5;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt5M) {
-          this.$message.error('上传头像图片大小不能超过 5MB!');
-        }
-        return isJPG && isLt5M;
-    },
-    changeImage(file) {
-      this.dialogForm.image = 'static/images/' + file.name
-    }
   }
 }
 </script>

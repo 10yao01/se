@@ -8,10 +8,10 @@
         from user
         <where>
             <if test="uid != null and uid != ''">
-                u_id like concat('%', #{uid}, '%')
+                u_id = #{uid}
             </if>
             <if test="name != null and name != ''">
-                and name = #{name}
+                and name like concat('%', #{name}, '%')
             </if>
             <if test="gender != null and gender != ''">
                 and gender = #{gender}
@@ -38,16 +38,16 @@
                 name = #{name},
             </if>
             <if test="pwd != null and pwd != ''">
-                pwd = #{pwd}
+                pwd = #{pwd},
             </if>
             <if test="age != null and age != ''">
-                age = #{age}
+                age = #{age},
             </if>
             <if test="tel != null and tel != ''">
-                tel = #{tel}
+                tel = #{tel},
             </if>
             <if test="gender != null and gender != ''">
-                gender = #{gender}
+                gender = #{gender},
             </if>
             <if test="idtype != null and idtype != ''">
                 id_type = #{idtype}

@@ -8,10 +8,53 @@
         <el-col :span="22" :offset="1">
           <el-input style="width: 15%;" placeholder="请输入用户ID" v-model="searchID" />
           <el-input style="width: 15%;" placeholder="请输入用户姓名" v-model="searchName" />
-          <el-input style="width: 15%;" placeholder="请输入用户性别" v-model="searchGender" />
+          <el-select v-model="searchGender" clearable placeholder="请选择性别" style="width: 10%">
+            <el-option label="男" value="1"></el-option>
+            <el-option label="女" value="0"></el-option>
+          </el-select>
           <el-input style="width: 15%;" placeholder="请输入用户电话" v-model="searchTel" />
           <el-button size="media" @click="search(searchID, searchName, searchGender, searchTel)" icon="el-icon-search">搜索</el-button>
-         
+          <el-button type="primary" style="margin-left: 420px;" @click="dialogFormVisible = true">+ 新增人员</el-button>
+          <el-dialog title="新增用户" :visible.sync="dialogFormVisible" width="30%">
+            <el-form :model="dialogForm">
+              <el-form-item label="U-id" :label-width="formLabelWidth">
+                <el-input v-model="dialogForm.uid" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="密码" :label-width="formLabelWidth">
+                <el-input v-model="dialogForm.pwd" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="姓名" :label-width="formLabelWidth">
+                <el-input v-model="dialogForm.name" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="性别" style="margin-left: 30px">
+                <el-radio v-model="dialogForm.gender" label="1">男</el-radio>
+                <el-radio v-model="dialogForm.gender" label="0">女</el-radio>
+              </el-form-item>
+              <el-form-item label="年龄" :label-width="formLabelWidth">
+                <el-input v-model="dialogForm.age" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="电话" :label-width="formLabelWidth">
+                <el-input v-model="dialogForm.tel" autocomplete="off"></el-input>
+              </el-form-item>
+              <div>
+                <span style="font-weight: bold">用户类型&nbsp;&nbsp;</span>
+                <el-select v-model="dialogForm.idtype" placeholder="请选择" filterable>
+                  <el-option
+                    v-for="item in typeClass"
+                    :key="item.index"
+                    :label="item"
+                    :value="typeClass.indexOf(item)">
+                    <span style="float: left">{{ item }}</span>
+                    <!-- <span style="float: right; color: #8492a6; font-size: 13px">{{ item.id }}</span> -->
+                  </el-option>
+                </el-select>
+              </div>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="AddData()">确 定</el-button>
+            </div>
+          </el-dialog>
         </el-col>
       </el-row>
 
@@ -108,7 +151,6 @@ export default {
           idtype: '',
           tel: ''
       },
-      dialogVisible: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
       formLabelWidth: '70px',
@@ -171,14 +213,15 @@ export default {
     AddData() {
       if(this.name=='root'){ 
         this.dialogFormVisible = false;
-        const url = this.$store.state.settings.baseurl + '/farmer';
+        const url = this.$store.state.settings.baseurl + '/user';
         axios.post(url, {
-          "fid": this.formData[this.formData.length-1].fid+1,
+          "uid": this.dialogForm.uid,
+          "pwd": this.dialogForm.pwd,
           "name": this.dialogForm.name,
           "gender": this.dialogForm.gender,
           "age": this.dialogForm.age,
-          "areaname": this.dialogForm.areaname,
-          "image": this.dialogForm.image
+          "tel": this.dialogForm.tel,
+          "idtype": this.dialogForm.idtype
         },
         {
           headers: {
@@ -194,7 +237,7 @@ export default {
         })
         .catch(error => {
             console.log(error)
-        });
+        })
       }else{
         Message.error("没有此权限！")
       }
@@ -324,7 +367,7 @@ export default {
       })  
       .catch(error => {
           console.log(error)
-      });
+      })
     },
     beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';

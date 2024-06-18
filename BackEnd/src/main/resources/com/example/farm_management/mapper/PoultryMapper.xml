@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.farm_management.mapper.PoultryMapper">
+    <select id="list" resultType="com.example.farm_management.pojo.Poultry">
+        select *
+        from poultry
+        <where>
+            <if test="pid != null and pid != ''">
+                p_id = #{pid}
+            </if>
+            <if test="pname != null and pname != ''">
+                p_name like concat('%', #{pname}, '%')
+            </if>
+            <if test="pinfo != null and pinfo != ''">
+                and p_info = #{pinfo}
+            </if>
+            <if test="feedinterval != null and feedinterval != ''">
+                and feed_interval = #{feedinterval}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from poultry
+        where poultry.p_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update poultry
+        <set>
+            <if test="pname != null and pname != ''">
+                p_name = #{pname},
+            </if>
+            <if test="pinfo != null and pinfo != ''">
+                p_info = #{pinfo},
+            </if>
+            <if test="feedinterval != null and feedinterval != ''">
+                feed_interval = #{feedinterval}
+            </if>
+        </set>
+        where p_id = #{pid}
+    </update>
+</mapper>
