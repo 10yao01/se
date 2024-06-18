@@ -150,7 +150,6 @@ export default {
             let Ddata = response.data.data
             let n = parseInt(Ddata.length)+1
             let oid = 'O' + n
-            console.log(oid)
             axios.post(url, {
               "oid": oid,
               "customerid": this.dialogForm.customerid,

@@ -4,7 +4,7 @@
       <h3 class="title">智慧农场管理平台</h3>
     </el-header>
     <el-main>
-      <h5>当前用户：  <el-tag size="medium">{{ name }}</el-tag>&nbsp;&nbsp;&nbsp;<el-button type="danger" size="mini" @click="$router.push('/login')" plain>切换账户</el-button></h5>
+      <h5>当前用户：  <el-tag size="medium" type="info">{{ this.uid }}</el-tag>&nbsp;&nbsp;&nbsp;<el-tag size="medium">{{ this.typeClass[this.type] }}</el-tag>&nbsp;&nbsp;&nbsp;<el-button type="danger" size="mini" @click="$router.push('/login')" plain>切换账户</el-button></h5>
       <el-row :gutter="20">
         <el-col :span="6" :offset="0" v-for="item in link" :key="item.baseURL" style="margin-bottom: 20px;">
           <el-card shadow="hover" class="box-card" style="cursor: pointer;height:70vh;" @click.native="handle(item.routeName)">
@@ -49,13 +49,16 @@ export default {
         }
 
       ],
-      name: '',
+      uid: '',
       token: '',
+      type: '',
+      typeClass: ['普通用户', '农场职工', '农场管理员', '系统管理员']
     }
   },
   created () {
-    this.name = window.localStorage.getItem('name')
+    this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
+    this.type = window.localStorage.getItem('type')
   },
   mounted () {
   },

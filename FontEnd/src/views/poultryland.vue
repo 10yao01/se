@@ -20,27 +20,41 @@
           <el-table :data="pagedData" border height="550" style="width: 100%">
           <el-table-column prop="pid" label="养殖场编号" sortable>
           </el-table-column>
-          <el-table-column prop="pname" label="养殖场名称">
+          <el-table-column prop="pname" label="养殖场名称" width="105px">
             
             </el-table-column>
-            <el-table-column prop="poultryid" label="家禽编号" sortable>
+            <el-table-column prop="poultryid" label="家禽编号" width="105px" sortable>
             </el-table-column>
-            <el-table-column prop="poultryname" label="家禽名称" sortable>
+            <el-table-column prop="poultryname" label="家禽名称" width="105px" sortable>
             </el-table-column>
-            <el-table-column prop="poultrynum" label="养殖数量" sortable>
+            <el-table-column prop="poultrynum" label="养殖数量" width="105px" sortable>
             </el-table-column>
             <el-table-column prop="starttime" label="养殖时间" sortable>
             </el-table-column>
-            <el-table-column prop="wid" label="管理员号" sortable>
+            <el-table-column prop="wid" label="管理员号" width="105px" sortable>
             </el-table-column>
             <el-table-column prop="maturetime" label="预计成熟时间" sortable>
             </el-table-column>
-            <el-table-column prop="stage" label="成长阶段" sortable>
+            <el-table-column prop="stage" label="成长阶段" width="105px" sortable>
             </el-table-column>
             <el-table-column prop="posinfo" label="养殖场位置备注" sortable>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" width="220px"> 
             <template slot-scope="scope">
+              <el-button size="mini" type="primary" @click="weishi(scope.row)">
+                喂食
+              </el-button>
+              <el-dialog title="喂食时间" :visible.sync="dialogFormVisible" width="30%">
+                <el-form :model="dialogForm">
+                  <el-form-item label="喂食时间" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm.ftime" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="weishiUpdate()">确 定</el-button>
+                </div>
+              </el-dialog>
               <el-button size="mini" type="info" @click="handleInfo(scope.row)">
                 修改
               </el-button>
@@ -82,9 +96,20 @@
                     <el-button type="primary" @click="Update()">确 定</el-button>
                 </div>
               </el-dialog>
-              <el-button size="mini" type="danger" @click="openDelete(scope.row)">
-                删除
+              <el-button size="mini" type="warning" @click="shangchuan(scope.row)">
+                上传
               </el-button>
+              <el-dialog title="上传时间" :visible.sync="dialogFormVisible3" width="30%">
+                <el-form :model="batchform">
+                  <el-form-item label="上传时间" :label-width="formLabelWidth">
+                    <el-input v-model="batchform.bdate" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible3 = false">取 消</el-button>
+                    <el-button type="primary" @click="shangchuanUpdate()">确 定</el-button>
+                </div>
+              </el-dialog>
             </template>
           </el-table-column>
           </el-table>
@@ -107,7 +132,6 @@ export default {
   data () {
     return {
       formData: [],
-      userData: [],
       oneData: {},
       searchID:'',
       searchName: '',
@@ -117,48 +141,45 @@ export default {
       LandName: '',
       CropName: '',
       Uid: '',
-      descriptionData: '',
+      batchform: {
+        bdate: '',
+        originid: '',
+        gid: '',
+        gname: '',
+        amount: ''
+      },
       dialogForm: {
-          pid: '',
-          pname: '',
-          poultryid: '',
-          poultryname: '',
-          poultrynum: '',
-          starttime: '',
-          wid: '',
-          maturetime: '',
-          stage: '',
-          posinfo: '',
+        fid: '',
+        pid: '',
+        ftime: ''
       },
       dialogForm2: {
-          pid: '',
-          pname: '',
-          poultryid: '',
-          poultryname: '',
-          poultrynum: '',
-          starttime: '',
-          wid: '',
-          maturetime: '',
-          stage: '',
-          posinfo: '',
+        pid: '',
+        pname: '',
+        poultryid: '',
+        poultryname: '',
+        poultrynum: '',
+        starttime: '',
+        wid: '',
+        maturetime: '',
+        stage: '',
+        posinfo: '',
       },
-      dialogVisible: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
-      formLabelWidth: '70px',
-      typeClass: ['普通用户', '农场职工', '农场管理员', '系统管理员'],
+      dialogFormVisible3: false,
+      formLabelWidth: '100px',
       pageSize: 10,
       firstRecord: 1,
       lastRecord: 999,
-      statusFileter: ['男', '女'],
-      name: '',
+      uid: '',
       token: '',
       type:''
     }
   },
   created() {
     this.fetchData()
-    this.name = window.localStorage.getItem('name')
+    this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
   },
@@ -196,42 +217,112 @@ export default {
             }
           }
         })
-      }).filter(row => {
-        return this.statusFileter.includes(row.gender)
       })
     }
   },
   methods: {
-    AddData() {
-      if(this.name=='root'){ 
-        this.dialogFormVisible = false;
-        const url = this.$store.state.settings.baseurl + '/farmer';
-        axios.post(url, {
-          "fid": this.formData[this.formData.length-1].fid+1,
-          "name": this.dialogForm.name,
-          "gender": this.dialogForm.gender,
-          "age": this.dialogForm.age,
-          "areaname": this.dialogForm.areaname,
-          "image": this.dialogForm.image
-        },
-        {
+    shangchuan(row) {
+      this.dialogFormVisible3 = true
+      this.batchform.originid = row.pid
+      this.batchform.gname = row.poultryname
+      this.batchform.amount = row.poultrynum
+      this.batchform.gid = row.poultryid
+    },
+    shangchuanUpdate() {
+      this.dialogFormVisible3 = false
+      let url = this.$store.state.settings.baseurl + '/batch'
+      axios.get(url,{
           headers: {
             'Authorization': this.token
           }
         })
-        .then(() => {
-          this.fetchData();
-          this.$message({
-            type: 'success',
-            message: '新增成功!'
-          });
-        })
-        .catch(error => {
+          .then(response => {
+            let Ddata = response.data.data
+            let n = parseInt(Ddata.length)+1
+            let bid = 'B' + n
+            axios.post(url, {
+              "bid": bid,
+              "originid": this.batchform.originid,
+              "bdate": this.batchform.bdate,
+              "gid": this.batchform.gid,
+              "gname": this.batchform.gname,
+              "amount": this.batchform.amount,
+              "isdealed": 0
+            },
+            {
+              headers: {
+                'Authorization': this.token
+              }
+            })
+            .then(() => {
+              this.$message({
+                type: 'success',
+                message: '上传成功!'
+              })
+              let url2 = this.$store.state.settings.baseurl + '/pasture'
+              axios.put(url2, {
+                "pid": this.batchform.originid,
+                "poultrynum": 0
+              },
+              {
+                headers: {
+                'Authorization': this.token
+              }
+              })
+              .then(() => {
+                this.fetchData()
+              })
+              .catch(error => {
+                console.log(error)
+              })
+            })
+            .catch(error => {
+                console.log(error)
+            })
+          })
+          .catch(error => {
             console.log(error)
-        });
-      }else{
-        Message.error("没有此权限！")
-      }
+          })
+    },
+    weishi(row) {
+      this.dialogFormVisible = true
+      this.dialogForm.pid = row.pid
+    },
+    weishiUpdate() {
+      this.dialogFormVisible = false
+      let url = this.$store.state.settings.baseurl + '/feed'
+      axios.get(url,{
+          headers: {
+            'Authorization': this.token
+          }
+        })
+          .then(response => {
+            let Ddata = response.data.data
+            let n = parseInt(Ddata.length)+1
+            let fid = 'F' + n
+            axios.post(url, {
+              "fid": fid,
+              "pid": this.dialogForm.pid,
+              "ftime": this.dialogForm.ftime
+            },
+            {
+              headers: {
+                'Authorization': this.token
+              }
+            })
+            .then(() => {
+              this.$message({
+                type: 'success',
+                message: '喂食成功!'
+              });
+            })
+            .catch(error => {
+                console.log(error)
+            })
+          })
+          .catch(error => {
+            console.log(error)
+          })
     },
     search(LandID,LandName,CropName,Uid) {
       if(this.name=='root'){       
@@ -249,10 +340,6 @@ export default {
         })
         .then(response => {
           let Ddata = response.data.data
-          for(let i = 0;i<Ddata.length;i++){
-            Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
-          }
           this.formData = Ddata
         })
         .catch(error => {
@@ -261,43 +348,6 @@ export default {
       }else{
         Message.error("没有此权限！")
       }
-    },
-    openDelete(row) {
-        if(this.name=='root'){        
-          this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.deleteRow(row);
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
-      }else{
-        Message.error("没有此权限！")
-      }
-    },
-    deleteRow (row) {
-      let Fid = row.fid;
-      const url = this.$store.state.settings.baseurl + '/pasture/' + Fid;
-      axios.delete(url, {
-        headers: {
-          'Authorization': this.token
-        }
-      })    
-      .then(() => {
-        this.fetchData();
-      })      
-      .catch(error => {
-        console.log(error)
-      })
     },
     fetchData () {
       let url = this.$store.state.settings.baseurl + '/pasture'
@@ -308,11 +358,6 @@ export default {
       })
         .then(response => {
           let Ddata = response.data.data
-          this.userData = Ddata
-          for(let i = 0;i<Ddata.length;i++){
-            Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
-          }
           this.formData=Ddata
           this.firstRecord = 1
           this.lastRecord = this.pageSize
@@ -367,21 +412,6 @@ export default {
       .catch(error => {
           console.log(error)
       });
-    },
-    beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt5M = file.size / 1024 / 1024 < 5;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt5M) {
-          this.$message.error('上传头像图片大小不能超过 5MB!');
-        }
-        return isJPG && isLt5M;
-    },
-    changeImage(file) {
-      this.dialogForm.image = 'static/images/' + file.name
     }
   }
 }

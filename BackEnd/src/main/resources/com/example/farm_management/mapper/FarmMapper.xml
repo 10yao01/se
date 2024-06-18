@@ -46,7 +46,7 @@
             <if test="cname != null and cname != ''">
                 c_name = #{cname},
             </if>
-            <if test="camount != null and camount != ''">
+            <if test="camount != null">
                 c_amount = #{camount},
             </if>
             <if test="wid != null and wid != ''">
