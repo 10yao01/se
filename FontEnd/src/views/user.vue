@@ -151,7 +151,6 @@ export default {
           idtype: '',
           tel: ''
       },
-      dialogVisible: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
       formLabelWidth: '70px',
@@ -238,7 +237,7 @@ export default {
         })
         .catch(error => {
             console.log(error)
-        });
+        })
       }else{
         Message.error("没有此权限！")
       }
@@ -368,7 +367,7 @@ export default {
       })  
       .catch(error => {
           console.log(error)
-      });
+      })
     },
     beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';

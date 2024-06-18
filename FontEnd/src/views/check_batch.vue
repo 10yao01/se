@@ -69,37 +69,20 @@ export default {
       searchBid: '',
       searchGname: '',
       descriptionData: '',
-      dialogForm: {
-          name: '',
-          gender: '',
-          age: '',
-          image: '',
-          areaname: ''
-      },
-      dialogForm2: {
-          name: '',
-          gender: '',
-          age: '',
-          image: '',
-          areaname: ''
-      },
-      dialogVisible: false,
-      dialogFormVisible: false,
-      dialogFormVisible2: false,
       formLabelWidth: '70px',
       pageSize: 10,
       firstRecord: 1,
       lastRecord: 999,
       stateType: ['danger','warning','success'],
       state: ['审批不通过', '未审批', '审批通过'],
-      name: '',
+      uid: '',
       token: '',
       type: ''
     }
   },
   created() {
     this.fetchData()
-    this.name = window.localStorage.getItem('name')
+    this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
   },
@@ -205,7 +188,7 @@ export default {
       })
       .catch(error => {
         console.log(error)
-      });
+      })
     },
     fetchData () {
       let url = this.$store.state.settings.baseurl + '/batch'
@@ -256,7 +239,6 @@ export default {
             }
           }
           this.formData=Ddata
-          console.log(this.formData)
           this.firstRecord = 1
           this.lastRecord = this.pageSize
         })
