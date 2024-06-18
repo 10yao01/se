@@ -11,6 +11,7 @@ public class Order {
     private String oid;
     private String customerid;
     private String gid;
+    private String gname;
     private Integer amount;
     private Integer score;
 }

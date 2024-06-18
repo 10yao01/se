@@ -23,10 +23,11 @@ public class OrderController {
     public Result list(String oid,
                        String customerid,
                        String gid,
+                       String gname,
                        Integer amount,
                        Integer score){
         log.info("查询订单信息");
-        List<Order> orderList = orderService.list(oid, customerid, gid, amount, score);
+        List<Order> orderList = orderService.list(oid, customerid, gid, gname, amount, score);
         return Result.success(orderList);
     }
 
