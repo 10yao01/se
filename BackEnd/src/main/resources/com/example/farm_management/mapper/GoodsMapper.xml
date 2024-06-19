@@ -31,7 +31,7 @@
             <if test="gname != null and gname != ''">
                 g_name = #{gname},
             </if>
-            <if test="stock != null and">
+            <if test="stock != null">
                 stock = #{stock},
             </if>
             <if test="sale != null">

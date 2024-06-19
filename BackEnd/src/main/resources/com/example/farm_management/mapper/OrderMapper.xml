@@ -19,10 +19,10 @@
             <if test="gname != null and gname != ''">
                 and g_name like concat('%', #{gname}, '%')
             </if>
-            <if test="amount != null and amount != ''">
+            <if test="amount != null">
                 and amount = #{amount}
             </if>
-            <if test="score != null and score != ''">
+            <if test="score != null">
                 and score = #{score}
             </if>
         </where>
