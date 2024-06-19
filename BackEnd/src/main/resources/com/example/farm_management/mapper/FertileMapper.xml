@@ -7,7 +7,7 @@
         select *
         from fertile
         <where>
-            <if test="fid != null">
+            <if test="fid != null and fid != ''">
                 f_id = #{fid}
             </if>
             <if test="farmid != null and farmid != ''">

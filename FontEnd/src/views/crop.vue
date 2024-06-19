@@ -175,7 +175,7 @@ export default {
       }
     },
     openDelete(row) {
-        if(this.name=='root'){        
+        if(this.type != 1){        
           this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -193,7 +193,7 @@ export default {
           });          
         });
       }else{
-        Message.error("没有此权限！")
+        Message.error("抱歉，您没有此权限！")
       }
     },
     deleteRow (row) {
@@ -236,6 +236,10 @@ export default {
       this.lastRecord = last
     },
     handleInfo (row) {
+      if(this.type == 1){
+        Message.error("抱歉，您没有此权限！")
+        return 
+      }
       this.dialogFormVisible2 = true;
       this.dialogForm2.cid = row.cid
       this.dialogForm2.cname = row.cname

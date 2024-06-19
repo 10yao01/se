@@ -174,27 +174,14 @@ export default {
       lastRecord: 999,
       uid: '',
       token: '',
-      type:''
+      type: ''
     }
   },
   created() {
-    this.fetchData()
     this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
-  },
-  mounted () {
-    if (this.$route.params.iid) {
-      const url = this.$store.state.settings.baseurl + '/farmer/' + this.$route.params.iid
-      axios.get(url).then(res => {
-        if (res.data.code === 200) {
-          this.oneData = res.data.data
-        }
-      })
-    } else {
-      this.fetchData()
-      this.lastRecord = this.pageSize
-    }
+    this.fetchData()
   },
   computed: {
     pagedData () {
@@ -325,32 +312,35 @@ export default {
           })
     },
     search(LandID,LandName,CropName,Uid) {
-      if(this.name=='root'){       
-        let url = this.$store.state.settings.baseurl + '/pasture'
-        axios.get(url, {
-            headers: {
-            'Authorization': this.token
-            },
-            params:{
-              pid: LandID,
-              pname: LandName,
-              pasturename: CropName,
-              wid: Uid
-            }
-        })
-        .then(response => {
-          let Ddata = response.data.data
-          this.formData = Ddata
-        })
-        .catch(error => {
-          console.log(error)
-        });
-      }else{
-        Message.error("没有此权限！")
-      }
+      if(this.type == 1){
+        Message.error("抱歉，您没有此权限！")
+        return
+      }     
+      let url = this.$store.state.settings.baseurl + '/pasture'
+      axios.get(url, {
+          headers: {
+          'Authorization': this.token
+          },
+          params:{
+            pid: LandID,
+            pname: LandName,
+            pasturename: CropName,
+            wid: Uid
+          }
+      })
+      .then(response => {
+        let Ddata = response.data.data
+        this.formData = Ddata
+      })
+      .catch(error => {
+        console.log(error)
+      });
     },
     fetchData () {
       let url = this.$store.state.settings.baseurl + '/pasture'
+      if(this.type == 1){
+        url = url + '?wid=' + this.uid
+      }
       axios.get(url,{
         headers: {
           'Authorization': this.token
@@ -371,6 +361,10 @@ export default {
       this.lastRecord = last
     },
     handleInfo (row) {
+      if(this.type == 1){
+        Message.error("抱歉，您没有此权限！")
+        return
+      }
       this.dialogFormVisible2 = true;
       this.dialogForm2.pid = row.pid
       this.dialogForm2.pname = row.pname

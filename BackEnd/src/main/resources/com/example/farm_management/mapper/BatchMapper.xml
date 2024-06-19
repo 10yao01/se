@@ -58,7 +58,7 @@
             <if test="isdealed != null and isdealed != ''">
                 is_dealed = #{isdealed},
             </if>
-            <if test="amount != null and amount != ''">
+            <if test="amount != null">
                 amount = #{amount}
             </if>
         </set>

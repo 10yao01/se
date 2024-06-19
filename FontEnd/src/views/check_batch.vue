@@ -86,19 +86,6 @@ export default {
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
   },
-  mounted () {
-    if (this.$route.params.iid) {
-      const url = this.$store.state.settings.baseurl + '/farmer/' + this.$route.params.iid
-      axios.get(url).then(res => {
-        if (res.data.code === 200) {
-          this.oneData = res.data.data
-        }
-      })
-    } else {
-      this.fetchData()
-      this.lastRecord = this.pageSize
-    }
-  },
   computed: {
     pagedData () {
       return this.filteredData.slice(this.firstRecord - 1, this.lastRecord)
@@ -125,6 +112,10 @@ export default {
   },
   methods: {
     Pass(row) {
+      if(this.type == 1){
+        Message.error("抱歉，您没有此权限！")
+        return 
+      }
       let url = this.$store.state.settings.baseurl + '/batch'
       if(row.isdealed != 1){
         Message.error("请勿重复审核！")
@@ -147,6 +138,10 @@ export default {
       }
     },
     NoPass(row) {
+      if(this.type == 1){
+        Message.error("抱歉，您没有此权限！")
+        return 
+      }
       let url = this.$store.state.settings.baseurl + '/batch'
       if(row.isdealed != 1){
         Message.error("请勿重复审核！")
@@ -183,7 +178,43 @@ export default {
         let Ddata = response.data.data
         for(let i = 0;i<Ddata.length;i++){
             Ddata[i].isdealed = Ddata[i].isdealed+1
-        }       
+        }    
+        Ddata = Ddata.map(obj => {
+              obj.originname = '1';
+              return obj;
+          });
+        for(let i = 0;i<Ddata.length;i++){
+          let url2 = this.$store.state.settings.baseurl
+          if(Ddata[i].originid[0] == 'P'){
+            url2 += '/pasture?pid=' + Ddata[i].originid
+            axios.get(url2,{
+              headers: {
+                'Authorization': this.token
+              }
+            })
+            .then(response => {
+              let Ndata = response.data.data
+              Ddata[i].originname = Ndata[0].pname
+            })
+            .catch(error => {
+              console.log(error)
+            })
+          }else{
+            url2 += '/farm?fid=' + Ddata[i].originid
+            axios.get(url2,{
+              headers: {
+                'Authorization': this.token
+              }
+            })
+            .then(response => {
+              let Ndata = response.data.data
+              Ddata[i].originname = Ndata[0].fname
+            })
+            .catch(error => {
+              console.log(error)
+            })
+          }
+        }
         this.formData = Ddata
       })
       .catch(error => {

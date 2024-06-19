@@ -7,7 +7,7 @@
         select *
         from feed
         <where>
-            <if test="fid != null">
+            <if test="fid != null and fid != ''">
                 f_id = #{fid}
             </if>
             <if test="pid != null and pid != ''">

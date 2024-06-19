@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
 export default {
   data () {
     return {
@@ -45,7 +46,7 @@ export default {
       ],
       uid: '',
       token: '',
-      tyep: '',
+      type: '',
       typeClass: ['普通用户', '农场职工', '农场管理员', '系统管理员']
     }
   },
@@ -58,7 +59,11 @@ export default {
   },
   methods: {
     handle (routeName) {
-      this.$router.push({ path: routeName })
+      if(this.type == 0 && routeName == '/check_batch'){
+        Message.error("抱歉，您没有此权限！")
+      }else{
+        this.$router.push({ path: routeName })
+      }
     }
   }
 }
