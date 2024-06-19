@@ -31,19 +31,19 @@
             <if test="gname != null and gname != ''">
                 g_name = #{gname},
             </if>
-            <if test="stock != null and stock != ''">
+            <if test="stock != null">
                 stock = #{stock},
             </if>
-            <if test="sale != null and sale != ''">
+            <if test="sale != null">
                 sale = #{sale},
             </if>
-            <if test="price != null and price != ''">
+            <if test="price != null">
                 price = #{price},
             </if>
-            <if test="score != null and score != ''">
+            <if test="score != null">
                 score = #{score},
             </if>
-            <if test="raternum != null and raternum != ''">
+            <if test="raternum != null">
                 rater_num = #{raternum}
             </if>
         </set>
