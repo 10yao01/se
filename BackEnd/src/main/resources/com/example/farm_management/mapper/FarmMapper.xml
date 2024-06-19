@@ -13,6 +13,9 @@
             <if test="fid != null and fid != ''">
                 and f_id = #{fid}
             </if>
+            <if test="wid != null and wid != ''">
+                and w_id = #{wid}
+            </if>
             <if test="posinfo != null and posinfo != ''">
                 and pos_info = #{posinfo}
             </if>

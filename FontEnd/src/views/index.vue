@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
 export default {
   data () {
     return {
@@ -64,7 +65,11 @@ export default {
   },
   methods: {
     handle (routeName) {
+    if(this.type == 0 && (routeName == '/farm' || routeName == '/pasture')){
+      Message.error("抱歉，您没有此权限！")
+    }else{
       this.$router.push({ path: routeName })
+    }
     }
   }
 }

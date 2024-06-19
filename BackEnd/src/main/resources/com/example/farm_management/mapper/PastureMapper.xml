@@ -10,10 +10,13 @@
             <if test="pname != null and pname != ''">
                 p_name like concat('%', #{pname}, '%')
             </if>
-            <if test="pid != null">
+            <if test="pid != null and pid != ''">
                 and p_id = #{pid}
             </if>
-            <if test="pos != null and pos != ''">
+            <if test="wid != null and wid != ''">
+                and w_id = #{wid}
+            </if>
+            <if test="posinfo != null and posinfo != ''">
                 and pos_info = #{posinfo}
             </if>
             <if test="poultryname != null and poultryname != ''">

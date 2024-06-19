@@ -17,8 +17,8 @@ public class FarmServiceImpl implements FarmService {
     FarmMapper farmMapper;
 
     @Override
-    public List<Farm> list(String fname, String fid, String posinfo, String cname, String cid) {
-        return farmMapper.list(fname, fid, posinfo, cname, cid);
+    public List<Farm> list(String fname, String fid, String wid, String posinfo, String cname, String cid) {
+        return farmMapper.list(fname, fid, wid, posinfo, cname, cid);
     }
 
     @Override

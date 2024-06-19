@@ -93,10 +93,10 @@ export default {
     }
   },
   created() {
-    this.fetchData()
     this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
+    this.fetchData()
   },
   mounted () {
     if (this.$route.params.iid) {
@@ -168,6 +168,9 @@ export default {
     },
     search(searchOid, searchGName) {
       let url = this.$store.state.settings.baseurl + '/order'
+      if(this.type == 0){
+        url = url + '?customerid=' + this.uid
+      }
       axios.get(url, {
           headers: {
           'Authorization': this.token
@@ -187,6 +190,9 @@ export default {
     },
     fetchData () {
       let url = this.$store.state.settings.baseurl + '/order'
+      if(this.type == 0){
+        url = url + '?customerid=' + this.uid
+      }
       axios.get(url,{
         headers: {
           'Authorization': this.token

@@ -18,9 +18,9 @@ public class PastureController {
     PastureService pastureService;
 
     @GetMapping
-    public Result list(String pname, String pid, String posinfo, String poultryid, String poultryname){
+    public Result list(String pname, String pid, String wid, String posinfo, String poultryid, String poultryname){
         log.info("查询养殖场信息");
-        List<Pasture> pastureList = pastureService.list(pname, pid, posinfo, poultryid, poultryname);
+        List<Pasture> pastureList = pastureService.list(pname, pid, wid, posinfo, poultryid, poultryname);
         return  Result.success(pastureList);
     }
 

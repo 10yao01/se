@@ -187,16 +187,16 @@ export default {
       pageSize: 10,
       firstRecord: 1,
       lastRecord: 999,
-      name: '',
+      uid: '',
       token: '',
       type:''
     }
   },
   created() {
-    this.fetchData()
-    this.name = window.localStorage.getItem('name')
+    this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
+    this.fetchData()
   },
   mounted () {
     if (this.$route.params.iid) {
@@ -382,7 +382,14 @@ export default {
           })
     },
     search(LandID,LandName,CropName,Uid) {     
+      if(this.type == 1){
+        Message.error("抱歉，您没有此权限！")
+        return 
+      }
       let url = this.$store.state.settings.baseurl + '/farm'
+      if(this.type == 1){
+        url = url + '?wid=' + this.uid
+      }
       axios.get(url, {
           headers: {
           'Authorization': this.token
@@ -441,6 +448,9 @@ export default {
     },
     fetchData () {
       let url = this.$store.state.settings.baseurl + '/farm'
+      if(this.type == 1){
+        url = url + '?wid=' + this.uid
+      }
       axios.get(url,{
         headers: {
           'Authorization': this.token
@@ -461,6 +471,10 @@ export default {
       this.lastRecord = last
     },
     handleInfo (row) {
+      if(this.type == 1){
+        Message.error("抱歉，您没有此权限！")
+        return
+      }
       this.dialogFormVisible2 = true;
       this.dialogForm2.fid = row.fid
       this.dialogForm2.fname = row.fname

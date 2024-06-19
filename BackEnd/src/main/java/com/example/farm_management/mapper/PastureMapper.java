@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface PastureMapper {
 
-    List<Pasture> list(String pname, String pid, String pos, String poultryid, String poultryname);
+    List<Pasture> list(String pname, String pid, String wid, String posinfo, String poultryid, String poultryname);
 
     @Insert("insert into pasture(p_id,p_name,poultry_id,poultry_name,poultry_num,start_time,w_id,mature_time,stage,pos_info)" +
             "values (#{pid},#{pname},#{poultryid},#{poultryname},#{poultrynum},#{starttime},#{wid},#{maturetime},#{stage},#{posinfo})")

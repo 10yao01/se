@@ -174,36 +174,32 @@ export default {
         Message.error("没有此权限！")
       }
     },
-    search(searchFid,searchFarmid, searchTime) {
-      if(this.name=='root'){       
-        let url = this.$store.state.settings.baseurl + '/feed'
-        axios.get(url, {
-            headers: {
-            'Authorization': this.token
-            },
-            params:{
-              fid: searchFid,
-              pid: searchFarmid,
-              time: searchTime,
-            }
-        })
-        .then(response => {
-          let Ddata = response.data.data
-          for(let i = 0;i<Ddata.length;i++){
-            Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
+    search(searchFid,searchFarmid, searchTime) {      
+      let url = this.$store.state.settings.baseurl + '/feed'
+      axios.get(url, {
+          headers: {
+          'Authorization': this.token
+          },
+          params:{
+            fid: searchFid,
+            pid: searchFarmid,
+            time: searchTime,
           }
-          this.formData = Ddata
-        })
-        .catch(error => {
-          console.log(error)
-        });
-      }else{
-        Message.error("没有此权限！")
-      }
+      })
+      .then(response => {
+        let Ddata = response.data.data
+        for(let i = 0;i<Ddata.length;i++){
+          Ddata[i].gender = Ddata[i].gender==1? '男':'女'
+          Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
+        }
+        this.formData = Ddata
+      })
+      .catch(error => {
+        console.log(error)
+      });
     },
     openDelete(row) {
-        if(this.name=='root'){        
+        if(this.type != 1){        
           this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -221,7 +217,7 @@ export default {
           });          
         });
       }else{
-        Message.error("没有此权限！")
+        Message.error("抱歉，您没有此权限！")
       }
     },
     deleteRow (row) {
@@ -266,6 +262,10 @@ export default {
       this.lastRecord = last
     },
     handleInfo (row) {
+      if(this.type == 1){
+        Message.error("抱歉，您没有此权限！")
+        return 
+      }
       this.dialogFormVisible2 = true;
       this.dialogForm2.fid = row.fid
       this.dialogForm2.pid = row.pid

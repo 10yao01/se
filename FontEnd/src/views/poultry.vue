@@ -102,14 +102,14 @@ export default {
       firstRecord: 1,
       lastRecord: 999,
       statusFileter: ['男', '女'],
-      name: '',
+      uid: '',
       token: '',
       type:''
     }
   },
   created() {
     this.fetchData()
-    this.name = window.localStorage.getItem('name')
+    this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
   },
@@ -153,64 +153,31 @@ export default {
     }
   },
   methods: {
-    AddData() {
-      if(this.name=='root'){ 
-        this.dialogFormVisible = false;
-        const url = this.$store.state.settings.baseurl + '/farmer';
-        axios.post(url, {
-          "cid": this.formData[this.formData.length-1].cid+1,
-          "name": this.dialogForm.name,
-          "itime": this.dialogForm.itime,
-          "ftime": this.dialogForm.ftime,
-        },
-        {
+    search(searchID, searchName) {   
+      let url = this.$store.state.settings.baseurl + '/poultry'
+      axios.get(url, {
           headers: {
-            'Authorization': this.token
+          'Authorization': this.token
+          },
+          params:{
+            pid: searchID,
+            pname: searchName,
           }
-        })
-        .then(() => {
-          this.fetchData();
-          this.$message({
-            type: 'success',
-            message: '新增成功!'
-          });
-        })
-        .catch(error => {
-            console.log(error)
-        });
-      }else{
-        Message.error("没有此权限！")
-      }
-    },
-    search(searchID, searchName) {
-      if(this.name=='root'){       
-        let url = this.$store.state.settings.baseurl + '/poultry'
-        axios.get(url, {
-            headers: {
-            'Authorization': this.token
-            },
-            params:{
-              pid: searchID,
-              pname: searchName,
-            }
-        })
-        .then(response => {
-          let Ddata = response.data.data
-          for(let i = 0;i<Ddata.length;i++){
-            Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
-          }
-          this.formData = Ddata
-        })
-        .catch(error => {
-          console.log(error)
-        });
-      }else{
-        Message.error("没有此权限！")
-      }
+      })
+      .then(response => {
+        let Ddata = response.data.data
+        for(let i = 0;i<Ddata.length;i++){
+          Ddata[i].gender = Ddata[i].gender==1? '男':'女'
+          Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
+        }
+        this.formData = Ddata
+      })
+      .catch(error => {
+        console.log(error)
+      });
     },
     openDelete(row) {
-        if(this.name=='root'){        
+        if(this.type != 1){        
           this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -228,7 +195,7 @@ export default {
           });          
         });
       }else{
-        Message.error("没有此权限！")
+        Message.error("抱歉，您没有此权限！")
       }
     },
     deleteRow (row) {
@@ -273,6 +240,10 @@ export default {
       this.lastRecord = last
     },
     handleInfo (row) {
+      if(this.type == 1){
+        Message.error("抱歉，您没有此权限！")
+        return 
+      }
       this.dialogFormVisible2 = true;
       this.dialogForm2.pid = row.pid
       this.dialogForm2.pname = row.pname

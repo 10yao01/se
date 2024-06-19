@@ -157,29 +157,16 @@ export default {
       firstRecord: 1,
       lastRecord: 999,
       statusFileter: ['男', '女'],
-      name: '',
+      uid: '',
       token: '',
-      type:''
+      type: ''
     }
   },
   created() {
-    this.fetchData()
-    this.name = window.localStorage.getItem('name')
+    this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
-  },
-  mounted () {
-    if (this.$route.params.iid) {
-      const url = this.$store.state.settings.baseurl + '/farmer/' + this.$route.params.iid
-      axios.get(url).then(res => {
-        if (res.data.code === 200) {
-          this.oneData = res.data.data
-        }
-      })
-    } else {
-      this.fetchData()
-      this.lastRecord = this.pageSize
-    }
+    this.fetchData()
   },
   computed: {
     pagedData () {
@@ -209,7 +196,7 @@ export default {
   },
   methods: {
     AddData() {
-      if(this.name=='root'){ 
+      if(this.type == 3){ 
         this.dialogFormVisible = false;
         const url = this.$store.state.settings.baseurl + '/user';
         axios.post(url, {
@@ -237,11 +224,11 @@ export default {
             console.log(error)
         })
       }else{
-        Message.error("没有此权限！")
+        Message.error("抱歉，您没有此权限！")
       }
     },
     search(searchID, searchName, searchGender, searchTel) {
-      if(this.name=='root'){       
+      if(this.type == 3){       
         let url = this.$store.state.settings.baseurl + '/user'
         axios.get(url, {
             headers: {
@@ -266,11 +253,11 @@ export default {
           console.log(error)
         });
       }else{
-        Message.error("没有此权限！")
+        Message.error("抱歉，您没有此权限！")
       }
     },
     openDelete(row) {
-        if(this.name=='root'){        
+        if(this.type == 3){        
           this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -288,7 +275,7 @@ export default {
           });          
         });
       }else{
-        Message.error("没有此权限！")
+        Message.error("抱歉，您没有此权限！")
       }
     },
     deleteRow (row) {
@@ -308,6 +295,9 @@ export default {
     },
     fetchData () {
       let url = this.$store.state.settings.baseurl + '/user'
+      if (this.type != 3){
+        url = url + '?uid=' + this.uid
+      }
       axios.get(url,{
         headers: {
           'Authorization': this.token
