@@ -135,6 +135,7 @@ export default {
   },
   methods: {
     Buy() {
+    this.dialogFormVisible = false
       if(this.dialogForm.amount == ''){
         Message.error("购买数量不可为空！")
       }else if(this.dialogForm.amount > this.stock){
