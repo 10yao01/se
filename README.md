@@ -10,12 +10,18 @@
 ### 前后端
 
 前端使用VSCODE编写  主要技术栈为 Vue
+
+
 后端使用IDEA编写    主要技术栈为SSM框架(Spring SpringMVC MyBatis)
 
 ### 接口管理
 
 接口管理使用POSTMAN进行
+
+
 POSTMAN导出的JSON文件为`智慧农场.postman_collection.json`
+
+
 可以直接导入POSTMAN进行查看
 
 ### 版本控制 团队协作
