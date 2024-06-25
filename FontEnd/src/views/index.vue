@@ -28,7 +28,7 @@ export default {
           routeName: '/user',
           name: '用户管理',
           desc: '进行订单查询',
-          src: 'static/images/1.jpg'
+          src: 'static/images/user.jpg'
         },
         {
           routeName: '/farm',

@@ -58,14 +58,14 @@
               <el-button size="mini" type="primary" @click="shifei(scope.row)">
                 施肥
               </el-button>
-              <el-dialog title="施肥时间" :visible.sync="dialogFormVisible" width="30%">
+              <el-dialog title="施肥时间" :visible.sync="dialogFormVisible4" width="30%">
                 <el-form :model="dialogForm">
                   <el-form-item label="施肥时间" :label-width="formLabelWidth">
                     <el-input v-model="dialogForm.optime" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button @click="dialogFormVisible4 = false">取 消</el-button>
                     <el-button type="primary" @click="shifeiUpdate()">确 定</el-button>
                 </div>
               </el-dialog>
@@ -183,6 +183,7 @@ export default {
       dialogFormVisible: false,
       dialogFormVisible2: false,
       dialogFormVisible3: false,
+      dialogFormVisible4: false,
       formLabelWidth: '100px',
       pageSize: 10,
       firstRecord: 1,
@@ -341,11 +342,11 @@ export default {
           })
     },
     shifei(row) {
-      this.dialogFormVisible = true
+      this.dialogFormVisible4 = true
       this.dialogForm.farmid = row.fid
     },
     shifeiUpdate() {
-      this.dialogFormVisible = false
+      this.dialogFormVisible4 = false
       let url = this.$store.state.settings.baseurl + '/fertile'
       axios.get(url,{
           headers: {

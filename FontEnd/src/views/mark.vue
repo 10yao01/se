@@ -137,6 +137,11 @@ export default {
   },
   methods: {
     Mark(row) {
+      if(row.customerid != this.uid){
+        
+        Message.error("抱歉，您没有此权限！")
+        return
+      }
       if(row.score != null) {
         Message.error("请勿重复打分！")
       }else{
