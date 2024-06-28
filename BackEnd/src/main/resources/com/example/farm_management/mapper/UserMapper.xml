@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.farm_management.mapper.UserMapper">
     <select id="list" resultType="com.example.farm_management.pojo.User">
-        select *
+        select user.u_id, CAST(AES_DECRYPT(user.pwd, 'secret key') AS CHAR(50)) as pwd, user.id_type, user.`name`, user.gender, user.age, user.tel
         from user
         <where>
             <if test="uid != null and uid != ''">
@@ -38,7 +38,7 @@
                 name = #{name},
             </if>
             <if test="pwd != null and pwd != ''">
-                pwd = #{pwd},
+                pwd = AES_ENCRYPT(#{pwd}, 'secret key'),
             </if>
             <if test="age != null and age != ''">
                 age = #{age},
