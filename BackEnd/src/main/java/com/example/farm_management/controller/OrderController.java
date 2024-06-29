@@ -25,9 +25,11 @@ public class OrderController {
                        String gid,
                        String gname,
                        Integer amount,
-                       Integer score){
+                       Integer score,
+                       String eid,
+                       Double price){
         log.info("查询订单信息");
-        List<Order> orderList = orderService.list(oid, customerid, gid, gname, amount, score);
+        List<Order> orderList = orderService.list(oid, customerid, gid, gname, amount, score, eid, price);
         return Result.success(orderList);
     }
 

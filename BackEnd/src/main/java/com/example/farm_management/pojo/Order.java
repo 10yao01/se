@@ -14,4 +14,6 @@ public class Order {
     private String gname;
     private Integer amount;
     private Integer score;
+    private String eid;
+    private Double price;
 }
