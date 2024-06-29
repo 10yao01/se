@@ -15,8 +15,8 @@ public class OrderServiceImpl implements OrderService {
     OrderMapper orderMapper;
 
     @Override
-    public List<Order> list(String oid, String customerid, String gid, String gname, Integer amount, Integer score) {
-        return orderMapper.list(oid, customerid, gid, gname, amount, score);
+    public List<Order> list(String oid, String customerid, String gid, String gname, Integer amount, Integer score, String eid, Double price) {
+        return orderMapper.list(oid, customerid, gid, gname, amount, score, eid, price);
     }
 
     @Override

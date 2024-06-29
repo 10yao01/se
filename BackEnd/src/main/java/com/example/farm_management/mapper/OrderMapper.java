@@ -13,10 +13,12 @@ public interface OrderMapper {
                      String gid,
                      String gname,
                      Integer amount,
-                     Integer score);
+                     Integer score,
+                     String eid,
+                     Double price);
 
-    @Insert("insert into `order`(o_id, customer_id, g_id, g_name, amount, score)" +
-            "values (#{oid},#{customerid},#{gid},#{gname},#{amount},#{score})")
+    @Insert("insert into `order`(o_id, customer_id, g_id, g_name, amount, score, e_id, price)" +
+            "values (#{oid},#{customerid},#{gid},#{gname},#{amount},#{score},#{eid},#{price})")
     void insert(Order order);
 
     void delete(List<String> ids);

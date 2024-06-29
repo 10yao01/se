@@ -25,6 +25,12 @@
             <if test="score != null">
                 and score = #{score}
             </if>
+            <if test="eid != null and eid != ''">
+                and e_id = #{eid}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
         </where>
     </select>
 
@@ -50,7 +56,13 @@
                 amount = #{amount},
             </if>
             <if test="score != null and score != ''">
-                score = #{score}
+                score = #{score},
+            </if>
+            <if test="eid != null and eid != ''">
+                e_id = #{eid},
+            </if>
+            <if test="price != null">
+                price = #{price}
             </if>
         </set>
         where o_id = #{oid}

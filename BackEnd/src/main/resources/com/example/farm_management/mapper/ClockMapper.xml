@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.farm_management.mapper.ClockMapper">
+    <select id="list" resultType="com.example.farm_management.pojo.Clock">
+        select *
+        from clock
+        <where>
+            <if test="eid != null and eid != ''">
+                e_id = #{eid}
+            </if>
+            <if test="date != null">
+                and `date` = #{date}
+            </if>
+            <if test="come != null">
+                and come = #{come}
+            </if>
+            <if test="leave != null">
+                and `leave` = #{leave}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from clock
+        where clock.e_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update clock
+        <set>
+            <if test="come != null">
+                come = #{come},
+            </if>
+            <if test="leave != null">
+                `leave` = #{leave}
+            </if>
+        </set>
+        where e_id = #{eid} and `date` = #{date}
+    </update>
+</mapper>

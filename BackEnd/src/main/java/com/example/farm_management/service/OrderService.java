@@ -10,7 +10,9 @@ public interface OrderService {
                      String gid,
                      String gname,
                      Integer amount,
-                     Integer score);
+                     Integer score,
+                     String eid,
+                     Double price);
 
     void add(Order order);
 
