@@ -25,6 +25,9 @@
             <if test="cid != null and cid != ''">
                 and c_id = #{cid}
             </if>
+            <if test="soiltype != null and soiltype != ''">
+                and soil_type = #{soiltype}
+            </if>
         </where>
     </select>
 
@@ -65,7 +68,19 @@
                 stage = #{stage},
             </if>
             <if test="posinfo != null and posinfo != ''">
-                pos_info = #{posinfo}
+                pos_info = #{posinfo},
+            </if>
+            <if test="longitude != null and longitude !=''">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null and latitude !=''">
+                latitude = #{latitude},
+            </if>
+            <if test="soiltype != null and soiltype !=''">
+                soil_type = #{soiltype},
+            </if>
+            <if test="statistics != null and statistics !=''">
+                statistics = #{statistics}
             </if>
         </set>
         where f_id = #{fid}
