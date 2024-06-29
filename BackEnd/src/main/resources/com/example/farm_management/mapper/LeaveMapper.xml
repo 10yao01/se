@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.farm_management.mapper.LeaveMapper">
+    <select id="list" resultType="com.example.farm_management.pojo.Leave">
+        select *
+        from `leave`
+        <where>
+            <if test="eid != null and eid != ''">
+                e_id = #{eid}
+            </if>
+            <if test="startdate != null">
+                and start_date = #{startdate}
+            </if>
+            <if test="backdate != null">
+                and back_date = #{backdate}
+            </if>
+            <if test="isdealed != null and isdealed != ''">
+                and is_dealed = #{isdealed}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from `leave`
+        where `leave`.e_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update `leave`
+        <set>
+            <if test="backdate != null">
+                back_date = #{backdate},
+            </if>
+            <if test="isdealed != null and isdealed != ''">
+                is_dealed = #{isdealed}
+            </if>
+        </set>
+        where e_id = #{eid} and start_date = #{startdate}
+    </update>
+</mapper>
