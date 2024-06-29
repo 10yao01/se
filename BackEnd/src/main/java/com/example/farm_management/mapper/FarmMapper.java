@@ -11,10 +11,10 @@ import java.util.List;
 @Mapper
 public interface FarmMapper {
 
-    List<Farm> list(String fname, String fid, String wid, String posinfo, String cname, String cid);
+    List<Farm> list(String fname, String fid, String wid, String posinfo, String cname, String cid, Integer soiltype);
 
-    @Insert("insert into farm(f_id,f_name,c_id,c_name,c_amount,p_date,w_id,harvest_date,stage,pos_info)" +
-            "values (#{fid},#{fname},#{cid},#{cname},#{camount},#{pdate},#{wid},#{harvestdate},#{stage},#{posinfo})")
+    @Insert("insert into farm(f_id,f_name,c_id,c_name,c_amount,p_date,w_id,harvest_date,stage,pos_info,longitude,latitude,soil_type,statistics)" +
+            "values (#{fid},#{fname},#{cid},#{cname},#{camount},#{pdate},#{wid},#{harvestdate},#{stage},#{posinfo},#{longitude},#{latitude},#{soiltype},#{statistics})")
     void insert(Farm farm);
 
     void delete(List<String> ids);
