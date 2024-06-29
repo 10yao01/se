@@ -10,13 +10,13 @@
             <if test="eid != null and eid != ''">
                 e_id = #{eid}
             </if>
-            <if test="date != null and date != ''">
+            <if test="date != null">
                 and `date` = #{date}
             </if>
-            <if test="come != null and come != ''">
+            <if test="come != null">
                 and come = #{come}
             </if>
-            <if test="leave != null and leave != ''">
+            <if test="leave != null">
                 and `leave` = #{leave}
             </if>
         </where>
@@ -34,9 +34,6 @@
     <update id="update">
         update clock
         <set>
-            <if test="eid != null and eid != ''">
-                e_id = #{eid},
-            </if>
             <if test="come != null">
                 come = #{come},
             </if>
