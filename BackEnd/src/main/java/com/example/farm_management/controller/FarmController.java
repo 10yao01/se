@@ -111,10 +111,7 @@ public class FarmController {
             if (!statisticsList.isEmpty() && statisticsList.get(0) instanceof LinkedHashMap) {
                 // 使用 ObjectMapper 将 List<LinkedHashMap> 转换为 List<FarmFeature>
                 ObjectMapper mapper = new ObjectMapper();
-                List<FarmFeature> farmFeatureList = mapper.convertValue(
-                        statisticsList,
-                        TypeFactory.defaultInstance().constructCollectionType(List.class, FarmFeature.class)
-                );
+                List<FarmFeature> farmFeatureList = mapper.convertValue(statisticsList, TypeFactory.defaultInstance().constructCollectionType(List.class, FarmFeature.class));
                 // List<FarmFeature> 转换为 String
                 String statisticsString = ConvertFarmFeatureToString(farmFeatureList);
                 farm.setStatistics(statisticsString);
