@@ -105,6 +105,7 @@ public class FarmController {
     public Result update(@RequestBody Farm farm) {
         log.info("更新农田信息：{}", farm);
         // 检查 statistics 字段是否为 List<LinkedHashMap>
+        // ? 作为通配符
         if (farm.getStatistics() instanceof List<?>) {
             List<?> statisticsList = (List<?>) farm.getStatistics();
             if (!statisticsList.isEmpty() && statisticsList.get(0) instanceof LinkedHashMap) {
