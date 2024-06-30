@@ -1,11 +1,9 @@
 package com.example.farm_management.pojo;
 
 
-import com.nh.micro.ext.ExtBeanWrapper;
 import lombok.*;
 
 import java.sql.Date;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
