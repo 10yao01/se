@@ -1,5 +1,6 @@
 package com.example.farm_management.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,11 +12,15 @@ import com.example.farm_management.pojo.Farm;
 import com.example.farm_management.pojo.FarmFeature;
 import com.example.farm_management.pojo.Result;
 import com.example.farm_management.service.FarmService;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,7 +32,7 @@ public class FarmController {
     @Autowired
     FarmService farmService;
 
-    private List<FarmFeature> ConvertStringToFarmFeature(String farmStr) {
+    private static List<FarmFeature> ConvertStringToFarmFeature(String farmStr) {
         List<FarmFeature> farmFeatureList = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -46,6 +51,28 @@ public class FarmController {
         }
         return farmFeatureList;
     }
+
+    private static String ConvertFarmFeatureToString(List<FarmFeature> farmFeatureList) {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode arrayNode = mapper.createArrayNode();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH);
+
+        for (FarmFeature farmFeature : farmFeatureList) {
+            ObjectNode objectNode = mapper.createObjectNode();
+            objectNode.put("date", sdf.format(farmFeature.getDate()));
+            objectNode.put("moisture", farmFeature.getMoisture());
+            objectNode.put("nutrient", farmFeature.getNutrient());
+            arrayNode.add(objectNode);
+        }
+
+        try {
+            return mapper.writeValueAsString(arrayNode);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     @GetMapping
     public Result list(String fname, String fid, String wid, String posinfo, String cname, String cid, Integer soiltype) {
@@ -77,8 +104,25 @@ public class FarmController {
     @PutMapping
     public Result update(@RequestBody Farm farm) {
         log.info("更新农田信息：{}", farm);
-
-        System.out.println(farm.getStatistics().getClass());
+        // 检查 statistics 字段是否为 List<LinkedHashMap>
+        // ? 作为通配符
+        if (farm.getStatistics() instanceof List<?>) {
+            List<?> statisticsList = (List<?>) farm.getStatistics();
+            if (!statisticsList.isEmpty() && statisticsList.get(0) instanceof LinkedHashMap) {
+                // 使用 ObjectMapper 将 List<LinkedHashMap> 转换为 List<FarmFeature>
+                ObjectMapper mapper = new ObjectMapper();
+                List<FarmFeature> farmFeatureList = mapper.convertValue(statisticsList, TypeFactory.defaultInstance().constructCollectionType(List.class, FarmFeature.class));
+                // List<FarmFeature> 转换为 String
+                String statisticsString = ConvertFarmFeatureToString(farmFeatureList);
+                farm.setStatistics(statisticsString);
+            } else {
+                log.error("统计数据类型不匹配");
+                return Result.error("统计数据类型不匹配");
+            }
+        } else {
+            log.error("统计数据不是列表类型");
+            return Result.error("统计数据不是列表类型");
+        }
         farmService.update(farm);
         return Result.success();
     }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.farm_management.mapper.EmployeeMapper">
+    <select id="list" resultType="com.example.farm_management.pojo.Employee">
+        select *
+        from employee
+        <where>
+            <if test="eid != null and eid != ''">
+                e_id = #{eid}
+            </if>
+            <if test="ename != null and ename != ''">
+                and e_name like concat('%', #{ename}, '%')
+            </if>
+            <if test="tel != null and tel != ''">
+                and tel = #{tel}
+            </if>
+            <if test="salary != null and salary != ''">
+                and salary = #{salary}
+            </if>
+            <if test="isgot != null and isgot != ''">
+                and isgot = #{isgot}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete
+        from employee
+        where e_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update employee
+        <set>
+            <if test="ename != null and ename != ''">
+                e_name = #{ename},
+            </if>
+            <if test="performance != null and performance != ''">
+                performance = #{performance},
+            </if>
+            <if test="tel != null and tel != ''">
+                tel = #{tel},
+            </if>
+            <if test="salary != null and salary != ''">
+                salary = #{salary},
+            </if>
+            <if test="isgot != null and isgot != ''">
+                is_got = #{isgot}
+            </if>
+        </set>
+        where e_id = #{eid}
+    </update>
+</mapper>
