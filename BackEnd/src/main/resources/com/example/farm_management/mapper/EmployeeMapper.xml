@@ -27,8 +27,8 @@
 
     <delete id="delete">
         delete
-        from farm
-        where f_id in
+        from employee
+        where e_id in
         <foreach collection="ids" item="id" separator="," open="(" close=")">
             #{id}
         </foreach>
