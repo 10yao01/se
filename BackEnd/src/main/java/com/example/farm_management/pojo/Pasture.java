@@ -20,5 +20,8 @@ public class Pasture {
     private String wid;
     private Date maturetime;
     private Integer stage;
+    private Integer longitude;
+    private Integer latitude;
+    private Double area;
     private String posinfo;
 }
