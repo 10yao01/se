@@ -1,0 +1,1409 @@
+{
+	"info": {
+		"_postman_id": "db01c9e9-e776-406c-8a73-ff31fb44d0d3",
+		"name": "智慧农场",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34870143",
+		"_collection_link": "https://seteam-8582.postman.co/workspace/Team-Workspace~9c0fc35c-d30e-4dbe-81e8-8df098e78ef7/collection/34870143-db01c9e9-e776-406c-8a73-ff31fb44d0d3?action=share&source=collection_link&creator=34870143"
+	},
+	"item": [
+		{
+			"name": "用户管理",
+			"item": [
+				{
+					"name": "用户查询",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"uid\":\"U2000516\",\r\n    \"pwd\":\"pwdasdads4656\",\r\n    \"idtype\":2,\r\n    \"name\":\"姚攀峰\",\r\n    \"gender\":0,\r\n    \"age\":45,\r\n    \"tel\":\"15515520055\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/user/U2000516",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"user",
+								"U2000516"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户更新",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"uid\": \"U0128311\",\r\n    \"pwd\": \"pwd769\",\r\n    \"idtype\": 0,\r\n    \"name\": \"危素珊\",\r\n    \"gender\": 1,\r\n    \"age\": 28,\r\n    \"tel\": \"16800471240\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户登录",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"uid\":\"U0128311\",\r\n    \"pwd\":\"pwd769\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "养殖场管理",
+			"item": [
+				{
+					"name": "养殖场查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/pasture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"pasture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "养殖场添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pid\":\"P08\",\r\n    \"pname\":\"养牛场\",\r\n    \"poultryid\":\"P06\",\r\n    \"poultryname\":\"黄牛\",\r\n    \"poultrynum\":\"43\",\r\n    \"starttime\":\"2024-05-29\",\r\n    \"wid\":\"U0128311\",\r\n    \"maturetime\":\"2024-06-10\",\r\n    \"stage\":\"2\",\r\n    \"longitude\": 116,\r\n    \"latitude\": 39,\r\n    \"area\": 20.0,\r\n    \"posinfo\":\"山东省德州市德城区\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/pasture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"pasture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "养殖场删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/pasture/P08",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"pasture",
+								"P08"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "养殖场更新",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n            \"pid\": \"P01\",\r\n            \"pname\": \"养鸡场\",\r\n            \"poultryid\": \"P01\",\r\n            \"poultryname\": \"鸡\",\r\n            \"poultrynum\": 17,\r\n            \"starttime\": \"2024-05-25\",\r\n            \"wid\": \"U5504479\",\r\n            \"maturetime\": \"2024-06-02\",\r\n            \"stage\": 3,\r\n            \"longitude\": 11,\r\n            \"latitude\": 34,\r\n            \"area\": 21.1,\r\n            \"posinfo\": \"山西省朔州市应县\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/pasture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"pasture"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "农田管理",
+			"item": [
+				{
+					"name": "农田查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/farm",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"farm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "农田添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n            \"fid\": \"F08\",\r\n            \"fname\": \"悲伤农场\",\r\n            \"cid\": \"C01\",\r\n            \"cname\": \"大葱\",\r\n            \"camount\": 50,\r\n            \"pdate\": \"2024-05-17\",\r\n            \"wid\": \"U2270119\",\r\n            \"harvestdate\": \"2024-06-10\",\r\n            \"stage\": 2,\r\n            \"posinfo\": \"浙江\",\r\n            \"longitude\": 120.0,\r\n            \"latitude\": 30.0,\r\n            \"area\": 2.1,\r\n            \"soiltype\": 1,\r\n            \"extcol\": null\r\n        }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/farm",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"farm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "农田删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/farm/F08",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"farm",
+								"F08"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "农田更新",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fid\": \"F06\",\r\n    \"fname\": \"悲伤农场\",\r\n    \"cid\": \"C01\",\r\n    \"cname\": \"大葱\",\r\n    \"camount\": 50,\r\n    \"pdate\": \"2024-05-17\",\r\n    \"wid\": \"U2270119\",\r\n    \"harvestdate\": \"2024-06-10\",\r\n    \"stage\": 2,\r\n    \"posinfo\": \"浙江\",\r\n    \"longitude\": 120.1,\r\n    \"latitude\": 30.1,\r\n    \"area\": 2.4,\r\n    \"soiltype\": 1,\r\n    \"statistics\": [\r\n        {\r\n            \"date\": \"2024-01-01\",\r\n            \"moisture\": 3,\r\n            \"nutrient\": 2\r\n        },\r\n        {\r\n            \"date\": \"2024-02-01\",\r\n            \"moisture\": 3,\r\n            \"nutrient\": 2\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/farm",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"farm"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "集市管理",
+			"item": [
+				{
+					"name": "商品查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/goods",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"goods"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "商品删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/goods/G05",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"goods",
+								"G05"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "商品添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gid\": \"G05\",\r\n    \"gname\": \"鸡\",\r\n    \"stock\": 100,\r\n    \"sale\": 50,\r\n    \"price\": 20.0,\r\n    \"score\": 3.2,\r\n    \"raternum\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/goods",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"goods"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "商品修改",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "        {\r\n            \"gid\": \"C01\",\r\n            \"gname\": \"大葱\",\r\n            \"stock\": 5,\r\n            \"sale\": 50,\r\n            \"price\": 20.0,\r\n            \"score\": 3.2,\r\n            \"raternum\": 3\r\n        }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/goods",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"goods"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "喂食",
+			"item": [
+				{
+					"name": "喂食查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/feed",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"feed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "喂食添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fid\":\"F02\",\r\n    \"pid\":\"P01\",\r\n    \"ftime\":\"2024-06-10\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/feed",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"feed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "喂食删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/feed/F01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"feed",
+								"F01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "喂食更新",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fid\": \"F01\",\r\n    \"pid\": \"P01\",\r\n    \"ftime\": \"2024-05-27\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/feed",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"feed"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "浇水灌溉",
+			"item": [
+				{
+					"name": "浇水灌溉查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/fertile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"fertile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "浇水灌溉添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fid\":\"F010\",\r\n    \"farmid\":\"F02\",\r\n    \"optype\":0,\r\n    \"optime\":\"2024-06-10\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/fertile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"fertile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "浇水灌溉删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/fertile/F010",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"fertile",
+								"F010"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "浇水灌溉更新",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fid\": \"F01\",\r\n    \"farmid\": \"F02\",\r\n    \"optype\": 1,\r\n    \"optime\": \"2024-05-25\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/fertile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"fertile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "批次管理",
+			"item": [
+				{
+					"name": "批次查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/batch",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"batch"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "批次添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{           \r\n    \"bid\": \"B05\",\r\n    \"bdate\": \"2024-05-25\",\r\n    \"originid\": \"P01\",\r\n    \"gid\": \"P01\",\r\n    \"gname\": \"鸡\",\r\n    \"isdealed\": 0,\r\n    \"amount\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/batch",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"batch"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "批次删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/batch/B03",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"batch",
+								"B03"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "批次更新",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bid\": \"B05\",\r\n    \"bdate\": \"2024-05-25\",\r\n    \"originid\": \"P01\",\r\n    \"gid\": \"P01\",\r\n    \"gname\": \"鸡\",\r\n    \"isdealed\": 1,\r\n    \"amount\": 2\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/batch",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"batch"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "订单管理",
+			"item": [
+				{
+					"name": "订单查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "订单添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oid\": \"O11\",\r\n    \"customerid\": \"U3365824\",   \r\n    \"gid\": \"C02\",\r\n    \"gname\": \"土豆\",\r\n    \"amount\": 22,\r\n    \"score\": null,\r\n    \"eid\": \"U2270119\",\r\n    \"price\": 43.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "订单修改",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oid\": \"O01\",\r\n    \"customerid\": \"U3365824\",\r\n    \"gid\": \"C02\",\r\n    \"gname\": \"土豆\",\r\n    \"amount\": 22,\r\n    \"score\": 3,\r\n    \"eid\": \"U2270119\",\r\n    \"price\": 43.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "订单删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/order/O11",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"order",
+								"O11"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "作物管理",
+			"item": [
+				{
+					"name": "作物查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/crop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"crop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "作物添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"cid\": \"C07\",\r\n            \"cname\": \"ZZB\",\r\n            \"cinfo\": \"非常好吃\",\r\n            \"wtime\": 24,\r\n            \"ftime\": 48\r\n\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/crop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"crop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "作物修改",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cid\": \"C06\",\r\n            \"cname\": \"ZZB\",\r\n            \"cinfo\": \"非常好吃\",\r\n            \"wtime\": 46,\r\n            \"ftime\": 48\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/crop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"crop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "作物删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/crop/C07",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"crop",
+								"C07"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "家禽管理",
+			"item": [
+				{
+					"name": "家禽查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/poultry",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"poultry"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "家禽添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pid\": \"P07\",\r\n            \"pname\": \"鸡\",\r\n            \"pinfo\": \"一种鸡\",\r\n            \"feedinterval\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/poultry",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"poultry"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "家禽删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/poultry/P07",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"poultry",
+								"P07"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "家禽修改",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pid\": \"P01\",\r\n            \"pname\": \"鸡\",\r\n            \"pinfo\": \"一种鸡\",\r\n            \"feedinterval\": 6\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/poultry",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"poultry"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "签到clock表",
+			"item": [
+				{
+					"name": "签到信息查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/clock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"clock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "签到信息添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eid\": \"U2270119\",\r\n    \"date\": \"2024-06-29\",\r\n    \"come\": \"12:34:15\",\r\n    \"leave\": \"20:34:16\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/clock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"clock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "签到信息的更新",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eid\": \"U2270119\",\r\n    \"date\": \"2024-06-29\",\r\n    \"come\": \"12:34:15\",\r\n    \"leave\": \"20:34:52\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/clock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"clock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "签到记录的删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/clock/U2270119",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"clock",
+								"U2270119"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "请假管理",
+			"item": [
+				{
+					"name": "请假查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/leave",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"leave"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "请假添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"eid\": \"U2270119\",\r\n\"startdate\": \"2024-07-02\",\r\n\"backdate\": \"2024-07-03\",\r\n\"isdealed\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/leave",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"leave"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "请假删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/leave/U2270119",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"leave",
+								"U2270119"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "请假更新",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"eid\": \"U2270119\",\r\n            \"startdate\": \"2024-07-02\",\r\n            \"backdate\": \"2024-07-05\",\r\n            \"isdealed\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/leave",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"leave"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "职工管理",
+			"item": [
+				{
+					"name": "职工查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/employee",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"employee"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "职工查询",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9091/employee",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9091",
+									"path": [
+										"employee"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 30 Jun 2024 08:51:09 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1,\n    \"msg\": \"success\",\n    \"data\": [\n        {\n            \"eid\": \"U2270119\",\n            \"ename\": \"邰元\",\n            \"performance\": [\n                {\n                    \"date\": \"2024-01-01\",\n                    \"performance\": 2000\n                },\n                {\n                    \"date\": \"2024-02-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-03-01\",\n                    \"performance\": 4000\n                },\n                {\n                    \"date\": \"2024-04-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-05-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-06-01\",\n                    \"performance\": 5000\n                },\n                {\n                    \"date\": \"2024-07-01\",\n                    \"performance\": 1000\n                }\n            ],\n            \"tel\": \"12315\",\n            \"salary\": 2281,\n            \"isgot\": 0\n        },\n        {\n            \"eid\": \"U2379633\",\n            \"ename\": \"夏侯贞\",\n            \"performance\": [\n                {\n                    \"date\": \"2024-01-01\",\n                    \"performance\": 2000\n                },\n                {\n                    \"date\": \"2024-02-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-03-01\",\n                    \"performance\": 4000\n                },\n                {\n                    \"date\": \"2024-04-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-05-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-06-01\",\n                    \"performance\": 5000\n                },\n                {\n                    \"date\": \"2024-07-01\",\n                    \"performance\": 1000\n                }\n            ],\n            \"tel\": \"110\",\n            \"salary\": 440,\n            \"isgot\": 0\n        },\n        {\n            \"eid\": \"U2787669\",\n            \"ename\": \"孟剑\",\n            \"performance\": [\n                {\n                    \"date\": \"2024-01-01\",\n                    \"performance\": 2000\n                },\n                {\n                    \"date\": \"2024-02-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-03-01\",\n                    \"performance\": 4000\n                },\n                {\n                    \"date\": \"2024-04-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-05-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-06-01\",\n                    \"performance\": 5000\n                },\n                {\n                    \"date\": \"2024-07-01\",\n                    \"performance\": 1000\n                }\n            ],\n            \"tel\": \"120\",\n            \"salary\": 200,\n            \"isgot\": 0\n        },\n        {\n            \"eid\": \"U2988270\",\n            \"ename\": \"赫嘉\",\n            \"performance\": [\n                {\n                    \"date\": \"2024-01-01\",\n                    \"performance\": 2000\n                },\n                {\n                    \"date\": \"2024-02-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-03-01\",\n                    \"performance\": 4000\n                },\n                {\n                    \"date\": \"2024-04-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-05-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-06-01\",\n                    \"performance\": 5000\n                },\n                {\n                    \"date\": \"2024-07-01\",\n                    \"performance\": 1000\n                }\n            ],\n            \"tel\": \"119\",\n            \"salary\": 200,\n            \"isgot\": 0\n        },\n        {\n            \"eid\": \"U5278444\",\n            \"ename\": \"卓君轩\",\n            \"performance\": [\n                {\n                    \"date\": \"2024-01-01\",\n                    \"performance\": 2000\n                },\n                {\n                    \"date\": \"2024-02-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-03-01\",\n                    \"performance\": 4000\n                },\n                {\n                    \"date\": \"2024-04-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-05-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-06-01\",\n                    \"performance\": 5000\n                },\n                {\n                    \"date\": \"2024-07-01\",\n                    \"performance\": 1000\n                }\n            ],\n            \"tel\": \"177\",\n            \"salary\": 400,\n            \"isgot\": 0\n        },\n        {\n            \"eid\": \"U5430317\",\n            \"ename\": \"狄薇泓\",\n            \"performance\": [\n                {\n                    \"date\": \"2024-01-01\",\n                    \"performance\": 2000\n                },\n                {\n                    \"date\": \"2024-02-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-03-01\",\n                    \"performance\": 4000\n                },\n                {\n                    \"date\": \"2024-04-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-05-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-06-01\",\n                    \"performance\": 5000\n                },\n                {\n                    \"date\": \"2024-07-01\",\n                    \"performance\": 1000\n                }\n            ],\n            \"tel\": \"456\",\n            \"salary\": 500,\n            \"isgot\": 0\n        },\n        {\n            \"eid\": \"U5504479\",\n            \"ename\": \"谌玄\",\n            \"performance\": [\n                {\n                    \"date\": \"2024-01-01\",\n                    \"performance\": 2000\n                },\n                {\n                    \"date\": \"2024-02-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-03-01\",\n                    \"performance\": 4000\n                },\n                {\n                    \"date\": \"2024-04-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-05-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-06-01\",\n                    \"performance\": 5000\n                },\n                {\n                    \"date\": \"2024-07-01\",\n                    \"performance\": 1000\n                }\n            ],\n            \"tel\": \"125\",\n            \"salary\": 2000,\n            \"isgot\": 0\n        },\n        {\n            \"eid\": \"U5574819\",\n            \"ename\": \"端木秋会\",\n            \"performance\": [\n                {\n                    \"date\": \"2024-01-01\",\n                    \"performance\": 2000\n                },\n                {\n                    \"date\": \"2024-02-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-03-01\",\n                    \"performance\": 4000\n                },\n                {\n                    \"date\": \"2024-04-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-05-01\",\n                    \"performance\": 3000\n                },\n                {\n                    \"date\": \"2024-06-01\",\n                    \"performance\": 5000\n                },\n                {\n                    \"date\": \"2024-07-01\",\n                    \"performance\": 1000\n                }\n            ],\n            \"tel\": \"223\",\n            \"salary\": 1600,\n            \"isgot\": 0\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "职工添加",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eid\": \"U0128311\",\r\n    \"ename\": \"邰元\",\r\n    \"performance\": null,\r\n    \"tel\": \"12315\",\r\n    \"salary\": 0,\r\n    \"isgot\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/employee",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "职工删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9091/employee/U0128311",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"employee",
+								"U0128311"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "职工修改",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n            \"eid\": \"U0128311\",\r\n            \"ename\": \"邰\",\r\n            \"performance\": [\r\n                {\r\n                    \"date\": \"2024-01-01\",\r\n                    \"performance\": 2000\r\n                },\r\n                {\r\n                    \"date\": \"2024-02-01\",\r\n                    \"performance\": 3000\r\n                },\r\n                {\r\n                    \"date\": \"2024-03-01\",\r\n                    \"performance\": 4000\r\n                },\r\n                {\r\n                    \"date\": \"2024-04-01\",\r\n                    \"performance\": 3000\r\n                },\r\n                {\r\n                    \"date\": \"2024-05-01\",\r\n                    \"performance\": 3000\r\n                },\r\n                {\r\n                    \"date\": \"2024-06-01\",\r\n                    \"performance\": 5000\r\n                },\r\n                {\r\n                    \"date\": \"2024-07-01\",\r\n                    \"performance\": 1000\r\n                }\r\n            ],\r\n            \"tel\": \"1315\",\r\n            \"salary\": 281,\r\n            \"isgot\": 1\r\n        }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9091/employee",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9091",
+							"path": [
+								"employee"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
