@@ -76,6 +76,9 @@
             <if test="latitude != null and latitude !=''">
                 latitude = #{latitude},
             </if>
+            <if test="area != null and area !=''">
+                area = #{area},
+            </if>
             <if test="soiltype != null and soiltype !=''">
                 soil_type = #{soiltype},
             </if>

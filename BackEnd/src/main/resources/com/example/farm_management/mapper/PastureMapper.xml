@@ -64,6 +64,15 @@
             <if test="stage != null and stage != ''">
                 stage = #{stage},
             </if>
+            <if test="longitude != null and longitude !=''">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null and latitude !=''">
+                latitude = #{latitude},
+            </if>
+            <if test="area != null and area !=''">
+                area = #{area},
+            </if>
             <if test="posinfo != null and posinfo != ''">
                 pos_info = #{posinfo}
             </if>

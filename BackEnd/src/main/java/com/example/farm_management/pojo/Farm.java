@@ -21,6 +21,7 @@ public class Farm {
     private String posinfo;
     private Double longitude;
     private Double latitude;
+    private Double area;
     private Integer soiltype;
     @Getter
     @Setter
