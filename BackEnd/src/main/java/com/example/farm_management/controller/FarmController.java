@@ -119,7 +119,7 @@ public class FarmController {
                 log.error("统计数据类型不匹配");
                 return Result.error("统计数据类型不匹配");
             }
-        } else {
+        } else if (farm.getStatistics() != null){
             log.error("统计数据不是列表类型");
             return Result.error("统计数据不是列表类型");
         }
