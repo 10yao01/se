@@ -10,13 +10,14 @@ import store from './store'
 import '@/styles/index.scss' // global css
 import '@/icons' // icon
 import VueParticles from 'vue-particles'
+import * as echarts from 'echarts';
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(Vuex)
 Vue.use(VueParticles) 
 /* eslint-disable no-new */
-
+Vue.prototype.$echarts = echarts
 
 new Vue({
   el: '#app',
