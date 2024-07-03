@@ -39,7 +39,8 @@
               <el-button size="mini" type="info" @click="jixiao(scope.row)">
                 查看绩效
               </el-button>
-              <el-dialog title="绩效详情" :visible.sync="dialogFormVisible" width="50%">
+              <el-dialog title="绩效详情" :visible.sync="dialogFormVisible" width="75%" @open="drawChart">
+              <div id="chart" style="width: 100%; height: 400px;" ref="charts"></div>
               </el-dialog>
               <el-button size="mini" type="danger" @click="openDelete(scope.row)">
                 删除
@@ -100,7 +101,10 @@ export default {
       lastRecord: 999,
       uid: '',
       token: '',
-      type: ''
+      type: '',
+      date: [],
+      performance: [],
+      chartInstance: null,
     }
   },
   created() {
@@ -135,6 +139,8 @@ export default {
   },
   methods: {
     jixiao(row) {
+        this.date = []
+        this.performance = []
         let url = this.$store.state.settings.baseurl + '/employee'
         axios.get(url,{
             headers: {
@@ -146,21 +152,53 @@ export default {
         })
         .then(response => {
             let data = response.data.data[0].performance
-            let date = new Array(data.length) // 日期 x轴
-            let performance = new Array(data.length) // 绩效 y轴
-            for(let i = 0;i<data.length;i++){
-                date[i] = data[i].date
-            }
-            for(let i = 0;i<data.length;i++){
-                performance[i] = data[i].performance
-            }
-            // console.log(date)
-            // console.log(performance)
+            this.date = data.map(item => item.date.substring(0, 7))
+            this.performance = data.map(item => item.performance)
+            // console.log(this.date)
+            // console.log(this.performance)
             this.dialogFormVisible = true
         })
         .catch(error => {
             console.log(error)
         })
+    },
+    drawChart(){
+      this.$nextTick(() => {
+        // 检查是否已经存在实例，如果存在则销毁
+        if (this.chartInstance) {
+            this.chartInstance.dispose();
+        }
+      // 基于准备好的 dom，初始化 echarts 实例
+      this.chartInstance = this.$echarts.init(this.$refs.charts);
+      // 指定图表的配置项和数据
+      var option = {
+        title: {
+          text: '绩效折线图'
+          },
+          tooltip: {
+            trigger: 'axis'
+            },
+            legend: {
+              data: ['绩效']
+              },
+              xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: this.date
+                },
+                yAxis: {
+                  type: 'value'
+                  },
+                  series: [
+                    {
+                      name: '绩效',
+                      type: 'line',
+                      data: this.performance
+                      }
+                      ]
+                      };
+      // 使用刚指定的配置项和数据显示图表。
+      this.chartInstance.setOption(option)});
     },
     search(searchID, searchName, searchTel) {
       if(this.type == 3){       

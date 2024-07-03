@@ -63,12 +63,14 @@
                   </el-form-item>
                   <el-form-item label="养分" :label-width="formLabelWidth">
                     <el-button size="mini" type="primary" @click="yangfen(scope.row)">查看统计</el-button>
-                    <el-dialog title="养分信息" :visible.sync="dialogFormVisible6" width="50%">
+                    <el-dialog title="养分信息" :visible.sync="dialogFormVisible6" width="50%" @open="drawChartNutrient" append-to-body>
+                      <div id="chartYangfen" style="width: 100%; height: 400px;" ref="chartsYangfen"></div>
                     </el-dialog>
                   </el-form-item>
                   <el-form-item label="墒情" :label-width="formLabelWidth">
                     <el-button size="mini" type="primary" @click="shangqing(scope.row)">查看统计</el-button>
-                    <el-dialog title="墒情信息" :visible.sync="dialogFormVisible7" width="50%">
+                    <el-dialog title="墒情信息" :visible.sync="dialogFormVisible7" width="50%" @open="drawChartMoisture" append-to-body>
+                      <div id="chartShangqing" style="width: 100%; height: 400px;" ref="chartsShangqing"></div>
                     </el-dialog>
                   </el-form-item>
                 </el-form>
@@ -248,7 +250,12 @@ export default {
       lastRecord: 999,
       uid: '',
       token: '',
-      type:''
+      type:'',
+      date: [],
+      nutrient: [],
+      moisture: [],
+      chartInstanceMoisture: null,
+      chartInstanceNutrient: null
     }
   },
   created() {
@@ -283,6 +290,8 @@ export default {
   },
   methods: {
     yangfen(row) {
+      this.date = []
+      this.nutrient = []
       let url = this.$store.state.settings.baseurl + '/farm'
       axios.get(url,{
         headers: {
@@ -294,16 +303,8 @@ export default {
       })
       .then(response => {
         let data = response.data.data[0].statistics
-        let date = new Array(data.length) // 日期 x轴
-        let nutrient = new Array(data.length) // 养分 y轴
-        for(let i = 0;i<data.length;i++){
-          date[i] = data[i].date
-        }
-        for(let i = 0;i<data.length;i++){
-          nutrient[i] = data[i].nutrient
-        }
-        // console.log(date)
-        // console.log(nutrient)
+        this.date = data.map(item =>item.date.substring(0, 7))
+        this.nutrient = data.map(item =>item.nutrient)
         this.dialogFormVisible6 = true
       })
       .catch(error => {
@@ -311,6 +312,8 @@ export default {
       })
     },
     shangqing(row) {
+      this.date = []
+      this.moisture = []
       let url = this.$store.state.settings.baseurl + '/farm'
       axios.get(url,{
         headers: {
@@ -322,21 +325,89 @@ export default {
       })
       .then(response => {
         let data = response.data.data[0].statistics
-        let date = new Array(data.length) // 日期 x轴
-        let moisture = new Array(data.length) // 养分 y轴
-        for(let i = 0;i<data.length;i++){
-          date[i] = data[i].date
-        }
-        for(let i = 0;i<data.length;i++){
-          moisture[i] = data[i].moisture
-        }
-        // console.log(date)
-        // console.log(moisture)
+        this.date = data.map(item =>item.date.substring(0, 7))
+        this.moisture = data.map(item =>item.moisture)
         this.dialogFormVisible7 = true
       })
       .catch(error => {
-                console.log(error)
+        console.log(error)
       })
+    },
+    drawChartMoisture(){
+      this.$nextTick(() => {
+        // 检查是否已经存在实例，如果存在则销毁
+        if (this.chartInstanceMoisture) {
+            this.chartInstanceMoisture.dispose();
+        }
+      // 基于准备好的 dom，初始化 echarts 实例
+      this.chartInstanceMoisture = this.$echarts.init(this.$refs.chartsShangqing);
+      // 指定图表的配置项和数据
+      var option = {
+        title: {
+          text: '土壤墒情折线图'
+          },
+          tooltip: {
+            trigger: 'axis'
+            },
+            legend: {
+              data: ['墒情']
+              },
+              xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: this.date
+                },
+                yAxis: {
+                  type: 'value'
+                  },
+                  series: [
+                    {
+                      name: '墒情',
+                      type: 'line',
+                      data: this.moisture
+                      }
+                      ]
+                      };
+      // 使用刚指定的配置项和数据显示图表。
+      this.chartInstanceMoisture.setOption(option)});
+    },
+    drawChartNutrient(){
+      this.$nextTick(() => {
+        // 检查是否已经存在实例，如果存在则销毁
+        if (this.chartInstanceNutrient) {
+            this.chartInstanceNutrient.dispose();
+        }
+      // 基于准备好的 dom，初始化 echarts 实例
+      this.chartInstanceNutrient = this.$echarts.init(this.$refs.chartsYangfen);
+      // 指定图表的配置项和数据
+      var option = {
+        title: {
+          text: '土壤养分折线图'
+          },
+          tooltip: {
+            trigger: 'axis'
+            },
+            legend: {
+              data: ['养分']
+              },
+              xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: this.date
+                },
+                yAxis: {
+                  type: 'value'
+                  },
+                  series: [
+                    {
+                      name: '养分',
+                      type: 'line',
+                      data: this.nutrient
+                      }
+                      ]
+                      };
+      // 使用刚指定的配置项和数据显示图表。
+      this.chartInstanceNutrient.setOption(option)});
     },
     detail(row) {
       let url = this.$store.state.settings.baseurl + '/farm'
