@@ -26,9 +26,11 @@
             </el-table-column>
           <el-table-column prop="amount" label="购买数量" sortable>
           </el-table-column>
+          <el-table-column prop="price" label="购买价格" sortable>
+          </el-table-column>
           <el-table-column prop="score" label="评分" sortable width="100px" align="center">
             <template slot-scope="scope">
-                <el-tag :type="stateType[scope.row.score]" disable-transitions>{{ scope.row.score==null? '未打分':scope.row.score }}</el-tag>
+                <el-tag :type="stateType[scope.row.score]" disable-transitions>{{ scope.row.score==0? '未打分':scope.row.score }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center">
@@ -98,19 +100,6 @@ export default {
     this.type = window.localStorage.getItem('type')
     this.fetchData()
   },
-  mounted () {
-    if (this.$route.params.iid) {
-      const url = this.$store.state.settings.baseurl + '/farmer/' + this.$route.params.iid
-      axios.get(url).then(res => {
-        if (res.data.code === 200) {
-          this.oneData = res.data.data
-        }
-      })
-    } else {
-      this.fetchData()
-      this.lastRecord = this.pageSize
-    }
-  },
   computed: {
     pagedData () {
       return this.filteredData.slice(this.firstRecord - 1, this.lastRecord)
@@ -142,7 +131,7 @@ export default {
         Message.error("抱歉，您没有此权限！")
         return
       }
-      if(row.score != null) {
+      if(row.score != 0) {
         Message.error("请勿重复打分！")
       }else{
         this.dialogFormVisible = true
