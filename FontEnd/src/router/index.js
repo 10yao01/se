@@ -61,6 +61,26 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/index3',
+    component: () => import('@/views/index3'),
+    hidden: true
+  },
+  {
+    path: '/employee',
+    component: () => import('@/views/employee'),
+    hidden: true
+  },
+  {
+    path: '/clock',
+    component: () => import('@/views/clock'),
+    hidden: true
+  },
+  {
+    path: '/leave',
+    component: () => import('@/views/leave'),
+    hidden: true
+  },
+  {
     path: '/',
     component: Layout,
     redirect: '/welcome',

@@ -31,16 +31,28 @@
                 <el-tag :type="stateType[Math.floor(scope.row.score)]" disable-transitions>{{ scope.row.score.toFixed(2)}}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center">
+          <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button size="mini" type="success" @click="handleInfo(scope.row)">
                 购买
               </el-button>
               <el-dialog title="购买商品" :visible.sync="dialogFormVisible" width="30%">
                 <el-form :model="dialogForm">
-                  <el-form-item label="购买数量" style="margin-left: 30px">
+                  <el-form-item label="购买数量" :label-width="formLabelWidth">
                     <el-input v-model="dialogForm.amount" autocomplete="off"></el-input>
                   </el-form-item>
+                  <div>
+                    <span style="font-weight: bold">职工编号&nbsp;&nbsp;</span>
+                    <el-select v-model="dialogForm.eid" placeholder="请选择" filterable>
+                      <el-option
+                        v-for="item in epData"
+                        :key="item"
+                        :label="item"
+                        :value="item">
+                        <span style="float: left">{{ item }}</span>
+                      </el-option>
+                    </el-select>
+                  </div>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                   <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -69,7 +81,7 @@ export default {
   data () {
     return {
       formData: [],
-      oneData: {},
+      epData: [],
       searchGid: '',
       searchGName: '',
       stock: '',
@@ -77,7 +89,9 @@ export default {
           gid: '',
           gname: '',
           customerid: '',
-          amount: ''
+          amount: '',
+          eid: '',
+          price: ''
       },
       stateType: ['danger', 'danger', 'danger','warning','success'],
       dialogFormVisible: false,
@@ -91,23 +105,25 @@ export default {
     }
   },
   created() {
-    this.fetchData()
     this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
-  },
-  mounted () {
-    if (this.$route.params.iid) {
-      const url = this.$store.state.settings.baseurl + '/farmer/' + this.$route.params.iid
-      axios.get(url).then(res => {
-        if (res.data.code === 200) {
-          this.oneData = res.data.data
+    this.fetchData()
+    let url = this.$store.state.settings.baseurl + '/employee'
+    axios.get(url,{
+      headers: {
+        'Authorization': this.token
+      }
+    })
+      .then(response => {
+        let Ddata = response.data.data
+        for(let i = 0;i<Ddata.length;i++) {
+          this.epData[i] = Ddata[i].eid
         }
       })
-    } else {
-      this.fetchData()
-      this.lastRecord = this.pageSize
-    }
+      .catch(error => {
+        console.log(error)
+      })
   },
   computed: {
     pagedData () {
@@ -156,7 +172,10 @@ export default {
               "customerid": this.dialogForm.customerid,
               "gid": this.dialogForm.gid,
               "gname": this.dialogForm.gname,
+              "score": 0,
               "amount": this.dialogForm.amount,
+              "eid": this.dialogForm.eid,
+              "price": this.dialogForm.price
             },
             {
               headers: {
@@ -226,6 +245,7 @@ export default {
       this.dialogForm.gname = row.gname
       this.dialogForm.gid = row.gid
       this.dialogForm.customerid = this.uid
+      this.dialogForm.price = row.price
       this.stock = row.stock
     }
   }

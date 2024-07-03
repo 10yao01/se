@@ -29,25 +29,62 @@
             </el-table-column>
             <el-table-column prop="camount" label="种植数量" width="105px" sortable>
             </el-table-column>
-            <el-table-column prop="pdate" label="种植时间" sortable>
-            </el-table-column>
             <el-table-column prop="wid" label="管理员号" sortable>
-            </el-table-column>
-            <el-table-column prop="harvestdate" label="预计收成时间" sortable>
-            </el-table-column>
-            <el-table-column prop="stage" label="成长阶段" width="105px" sortable>
             </el-table-column>
             <el-table-column prop="posinfo" label="农场位置备注" sortable>
             </el-table-column>
-            <el-table-column label="操作" width="280px">
+            <el-table-column label="操作" width="400px">
             <template slot-scope="scope">
+              <el-button size="mini" type="info" @click="detail(scope.row)">
+                详情信息
+              </el-button>
+              <el-dialog title="详情信息" :visible.sync="dialogFormVisible5" width="30%">
+                <el-form :model="dialogForm3">
+                  <el-form-item label="种植时间" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.pdate" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="预计收获时间" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.harvestdate" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="成长阶段" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.stage" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="面积" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.area" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="经度" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.longitude" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="纬度" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.latitude" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="土地类型" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.soiltype" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="养分" :label-width="formLabelWidth">
+                    <el-button size="mini" type="primary" @click="yangfen(scope.row)">查看统计</el-button>
+                    <el-dialog title="养分信息" :visible.sync="dialogFormVisible6" width="50%">
+                    </el-dialog>
+                  </el-form-item>
+                  <el-form-item label="墒情" :label-width="formLabelWidth">
+                    <el-button size="mini" type="primary" @click="shangqing(scope.row)">查看统计</el-button>
+                    <el-dialog title="墒情信息" :visible.sync="dialogFormVisible7" width="50%">
+                    </el-dialog>
+                  </el-form-item>
+                </el-form>
+              </el-dialog>
               <el-button size="mini" type="success" @click="guangai(scope.row)">
                 灌溉
               </el-button>
               <el-dialog title="灌溉时间" :visible.sync="dialogFormVisible" width="30%">
                 <el-form :model="dialogForm">
                   <el-form-item label="灌溉时间" :label-width="formLabelWidth">
-                    <el-input v-model="dialogForm.optime" autocomplete="off"></el-input>
+                    <el-date-picker v-model="dialogForm.optime"
+                      type="date"
+                      placeholder="选择日期"
+                      format="yyyy-MM-dd"
+                      value-format="yyyy-MM-dd">
+                    </el-date-picker>
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -61,7 +98,12 @@
               <el-dialog title="施肥时间" :visible.sync="dialogFormVisible4" width="30%">
                 <el-form :model="dialogForm">
                   <el-form-item label="施肥时间" :label-width="formLabelWidth">
-                    <el-input v-model="dialogForm.optime" autocomplete="off"></el-input>
+                    <el-date-picker v-model="dialogForm.optime"
+                      type="date"
+                      placeholder="选择日期"
+                      format="yyyy-MM-dd"
+                      value-format="yyyy-MM-dd">
+                    </el-date-picker>
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -69,7 +111,7 @@
                     <el-button type="primary" @click="shifeiUpdate()">确 定</el-button>
                 </div>
               </el-dialog>
-              <el-button size="mini" type="info" @click="handleInfo(scope.row)">
+              <el-button size="mini" type="danger" @click="handleInfo(scope.row)">
                 修改
               </el-button>
               <el-dialog title="修改农田信息" :visible.sync="dialogFormVisible2" width="30%">
@@ -116,7 +158,12 @@
               <el-dialog title="上传时间" :visible.sync="dialogFormVisible3" width="30%">
                 <el-form :model="batchform">
                   <el-form-item label="上传时间" :label-width="formLabelWidth">
-                    <el-input v-model="batchform.bdate" autocomplete="off"></el-input>
+                    <el-date-picker v-model="batchform.bdate"
+                      type="date"
+                      placeholder="选择日期"
+                      format="yyyy-MM-dd"
+                      value-format="yyyy-MM-dd">
+                    </el-date-picker>
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -163,27 +210,38 @@ export default {
         amount: ''
       },
       dialogForm: {
-          fid:'',
-          farmid:'',
-          optype: '',
-          optime: '',
+        fid:'',
+        farmid:'',
+        optype: '',
+        optime: '',
       },
       dialogForm2: {
-          fid: '',
-          fname: '',
-          cid: '',
-          cname: '',
-          camount: '',
-          pdate: '',
-          wid: '',
-          harvestdate: '',
-          stage: '',
-          posinfo: '',
+        fid: '',
+        fname: '',
+        cid: '',
+        cname: '',
+        camount: '',
+        wid: '',
+        posinfo: '',
+      },
+      dialogForm3: {
+        pdate: '',
+        harvestdate: '',
+        stage: '',
+        longitude: '',
+        area: '',
+        latitude: '',
+        soiltype: '',
+        statistics: ''
       },
       dialogFormVisible: false,
       dialogFormVisible2: false,
       dialogFormVisible3: false,
       dialogFormVisible4: false,
+      dialogFormVisible5: false,
+      dialogFormVisible6: false,
+      dialogFormVisible7: false,
+      soiltypes: ['黄土地', '黑土地'],
       formLabelWidth: '100px',
       pageSize: 10,
       firstRecord: 1,
@@ -198,19 +256,6 @@ export default {
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
     this.fetchData()
-  },
-  mounted () {
-    if (this.$route.params.iid) {
-      const url = this.$store.state.settings.baseurl + '/farmer/' + this.$route.params.iid
-      axios.get(url).then(res => {
-        if (res.data.code === 200) {
-          this.oneData = res.data.data
-        }
-      })
-    } else {
-      this.fetchData()
-      this.lastRecord = this.pageSize
-    }
   },
   computed: {
     pagedData () {
@@ -237,6 +282,84 @@ export default {
     }
   },
   methods: {
+    yangfen(row) {
+      let url = this.$store.state.settings.baseurl + '/farm'
+      axios.get(url,{
+        headers: {
+            'Authorization': this.token
+        },
+        params: {
+          fid: row.fid
+        }
+      })
+      .then(response => {
+        let data = response.data.data[0].statistics
+        let date = new Array(data.length) // 日期 x轴
+        let nutrient = new Array(data.length) // 养分 y轴
+        for(let i = 0;i<data.length;i++){
+          date[i] = data[i].date
+        }
+        for(let i = 0;i<data.length;i++){
+          nutrient[i] = data[i].nutrient
+        }
+        // console.log(date)
+        // console.log(nutrient)
+        this.dialogFormVisible6 = true
+      })
+      .catch(error => {
+                console.log(error)
+      })
+    },
+    shangqing(row) {
+      let url = this.$store.state.settings.baseurl + '/farm'
+      axios.get(url,{
+        headers: {
+            'Authorization': this.token
+        },
+        params: {
+          fid: row.fid
+        }
+      })
+      .then(response => {
+        let data = response.data.data[0].statistics
+        let date = new Array(data.length) // 日期 x轴
+        let moisture = new Array(data.length) // 养分 y轴
+        for(let i = 0;i<data.length;i++){
+          date[i] = data[i].date
+        }
+        for(let i = 0;i<data.length;i++){
+          moisture[i] = data[i].moisture
+        }
+        // console.log(date)
+        // console.log(moisture)
+        this.dialogFormVisible7 = true
+      })
+      .catch(error => {
+                console.log(error)
+      })
+    },
+    detail(row) {
+      let url = this.$store.state.settings.baseurl + '/farm'
+      axios.get(url,{
+        headers: {
+            'Authorization': this.token
+        },
+        params: {
+          fid: row.fid
+        }
+      })
+      .then(response => {
+        let data = response.data.data
+        this.dialogForm3 = data[0]
+        this.dialogForm3.longitude = this.dialogForm3.longitude + '°'
+        this.dialogForm3.latitude = this.dialogForm3.latitude + '°'
+        this.dialogForm3.soiltype = this.soiltypes[this.dialogForm3.soiltype - 1]
+        this.dialogFormVisible5 = true
+      })
+      .catch(error => {
+                console.log(error)
+      })
+    },
     shangchuan(row) {
       this.dialogFormVisible3 = true
       this.batchform.originid = row.fid

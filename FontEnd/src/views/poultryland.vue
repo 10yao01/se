@@ -29,25 +29,49 @@
             </el-table-column>
             <el-table-column prop="poultrynum" label="养殖数量" width="105px" sortable>
             </el-table-column>
-            <el-table-column prop="starttime" label="养殖时间" sortable>
-            </el-table-column>
             <el-table-column prop="wid" label="管理员号" width="105px" sortable>
-            </el-table-column>
-            <el-table-column prop="maturetime" label="预计成熟时间" sortable>
-            </el-table-column>
-            <el-table-column prop="stage" label="成长阶段" width="105px" sortable>
             </el-table-column>
             <el-table-column prop="posinfo" label="养殖场位置备注" sortable>
             </el-table-column>
-            <el-table-column label="操作" width="220px"> 
+            <el-table-column label="操作" width="400px"> 
             <template slot-scope="scope">
+              <el-button size="mini" type="info" @click="detail(scope.row)">
+                详情信息
+              </el-button>
+              <el-dialog title="详情信息" :visible.sync="dialogFormVisible4" width="30%">
+                <el-form :model="dialogForm3">
+                  <el-form-item label="养殖时间" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.starttime" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="预计成熟时间" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.maturetime" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="成长阶段" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.stage" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="面积" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.area" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="经度" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.longitude" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="纬度" :label-width="formLabelWidth">
+                    <el-input v-model="dialogForm3.latitude" autocomplete="on" disabled></el-input>
+                  </el-form-item>
+                </el-form>
+              </el-dialog>
               <el-button size="mini" type="primary" @click="weishi(scope.row)">
                 喂食
               </el-button>
               <el-dialog title="喂食时间" :visible.sync="dialogFormVisible" width="30%">
                 <el-form :model="dialogForm">
                   <el-form-item label="喂食时间" :label-width="formLabelWidth">
-                    <el-input v-model="dialogForm.ftime" autocomplete="off"></el-input>
+                    <el-date-picker v-model="dialogForm.ftime"
+                      type="date"
+                      placeholder="选择日期"
+                      format="yyyy-MM-dd"
+                      value-format="yyyy-MM-dd">
+                    </el-date-picker>
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -102,7 +126,12 @@
               <el-dialog title="上传时间" :visible.sync="dialogFormVisible3" width="30%">
                 <el-form :model="batchform">
                   <el-form-item label="上传时间" :label-width="formLabelWidth">
-                    <el-input v-model="batchform.bdate" autocomplete="off"></el-input>
+                    <el-date-picker v-model="batchform.bdate"
+                      type="date"
+                      placeholder="选择日期"
+                      format="yyyy-MM-dd"
+                      value-format="yyyy-MM-dd">
+                    </el-date-picker>
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -165,9 +194,18 @@ export default {
         stage: '',
         posinfo: '',
       },
+      dialogForm3: {
+        starttime: '',
+        maturetime: '',
+        stage: '',
+        area: '',
+        longitude: '',
+        latitude: ''
+      },
       dialogFormVisible: false,
       dialogFormVisible2: false,
       dialogFormVisible3: false,
+      dialogFormVisible4: false,
       formLabelWidth: '100px',
       pageSize: 10,
       firstRecord: 1,
@@ -208,6 +246,27 @@ export default {
     }
   },
   methods: {
+    detail(row) {
+      let url = this.$store.state.settings.baseurl + '/pasture'
+      axios.get(url,{
+        headers: {
+          'Authorization': this.token
+        },
+        params: {
+          pid: row.pid
+        }
+      })
+      .then(response => {
+        let data = response.data.data
+        this.dialogForm3 = data[0]
+        this.dialogForm3.longitude = this.dialogForm3.longitude + '°'
+        this.dialogForm3.latitude = this.dialogForm3.latitude + '°'
+        this.dialogFormVisible4 = true
+      })
+      .catch(error => {
+                console.log(error)
+      })
+    },
     shangchuan(row) {
       this.dialogFormVisible3 = true
       this.batchform.originid = row.pid

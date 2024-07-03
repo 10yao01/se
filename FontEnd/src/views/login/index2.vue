@@ -86,7 +86,11 @@
         <el-form-item label="电话" :label-width="formLabelWidth">
           <el-input v-model="dialogForm.tel" autocomplete="off"></el-input>
         </el-form-item>
-
+        <el-form-item label="用户类型" style="margin-left: 30px">
+          <el-radio v-model="dialogForm.type" label="0">普通用户</el-radio>
+          <el-radio v-model="dialogForm.type" label="1">农场职工</el-radio>
+          <el-radio v-model="dialogForm.type" label="2">农场管理员</el-radio>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -99,6 +103,7 @@
 
 <script>
 import {Message} from 'element-ui'
+import { validatePassword } from '@/util.js'
 import axios from 'axios'
 export default {
   name: 'LoginPage',
@@ -130,7 +135,8 @@ export default {
           gender: '',
           pwd: '',
           age: '',
-          tel: ''
+          tel: '',
+          type: ''
       },
     }
   },
@@ -151,6 +157,14 @@ export default {
       })
     },
     AddData() {
+        const volidData = validatePassword(this.dialogForm.pwd)
+        if(!volidData.success) {
+          this.$message({
+            type: 'error',
+            message: '密码应不少于6位, 且至少包含小写字母和数字'
+          })
+          return
+        }
       this.dialogFormVisible = false;
       const url = this.$store.state.settings.baseurl + '/user';
       axios.post(url, {
@@ -160,7 +174,7 @@ export default {
         "gender": this.dialogForm.gender,
         "age": this.dialogForm.age,
         "tel": this.dialogForm.tel,
-        "idtype": 0
+        "idtype": this.dialogForm.type
       },
       {
         headers: {
@@ -171,7 +185,7 @@ export default {
         this.$message({
           type: 'success',
           message: '注册成功!'
-        });
+        })
       })
       .catch(error => {
           console.log(error)
@@ -200,8 +214,6 @@ export default {
     //   this.$router.push({ path: '/index' })
     // },
     handleLogin () {
-      // this.$router.push({ path: '/index' })
-      console.log(this.$store.state.settings.baseurl)
       // 表单验证
       this.$refs.loginForm.validate(valid => {
         if (valid) {

@@ -7,7 +7,6 @@
       <h5>当前用户：  <el-tag size="medium" type="info">{{ uid }}</el-tag>&nbsp;&nbsp;&nbsp;
       <el-tag size="medium">{{ this.typeClass[this.type] }}</el-tag>&nbsp;&nbsp;&nbsp;
       <el-button type="danger" size="mini" @click="$router.push('/login')" plain>切换账户</el-button>
-      <el-button v-if="buttonVisible" type="primary" size="medium" style="margin-left: 1150px;" @click="handle('/index3')">职工中心</el-button>
       </h5>
       <el-row :gutter="20">
         <el-col :span="6" :offset="0" v-for="item in link" :key="item.baseURL" style="margin-bottom: 20px;">
@@ -29,35 +28,27 @@ export default {
     return {
       link: [
         {
-          routeName: '/user',
-          name: '用户管理',
-          desc: '进行用户信息管理',
+          routeName: '/employee',
+          name: '职工管理',
+          desc: '进行职工信息管理',
           src: 'static/images/user.jpg'
         },
         {
-          routeName: '/farm',
-          name: '农田管理',
-          desc: '进行农田管理',
+          routeName: '/clock',
+          name: '打卡管理',
+          desc: '进行打卡管理',
           src: 'static/images/nongchang.jpg'
         },
         {
-          routeName: '/pasture',
-          name: '养殖场管理',
-          desc: '进行养殖场管理',
+          routeName: '/leave',
+          name: '请假管理',
+          desc: '进行请假管理',
           src: 'static/images/muchang.jpg'
-        },
-        {
-          routeName: '/market',
-          name: '集市管理',
-          desc: '进行集市管理',
-          src: 'static/images/market.jpg'
         }
-
       ],
       uid: '',
       token: '',
       type: '',
-      buttonVisible: false,
       typeClass: ['普通用户', '农场职工', '农场管理员', '系统管理员']
     }
   },
