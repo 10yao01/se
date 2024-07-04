@@ -67,6 +67,8 @@ export default {
     // this.type = window.localStorage.getItem('type')
     if(window.localStorage.getItem('type') == 0){
       this.type = 0
+    }else{
+      this.type = window.localStorage.getItem('type')
     }
     this.buttonVisible = this.type==0? false:true
   },
