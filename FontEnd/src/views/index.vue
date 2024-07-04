@@ -10,7 +10,7 @@
       <el-button v-if="buttonVisible" type="primary" size="medium" style="margin-left: 1150px;" @click="handle('/index3')">职工中心</el-button>
       </h5>
       <el-row :gutter="20">
-        <el-col :span="6" :offset="0" v-for="(item, index) in link" v-if="!(this.type === 1 && (index === 1 || index === 2))" :key="item.baseURL" style="margin-bottom: 20px;">
+        <el-col :span="6" :offset="0" v-for="(item, index) in link" v-if="!(type === 0 && (index === 1 || index === 2))" :key="item.baseURL" style="margin-bottom: 20px;">
           <el-card shadow="hover" class="box-card" style="cursor: pointer;height:70vh;" @click.native="handle(item.routeName)">
             <el-image style="width: 350px; height: 300px" :src="item.src"></el-image>
             <h3 style="margin-top: 0;">{{item.name}}</h3> 
