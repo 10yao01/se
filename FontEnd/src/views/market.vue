@@ -6,7 +6,7 @@
     <el-main>
       <h5>当前用户：  <el-tag size="medium" type="info">{{ this.uid }}</el-tag>&nbsp;&nbsp;&nbsp;<el-tag size="medium">{{ this.typeClass[this.type] }}</el-tag>&nbsp;&nbsp;&nbsp;<el-button type="danger" size="mini" @click="$router.push('/login')" plain>切换账户</el-button></h5>
       <el-row :gutter="20">
-        <el-col :span="6" :offset="0" v-for="item in link" :key="item.baseURL" style="margin-bottom: 20px;">
+        <el-col :span="6" :offset="0" v-for="(item, index) in link" v-if="!(type == 0 && index == 2)" :key="item.baseURL" style="margin-bottom: 20px;">
           <el-card shadow="hover" class="box-card" style="cursor: pointer;height:70vh;" @click.native="handle(item.routeName)">
             <el-image style="width: 350px; height: 300px" :src="item.src"></el-image>
             <h3 style="margin-top: 0;">{{item.name}}</h3>
@@ -53,7 +53,12 @@ export default {
   created () {
     this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
-    this.type = window.localStorage.getItem('type')
+    // this.type = window.localStorage.getItem('type')
+    if(window.localStorage.getItem('type') == 0){
+      this.type = 0
+    }else{
+      this.type = window.localStorage.getItem('type')
+    }
   },
   mounted () {
   },
