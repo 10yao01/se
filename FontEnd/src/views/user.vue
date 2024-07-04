@@ -14,7 +14,7 @@
           </el-select>
           <el-input style="width: 15%;" placeholder="请输入用户电话" v-model="searchTel" />
           <el-button size="media" @click="search(searchID, searchName, searchGender, searchTel)" icon="el-icon-search">搜索</el-button>
-          <el-button type="primary" style="margin-left: 420px;" @click="dialogFormVisible = true">+ 新增人员</el-button>
+          <el-button v-if="buttonVisible" type="primary" style="margin-left: 420px;" @click="dialogFormVisible = true">+ 新增人员</el-button>
           <el-dialog title="新增用户" :visible.sync="dialogFormVisible" width="30%">
             <el-form :model="dialogForm">
               <el-form-item label="U-id" :label-width="formLabelWidth">
@@ -157,6 +157,7 @@ export default {
       firstRecord: 1,
       lastRecord: 999,
       statusFileter: ['男', '女'],
+      buttonVisible: false,
       uid: '',
       token: '',
       type: ''
@@ -166,6 +167,7 @@ export default {
     this.uid = window.localStorage.getItem('uid')
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
+    this.buttonVisible = this.type==3? true:false
     this.fetchData()
   },
   computed: {
