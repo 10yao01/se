@@ -253,7 +253,7 @@ export default {
     },
     fetchData () {
       let url = this.$store.state.settings.baseurl + '/clock'
-      if(this.type != 3){
+      if(this.type == 1){
         url = url + '?eid=' + this.uid
       }
       axios.get(url,{
