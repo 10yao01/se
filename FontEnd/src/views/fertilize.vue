@@ -70,8 +70,6 @@ export default {
   data () {
     return {
       formData: [],
-      userData: [],
-      oneData: {},
       searchFid:'',
       searchFarmid: '',
       searchTime: '',
@@ -108,19 +106,6 @@ export default {
     this.token = window.localStorage.getItem('token')
     this.type = window.localStorage.getItem('type')
   },
-  mounted () {
-    if (this.$route.params.iid) {
-      const url = this.$store.state.settings.baseurl + '/farmer/' + this.$route.params.iid
-      axios.get(url).then(res => {
-        if (res.data.code === 200) {
-          this.oneData = res.data.data
-        }
-      })
-    } else {
-      this.fetchData()
-      this.lastRecord = this.pageSize
-    }
-  },
   computed: {
     pagedData () {
       return this.filteredData.slice(this.firstRecord - 1, this.lastRecord)
@@ -156,14 +141,11 @@ export default {
             fid: searchFid,
             farmid: searchFarmid,
             time: searchTime,
+            optype: 1
           }
       })
       .then(response => {
         let Ddata = response.data.data
-        for(let i = 0;i<Ddata.length;i++){
-          Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-          Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
-        }
         this.formData = Ddata
       })
       .catch(error => {
@@ -212,15 +194,13 @@ export default {
       axios.get(url,{
         headers: {
           'Authorization': this.token
+        },
+        params: {
+          optype: 1
         }
       })
         .then(response => {
           let Ddata = response.data.data
-          this.userData = Ddata
-          for(let i = 0;i<Ddata.length;i++){
-            Ddata[i].gender = Ddata[i].gender==1? '男':'女'
-            Ddata[i].idtype = this.typeClass[Ddata[i].idtype]
-          }
           this.formData=Ddata
           this.firstRecord = 1
           this.lastRecord = this.pageSize
