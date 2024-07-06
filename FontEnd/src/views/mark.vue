@@ -162,7 +162,7 @@ export default {
     },
     search(searchOid, searchGName) {
       let url = this.$store.state.settings.baseurl + '/order'
-      if(this.type == 0){
+      if(this.type == 0 || this.type == 1){
         url = url + '?customerid=' + this.uid
       }
       axios.get(url, {
@@ -184,7 +184,7 @@ export default {
     },
     fetchData () {
       let url = this.$store.state.settings.baseurl + '/order'
-      if(this.type == 0){
+      if(this.type == 0 || this.type == 1){
         url = url + '?customerid=' + this.uid
       }
       axios.get(url,{
