@@ -97,7 +97,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible2 = false">取 消</el-button>
-                    <el-button type="primary" @click="Update()">确 定</el-button>
+                    <el-button type="primary" @click="Update(scope.row)">确 定</el-button>
                 </div>
               </el-dialog>
               <el-button size="mini" type="danger" @click="openDelete(scope.row)">
@@ -333,7 +333,7 @@ export default {
       this.dialogForm2.idtype = row.idtype
       this.dialogForm2.tel = row.tel
     },
-    Update() {
+    Update(row) {
       this.dialogFormVisible2 = false
       const url = this.$store.state.settings.baseurl + '/user'
       axios.put(url,{
@@ -348,10 +348,12 @@ export default {
         }
       })
       .then(() => {
-        this.fetchData();
+        if(row.pwd != this.dialogForm.pwd){
+          this.$router.push({ path: '/login' })
+        }
         this.$message({
             type: 'success',
-            message: '修改成功!'
+            message: '修改成功, 请重新登录!'
         })
       })  
       .catch(error => {

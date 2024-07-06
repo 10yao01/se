@@ -157,7 +157,7 @@ export default {
         })
     },
     Pass(row) {
-      if(this.type == 1){
+      if(this.type == 1 || this.type == 2){
         Message.error("抱歉，您没有此权限！")
         return 
       }
@@ -184,7 +184,7 @@ export default {
       }
     },
     NoPass(row) {
-      if(this.type == 1){
+      if(this.type == 1 || this.type == 2){
         Message.error("抱歉，您没有此权限！")
         return 
       }
@@ -211,7 +211,7 @@ export default {
       }
     },
     search(searchEid) {
-      if(this.type == 1){
+      if(this.type == 1 && this.type == 2){
         Message.error("抱歉，您没有此权限！")
         return
       }
@@ -237,7 +237,7 @@ export default {
     },
     fetchData () {
       let url = this.$store.state.settings.baseurl + '/leave'
-      if(this.type == 1){
+      if(this.type == 1 || this.type == 2){
         url = url + '?eid=' + this.uid
       }
       axios.get(url,{
